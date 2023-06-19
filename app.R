@@ -21,13 +21,12 @@ ui <- shiny::fluidPage(
           #   placeholder = "Insérer les données",
           #   multiple = FALSE
           # ),
+          
           shiny::radioButtons(
             inputId = "radio",
             label = "Visualisation des données brutes",
-            selected = 1,
-            inline = FALSE,
-            choiceNames = "Veuillez charger les données",
-            choiceValues = "NULL"
+            choices=c("Nothing Selected"=""),
+            selected = NULL
           ),
           # textOutput("radio"),
           width = 3
@@ -246,7 +245,7 @@ server <- function ( input, output, session){
     #                 mutate(taxons_apparies = paste(list, collapse = " / ")) %>%
     #                 select(-abre, -name, -list) %>% distinct(), by = "taxon")
 
-      save(Diatom, file = "data/Donnees_compiles.RData")
+    # save(Diatom, file = "data/Donnees_compiles.RData")
     #   
     #   remove_modal_spinner()
     # 
@@ -463,7 +462,7 @@ server <- function ( input, output, session){
                 ),
               extensions = "Buttons",
               options = list(
-                pageLength = 20, 
+                pageLength = 10, 
                 scroller = TRUE
               ),
               filter="top", selection="multiple", escape=FALSE)})
