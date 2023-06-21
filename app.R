@@ -118,7 +118,7 @@ server <- function(input, output, session) {
 
   # library(RMySQL)
   # library(RPostgreSQL)
-  # 
+  #
   # # Établir la connexion à la base de données
   # mysqlconnection <- dbConnect(PostgreSQL(),
   #   dbname = "diatom",
@@ -128,9 +128,6 @@ server <- function(input, output, session) {
   #   password = ""
   # )
 
-
-  # Lister les tables de la base
-  # dbListTables(mysqlconnection)
 
   # Exécuter la requête SQL et stocker les résultats dans un data frame
 
@@ -148,77 +145,74 @@ server <- function(input, output, session) {
   # WHERE identifier_type_id = 1
   # "
 
-#   france_metropolitaine <- st_read("data/FRA_adm0.shp")
-# 
-#   query <- "
-# SELECT t.taxon_id, t.taxon_name, t.code, t.abundance, t.inventory_date, t.inventory_id, t.identifier_type_id, t.station_code, t.commune, t.station_id, t.x, t.y, s.total_abundance
-# FROM (
-#   SELECT station_code, inventory_date, SUM(abundance) AS total_abundance
-#   FROM public.taxon
-#   JOIN adne.inventory_taxon USING (taxon_id)
-#   JOIN adne.inventory USING (inventory_id)
-#   JOIN station USING (station_id)
-#   JOIN station_projection USING (station_id)
-#   JOIN public.taxon_identifier USING (taxon_id)
-#   WHERE inventory_type_id = 1
-#   GROUP BY station_code, inventory_date
-# ) AS s
-# JOIN (
-#   SELECT taxon_id, taxon_name, code, abundance, inventory_date, inventory_id, identifier_type_id, station_code, commune, station_id, x, y
-#   FROM public.taxon
-#   JOIN adne.inventory_taxon USING (taxon_id)
-#   JOIN adne.inventory USING (inventory_id)
-#   JOIN station USING (station_id)
-#   JOIN station_projection USING (station_id)
-#   JOIN public.taxon_identifier USING (taxon_id)
-#   WHERE inventory_type_id = 1
-# ) AS t
-# ON t.station_code = s.station_code AND t.inventory_date = s.inventory_date
-# "
-#   result <- dbGetQuery(mysqlconnection, query)
-# 
-# 
-#   # Fermer la connexion à la base de données
-#   dbDisconnect(mysqlconnection)
-# 
-#   # Afficher les résultats
-#   print(result)
-# 
-#   Diatom <- as_tibble(result) %>%
-#     mutate(
-#       SANDRE = ifelse(identifier_type_id == 2, code, NA),
-#       taxon = ifelse(identifier_type_id == 1, code, NA)
-#     ) %>%
-#     fill(taxon, .direction = "up") %>%
-#     select(-code) %>%
-#     mutate(full_name = paste0(taxon_name, " ", "(", taxon, ")")) %>%
-#     dplyr::select(
-#       "CODE_STATION" = station_code,
-#       "DATE" = inventory_date,
-#       commune,
-#       x,
-#       y,
-#       "Nom_latin_taxon" = taxon_name,
-#       SANDRE,
-#       "RESULTAT" = abundance,
-#       total_abundance,
-#       taxon
-#     ) %>%
-#     filter(!is.na(SANDRE)) %>%
-#     mutate(SANDRE = as.integer(SANDRE)) %>%
-#     dplyr::mutate(RESULTAT = (RESULTAT / total_abundance) * 1000) %>%
-#     dplyr::mutate(RESULTAT = round(RESULTAT, 2)) %>% # Passage des abondances en relative pour 1000
-#     dplyr::select(-total_abundance) %>%
-#     sf::st_as_sf(coords = c("x", "y"), crs = 2154) %>%
-#     st_transform(geometry, crs = 4326) %>%
-#     st_intersection(france_metropolitaine) %>%
-#     dplyr::select(CODE_STATION, DATE, SANDRE, Nom_latin_taxon, RESULTAT, taxon, commune) %>%
-#     tidyr::extract(geometry, c("long", "lat"), "\\((.*), (.*)\\)", convert = TRUE) %>%
-#     left_join(as_tibble(read.csv2("data/table_transcodage.csv", stringsAsFactors = FALSE)) %>%
-#       dplyr::select(taxon = "abre", True_name = "CodeValid"), by = "taxon") %>%
-#     mutate(taxon = if_else(is.na(True_name) == T, taxon, True_name)) %>%
-#     dplyr::select(-True_name) %>%
-#     filter(!is.na(taxon))
+  #   france_metropolitaine <- st_read("data/FRA_adm0.shp")
+  #
+  #   query <- "
+  # SELECT t.taxon_id, t.taxon_name, t.code, t.abundance, t.inventory_date, t.inventory_id, t.identifier_type_id, t.station_code, t.commune, t.station_id, t.x, t.y, s.total_abundance
+  # FROM (
+  #   SELECT station_code, inventory_date, SUM(abundance) AS total_abundance
+  #   FROM public.taxon
+  #   JOIN adne.inventory_taxon USING (taxon_id)
+  #   JOIN adne.inventory USING (inventory_id)
+  #   JOIN station USING (station_id)
+  #   JOIN station_projection USING (station_id)
+  #   JOIN public.taxon_identifier USING (taxon_id)
+  #   WHERE inventory_type_id = 1
+  #   GROUP BY station_code, inventory_date
+  # ) AS s
+  # JOIN (
+  #   SELECT taxon_id, taxon_name, code, abundance, inventory_date, inventory_id, identifier_type_id, station_code, commune, station_id, x, y
+  #   FROM public.taxon
+  #   JOIN adne.inventory_taxon USING (taxon_id)
+  #   JOIN adne.inventory USING (inventory_id)
+  #   JOIN station USING (station_id)
+  #   JOIN station_projection USING (station_id)
+  #   JOIN public.taxon_identifier USING (taxon_id)
+  #   WHERE inventory_type_id = 1
+  # ) AS t
+  # ON t.station_code = s.station_code AND t.inventory_date = s.inventory_date
+  # "
+  #   result <- dbGetQuery(mysqlconnection, query)
+  #
+  #
+  #   # Fermer la connexion à la base de données
+  #   dbDisconnect(mysqlconnection)
+  #
+  #   Diatom <- as_tibble(result) %>%
+  #     mutate(
+  #       SANDRE = ifelse(identifier_type_id == 2, code, NA),
+  #       taxon = ifelse(identifier_type_id == 1, code, NA)
+  #     ) %>%
+  #     fill(taxon, .direction = "up") %>%
+  #     select(-code) %>%
+  #     mutate(full_name = paste0(taxon_name, " ", "(", taxon, ")")) %>%
+  #     dplyr::select(
+  #       "CODE_STATION" = station_code,
+  #       "DATE" = inventory_date,
+  #       commune,
+  #       x,
+  #       y,
+  #       "Nom_latin_taxon" = taxon_name,
+  #       SANDRE,
+  #       "RESULTAT" = abundance,
+  #       total_abundance,
+  #       taxon
+  #     ) %>%
+  #     filter(!is.na(SANDRE)) %>%
+  #     mutate(SANDRE = as.integer(SANDRE)) %>%
+  #     dplyr::mutate(RESULTAT = (RESULTAT / total_abundance) * 1000) %>%
+  #     dplyr::mutate(RESULTAT = round(RESULTAT, 2)) %>% # Passage des abondances en relative pour 1000
+  #     dplyr::select(-total_abundance) %>%
+  #     sf::st_as_sf(coords = c("x", "y"), crs = 2154) %>%
+  #     st_transform(geometry, crs = 4326) %>%
+  #     st_intersection(france_metropolitaine) %>%
+  #     dplyr::select(CODE_STATION, DATE, SANDRE, Nom_latin_taxon, RESULTAT, taxon, commune) %>%
+  #     tidyr::extract(geometry, c("long", "lat"), "\\((.*), (.*)\\)", convert = TRUE) %>%
+  #     left_join(as_tibble(read.csv2("data/table_transcodage.csv", stringsAsFactors = FALSE)) %>%
+  #       dplyr::select(taxon = "abre", True_name = "CodeValid"), by = "taxon") %>%
+  #     mutate(taxon = if_else(is.na(True_name) == T, taxon, True_name)) %>%
+  #     dplyr::select(-True_name) %>%
+  #     filter(!is.na(taxon))
 
   # Direct depuis NAIADES
 

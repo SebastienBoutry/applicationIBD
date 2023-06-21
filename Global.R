@@ -1,4 +1,3 @@
-
 getwd()
 
 # getOption("repos")
@@ -33,13 +32,13 @@ library(shinyjs)
 # Fond de carte
 map_base <- leaflet::leaflet() %>%
   leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas,
-                   group = "Fond clair"
+    group = "Fond clair"
   ) %>%
   leaflet::addProviderTiles(providers$CartoDB.DarkMatter,
-                   group = "Fond noir"
+    group = "Fond noir"
   ) %>%
   leaflet::addProviderTiles(providers$GeoportailFrance.orthos,
-                   group = "Fond satellite"
+    group = "Fond satellite"
   )
 
 `%notin%` <- Negate(`%in%`)
