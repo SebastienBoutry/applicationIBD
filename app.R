@@ -2,52 +2,193 @@ source("Global.R")
 
 # prefixer()
 ui <- shiny::fluidPage(
+  shiny::tags$head(
+    shiny::tags$style(
+      
+      "
+  .custom-table {
+    border: 1px solid black;
+  }
+  
+  .custom-table th {
+    background-color: #f2f2f2;  
+    font-weight: bold;          
+    text-align: center;         
+  }
+  
+  .custom-table td {
+    text-align: center;         
+  }
+",
+      ".custom-plot {",
+      "  width: 800px;",
+      # "  height: 400px;",
+      "  margin-top: 40px;",  # Définir la marge supérieure personnalisée en pixels
+      "}",
+      ".custom-notification {",
+      "  font-size: 40px;",
+      "  text-align: center;",
+      "  width: 300px;",
+      "  position: fixed;",
+      "  top: 50%;",
+      "  left: 50%;",
+      "  transform: translate(-50%, -50%);",
+      "  color: pink;",
+      "}",
+      ".custom-notification2 {",
+      "  font-size: 40px;",
+      "  text-align: center;",
+      "  width: 300px;",
+      "  position: fixed;",
+      "  top: 50%;",
+      "  left: 50%;",
+      "  transform: translate(-50%, -50%);",
+      "  color: pink;",
+      "}",
+      ".custom-text {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }",
+      ".custom-heading {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }",
+      
+      "@media only screen and (max-width: 768px) {
+        .custom-plot {
+          height: 300px;
+          margin-top: 20px;
+        }
+        .custom-notification {
+          font-size: 30px;
+        }
+        .custom-text {
+          font-size: 16px;
+        }
+        .custom-heading {
+          font-size: 20px;
+        }
+      }"
+    )
+  ),
   shinyjs::useShinyjs(),
   theme = shinythemes::shinytheme("cerulean"),
   shiny::navbarPage(
-    title = "IBD 2023",
+    title = "Diatomées 2023",
     shiny::tabPanel(
-      title = "Chargement des données",
+      title = "Bienvenue",
+      shiny::fluidRow(
+        shiny::column(
+          width = 12,
+          
+          shiny::h1("Bienvenue dans l'application Diatomées 2023!"),
+          
+          shiny::p(
+            class = "custom-text",
+            "Cette application vous permet de visualiser et de comparer les données de prélèvements diatomiques présents sur la base publique NAIADES."
+          ),
+          shiny::p(
+            class = "custom-text",
+            "L'application est structurée en plusieurs onglets, chacun offrant des fonctionnalités spécifiques :"
+          ),
+          
+          shiny::div(style = "border: 4px solid #00CC99; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+          
+          shiny::h3(class = "custom-heading", "Onglet Données Brutes"),
+          
+          shiny::p(
+            class = "custom-text",
+            "Dans ce panneau, vous avez directement accès à la dernière version des données brutes extraites depuis NAIADES. 
+            Servez-vous du panneau de gauche pour naviguer entre les années de prélèvements. 
+            Chaque tableau d'une année est construit de la même façon, les colonnes sont requêtables pour celles présentant des caractères comme la colonne commune par exemple. 
+            Les colonnes numérique peuvent quand à elle être encadrées à l'aide d'un curseur qui apparaît lorsque vous cliquez dans la barre de recherche de la colonne.
+            Enfin, si vous en avez besoin, vous pouvez télécharger les données d'une année au format CSV à l'aide du bouton 'Download' situé en bas de chaque tableau.
+            Veuillez noter que le volume des données est assez important et peut donc prendre plusieurs secondes voir quelques minutes !"
+          
+            )),
+          
+          shiny::div(style = "border: 4px solid #00CC99; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+          shiny::h3(class = "custom-heading", "Onglet Carte"),
+          shiny::p(
+            class = "custom-text",
+            "Dans ce panneau, vous pouvez visualiser les données sur une carte interactive avec une vue centrée sur les taxons de la base de données brute. 
+            Sélectionnez le ou les taxons à afficher à l'aide de la liste déroulante 'Liste des taxons disponibles'. 
+            La carte affichera ensuite les emplacements géographiques des taxons sélectionnés, et un menu vous permettra de cocher les années que vous souhaitez observer. 
+            Vous pouvez sélectionner jusqu'à deux taxons. Chaque point de la carte est cliquable et affichera les informations du prélèvement que vous regardez.
+            En dessous de 'Liste des taxons disponibles', les taxons appariés à celui ou ceux que vous avez choisit vous sont précisés.
+            Enfin, deux histogrammes apparaissent dès lors que vous sélectionnez un taxon. Ils présentent l'évolution de l'abondance relative (en pour 1000) et 
+            l'évolution du nombre d'occurences du taxon dans les relevés des années ou il est vu, ce qui vous permet d'avoir une idée de son importance.
+            Lorsque vous sélectionnez un deuxième taxon, les représentations graphiques de chacun (Carte et Plot) se superposent pour vous permettre de comparer 
+            l'évolution des deux.
+            "
+          ),
+          
+          shiny::div(style = "border: 4px solid #339966; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+          shiny::h3(class = "custom-heading", "Sous-Onglet Données"),
+          shiny::p(
+            class = "custom-text",
+            "Dans ce panneau, 
+            vous pouvez afficher et télécharger les données des taxons que vous avez sélectionnés depuis le panneau Carte. 
+            Utilisez le bouton 'Download' pour télécharger les données au format CSV."
+          )),
+          
+          
+          shiny::div(style = "border: 4px solid #339966; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+          shiny::h3(class = "custom-heading", "Sous-Onglet Profile"),
+          shiny::p(
+            class = "custom-text",
+            "Ce panneau comporte deux onglets: 'Trophique' et 'Écologique'."
+          ),
+          shiny::p(class = "custom-text",
+                   "Dans l'onglet 'Trophique', vous pouvez afficher les informations concernant les paramètres pyshico-chimiques des milieux dans lesquels le taxon que 
+                   vous avez sélectionné est vu. Ces informations ont été récupérées grâce aux travaux de David Carayon en 2019 qui a dréssé un tableau 
+                   de profils physico-chimiques d'un grand nombre de taxons. Si un taxon n'est pas présent dans la base de David Carayon,
+                   alors un message apparaîtra vous le précisant. Les valeurs des paramètres se superposent la encore si vous sélectionnez deux taxons."),
+          shiny::p(class = "custom-text",
+          "Dans l'onglet 'Écologique', vous pouvez voir si le taxon sélectionné est indicateur ou pas de l'Indice Biologique Diatomées (IBD).
+                   Si il l'est, vous verrez le profil écologique du taxon en question s'afficher à l'écran, sinon un message apparaîtra, comme pour l'onglet Trophique"))),
+          
+          shiny::p(class = "custom-text",
+                   "A présent je vous laisse explorer les différents panneaux et profiter de l'application Diatomées 2023!")
+          
+          
+        )
+      )
+    ),
+    shiny::tabPanel(
+      title = "Données Brutes",
       shiny::sidebarLayout(
         shiny::sidebarPanel(
-          # actionButton("do", "Accès aux données NAIADES"),
-          # fileInput(
-          #   inputId = "upload",
-          #   label = "",
-          #   accept = c(".RData"),
-          #   buttonLabel = "Charger",
-          #   placeholder = "Insérer les données",
-          #   multiple = FALSE
-          # ),
           shiny::radioButtons(
             inputId = "radio",
             label = "Visualisation des données brutes",
             choices = c("Nothing Selected" = ""),
             selected = NULL
           ),
-          # textOutput("radio"),
           width = 3
         ),
         shiny::mainPanel(
-          "Données",
           DT::dataTableOutput("tab"),
           shiny::downloadButton("downloadData", "Download")
         )
       )
     ),
     shiny::tabPanel(
-      "Carte",
-      # conditionalPanel(
-      # condition = "output.filesUploaded",
+      title = "Carte",
       shiny::sidebarLayout(
         shiny::sidebarPanel(
-          shiny::selectInput("taxons", "Liste des taxons disponibles: ", ""),
+          shiny::selectInput("taxons", "Liste des taxons disponibles: ", "", multiple = TRUE),
           shiny::code(
             "Espèces comprises dans cette appelation: ",
-            style = "font-size:15px;color:#00a3a6"
+            style = "font-size:15px;"
           ),
           shiny::p(
             shiny::textOutput("name_list"),
+            style = "font-size:15px;color:black;"
+          ),
+          shiny::p(
+            shiny::textOutput("name_list2"),
             style = "font-size:15px;color:black;"
           ),
           shiny::plotOutput("Plot1"),
@@ -64,23 +205,61 @@ ui <- shiny::fluidPage(
             shiny::tabPanel(
               "Données",
               shiny::fluidRow(
-                shiny::mainPanel(DT::dataTableOutput("Donnees2",
-                  width = "100%"
-                ), shiny::downloadButton("downloadData2", "Download"))
+                shiny::mainPanel(
+                  DT::dataTableOutput("Donnees2", width = "100%"),
+                  shiny::downloadButton("downloadData2", "Download")
+                )
+              )
+            ),
+            shiny::navbarMenu(
+              "Profile",
+              shiny::tabPanel(
+                "Trophique",
+                shiny::mainPanel(
+                  shiny::absolutePanel(
+                    top = 70, right = -300, width = "150px"
+                  ),
+                  shiny::div(
+                    class = "custom-plot",
+                    plotly::plotlyOutput("Trophie")
+                  )
+                )
+              ),
+              shiny::tabPanel(
+                "Écologique",
+                plotly::plotlyOutput("Profil")
               )
             )
           )
         )
       )
-      # )
     )
   )
 )
 
-
 server <- function(input, output, session) {
+  
   library(openxlsx)
   library(lubridate)
+  
+  # Observer pour surveiller les changements dans l'input taxons
+  observe({
+    # Obtenir le nombre d'éléments sélectionnés
+    selected <- length(input$taxons)
+    
+    # Si plus de deux éléments sont sélectionnés, mettre à jour le selectInput pour n'afficher que les deux premiers éléments sélectionnés
+    if (selected > 2) {
+      updateSelectInput(session, "taxons", selected = input$taxons[1:2])
+      
+      showNotification(
+        "Vous ne pouvez pas comparer plus de deux taxons",
+        type = "warning",
+        duration = 20
+      )
+    }
+  })
+
+
 
 
 
@@ -315,21 +494,35 @@ server <- function(input, output, session) {
     shinybusy::show_modal_spinner(
       spin = "cube-grid",
       color = "#009999",
-      text = "Chargement des données"
+      text = "Chargement des données NAIDES: Veuillez patienter"
     )
 
     # load(input$upload$datapath)
-
-    load("data/Donnees_compiles.RData")
-
+    
+    githubURL <- paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/",fichier_plus_recent)
+    
+    # tempfile <- tempfile()  # Crée un fichier temporaire pour stocker le fichier téléchargé
+    # download.file(url = githubURL, destfile = tempfile, mode = "wb")  # Télécharge le fichier à partir de l'URL
+    # 
+    # load(tempfile)
+    
+    load(url(githubURL))
+    
     shiny::updateRadioButtons(
       session = session,
       inputId = "radio",
       choiceNames = seq(min(lubridate::year(Diatom$DATE)), max(lubridate::year(Diatom$DATE))),
       choiceValues = seq(min(lubridate::year(Diatom$DATE)), max(lubridate::year(Diatom$DATE)))
     )
+    
+    shinyWidgets::show_alert(
+      title = "Chargement terminé",
+      text = "Les données NAIDES ont été chargées avec succès !",
+      type = "success"
+    )
 
     shinybusy::remove_modal_spinner()
+    
 
     Diatom
   })
@@ -347,10 +540,21 @@ server <- function(input, output, session) {
 
   output$name_list <- shiny::renderText({
     as.character(data() %>%
-      dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::filter(full_name %in% input$taxons[1]) %>%
       dplyr::select(taxons_apparies) %>%
       unique() %>%
-      dplyr::mutate(taxons_apparies = dplyr::if_else(is.na(taxons_apparies) == T, "Aucun", taxons_apparies)))
+      dplyr::mutate(taxons_apparies = dplyr::if_else(is.na(taxons_apparies) == T, paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Aucun"), paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": ",taxons_apparies))))
+  })
+  
+  output$name_list2 <- shiny::renderText({
+    if(length(input$taxons) == 2){
+    as.character(data() %>%
+                   dplyr::filter(full_name %in% input$taxons[2]) %>%
+                   dplyr::select(taxons_apparies) %>%
+                   unique() %>%
+                   dplyr::mutate(taxons_apparies = dplyr::if_else(is.na(taxons_apparies) == T, paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Aucun"), paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": ",taxons_apparies))))
+    }else{""}
+
   })
 
   shiny::observe({
@@ -381,8 +585,10 @@ server <- function(input, output, session) {
         pageLength = 20,
         scroller = TRUE
       ),
-      filter = "top", selection = "multiple", escape = FALSE
+      filter = "top", selection = "multiple", escape = FALSE,
+      class = 'custom-table'
     )
+    
   })
 
   output$radio <- shiny::renderText({
@@ -395,19 +601,83 @@ server <- function(input, output, session) {
       paste("Données pour l'année ", as.character(unique(lubridate::year(data()$DATE))), ".csv", sep = ".")
     },
     content = function(file) {
-      shinybusy::show_modal_spinner()
+      shinybusy::show_modal_spinner(
+        spin = "cube-grid",
+        color = "#009999",
+        text = "Téléchargement des données, cette opération peut prendre quelques minutes"
+      )
       utils::write.csv2(data(), file)
       shinybusy::remove_modal_spinner()
+      shinyWidgets::show_alert(
+        title = "Chargement terminé",
+        text = "Vos données ont été téléchargées avec succès !",
+        type = "success"
+      )
     }
   )
 
 
+  # Définir une palette de couleurs fixe
+
+  
+  output$Plot1 <- shiny::renderPlot({
+    
+    req(length(input$taxons) <= 2)
+    
+    data() %>%
+      dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
+      dplyr::group_by(annee, full_name) %>%
+      dplyr::summarise(Abondance_moyenne = mean(RESULTAT, na.rm = TRUE)) %>%
+      ggplot2::ggplot(ggplot2::aes(y = Abondance_moyenne, x = annee, fill = str_sub(full_name, -6))) +
+      ggplot2::geom_bar(stat = "identity", position = "identity", alpha = 0.5) +
+      ggplot2::labs(
+        title = "Abondance relative moyenne",
+        x = "Année", y = "Abondance relative ‰",
+        fill = if (length(input$taxons) == 1) "" else "Espèce"
+      ) +
+      ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
+      ggplot2::scale_fill_manual(values = color_palette) +
+      theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1),
+                     legend.position = if (length(input$taxons) == 1) "none" else "top",
+                     text = element_text(size = 15))
+  })
+  
+  
+  output$Plot2 <- shiny::renderPlot({
+    
+    req(length(input$taxons) <= 2)
+    
+    data() %>%
+      dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
+      dplyr::group_by(annee, full_name) %>%
+      dplyr::summarise(Occurence = dplyr::n()) %>%
+      ggplot2::ggplot(ggplot2::aes(y = Occurence, x = annee, fill = str_sub(full_name, -6))) +
+      ggplot2::geom_bar(stat = "identity", position = "identity", alpha = 0.5) +
+      ggplot2::labs(
+        title = "Nombre de recensement",
+        x = "Année", y = "Nombre de stations",
+        fill = if (length(input$taxons) == 1) "" else "Espèce"
+      ) +
+      ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
+      ggplot2::scale_fill_manual(values = color_palette)+
+      theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1),
+                     legend.position = if (length(input$taxons) == 1) "none" else "top",
+                     text = element_text(size = 15))
+  })
+  
+  
   mapFiltered <- shiny::reactive({
     shiny::req(input$taxons)
+    
     leaflet_data <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
-      dplyr::group_by(full_name) %>%
+      mutate(grp = str_sub(full_name, -6)) %>%
+      dplyr::group_by(grp) %>%
       dplyr::mutate(label = dplyr::cur_group_id()) %>%
       dplyr::distinct() %>%
       dplyr::ungroup() %>%
@@ -416,38 +686,37 @@ server <- function(input, output, session) {
         lubridate::year(DATE), "_0",
         lubridate::month(DATE), "_0",
         lubridate::day(DATE)
-      ))
-
-    map_tax <- split(leaflet_data, leaflet_data$annee)
-
-
-    l <- leaflet::leaflet() %>% leaflet::addTiles()
-
-    names(map_tax) %>%
-      purrr::walk(function(df) {
-        l <<- l %>%
-          leaflet::addMarkers(
-            data = map_tax[[df]],
-            lng = ~long, lat = ~lat,
-            group = df,
-            popup = ~ paste(
-              "1- Année: ", annee, "<br>",
-              "2- Taxon: ", full_name, "<br>",
-              "3- Commune: ", commune, "<br>",
-              "4- Longitude: ", round(long, 2), "<br>",
-              "5- Latitude: ", round(lat, 2), "<br>",
-              "5- Abondance relative pour 1000:", round(RESULTAT, 2), "<br>"
-            ),
-            clusterOptions = leaflet::markerClusterOptions(removeOutsideVisibleBounds = F),
-            labelOptions = leaflet::labelOptions(
-              noHide = F,
-              direction = "auto"
-            )
-          )
-      })
-
-    maps <- l %>%
-      leaflet::addLayersControl(
+      ),
+      color = color_palette[label]) %>%
+      ungroup()
+    
+ 
+   map_base %>%
+     leaflet::addCircleMarkers(
+       data = leaflet_data,
+       lng = ~long, 
+       lat = ~lat,
+       group = ~annee,
+       color = ~color,
+       fill = ~color,
+       radius = 0.4,  # Utiliser la couleur définie dans la colonne "color"
+       fillColor = ~color,
+       popup = ~ paste(
+         "1- Année: ", annee, "<br>",
+         "2- Taxon: ", full_name, "<br>",
+         "3- Commune: ", commune, "<br>",
+         "4- Longitude: ", round(long, 2), "<br>",
+         "5- Latitude: ", round(lat, 2), "<br>",
+         "5- Abondance relative pour 1000:", round(RESULTAT, 2), "<br>"
+       ),
+       # clusterOptions = leaflet::markerClusterOptions(removeOutsideVisibleBounds = F),
+       labelOptions = leaflet::labelOptions(
+         noHide = F,
+         direction = "auto"
+       )
+     ) %>%
+     
+     leaflet::addLayersControl(
         position = "topleft",
         baseGroups = c(
           "Fond satellite",
@@ -455,65 +724,21 @@ server <- function(input, output, session) {
           "Fond noir",
           "Open Street Map"
         ),
-        overlayGroups = names(map_tax),
+        overlayGroups = leaflet_data$annee,
         options = leaflet::layersControlOptions(collapsed = FALSE)
       ) %>%
-      # addControl(title, position = "topleft", className="map-title") %>%
       leaflet::hideGroup(group = unique(leaflet_data$annee)) %>%
       leaflet::setView(
         lng = 2,
         lat = 47,
-        zoom = 6
-      ) %>%
-      leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas,
-        group = "Fond clair"
-      ) %>%
-      leaflet::addProviderTiles(providers$CartoDB.DarkMatter,
-        group = "Fond noir"
-      ) %>%
-      leaflet::addProviderTiles(providers$GeoportailFrance.orthos,
-        group = "Fond satellite"
-      ) %>%
-      leaflet::addProviderTiles(providers$OpenStreetMap.Mapnik,
-        group = "Open Street Map"
-      )
-  })
+        zoom = 6)
 
+    
+  })
+  
+  
   output$mapFiltered <- leaflet::renderLeaflet({
     mapFiltered()
-  })
-
-  output$Plot1 <- shiny::renderPlot({
-    data() %>%
-      dplyr::filter(full_name %in% input$taxons) %>%
-      dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
-      dplyr::group_by(annee) %>%
-      dplyr::summarise(Abondance_moyenne = mean(RESULTAT, na.rm = TRUE)) %>%
-      ggplot2::ggplot(ggplot2::aes(y = Abondance_moyenne, x = annee, group = 1)) +
-      ggplot2::geom_bar(stat = "identity") +
-      ggplot2::labs(
-        title = "Abondance relative moyenne",
-        x = "Année", y = "Abondance relative ‰"
-      ) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
-      ggplot2::scale_y_continuous(breaks = scales::pretty_breaks())
-  })
-
-
-  output$Plot2 <- shiny::renderPlot({
-    data() %>%
-      dplyr::filter(full_name %in% input$taxons) %>%
-      dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
-      dplyr::group_by(annee, taxon) %>%
-      dplyr::summarise(Occurence = dplyr::n()) %>%
-      ggplot2::ggplot(ggplot2::aes(y = Occurence, x = annee)) +
-      ggplot2::geom_bar(stat = "identity") +
-      ggplot2::labs(
-        title = "Nombre de recensement",
-        x = "Année", y = "Nombre de stations"
-      ) +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1)) +
-      ggplot2::scale_y_continuous(breaks = scales::pretty_breaks())
   })
 
   output$Donnees2 <- DT::renderDataTable({
@@ -533,8 +758,162 @@ server <- function(input, output, session) {
         pageLength = 10,
         scroller = TRUE
       ),
-      filter = "top", selection = "multiple", escape = FALSE
+      filter = "top", selection = "multiple", escape = FALSE,
+      class = 'custom-table'
     )
+  })
+  
+
+  # Combinaison des valeurs des colonnes optima, tolerance, range_min, range_max
+  output$Trophie <- plotly::renderPlotly({
+   
+     shiny::req(input$taxons)
+    
+    # num_taxons <- length(input$taxons)
+    # 
+    # if (length(input$taxons) == 1) {
+    #   
+    #   facet <- "parameter"
+    #   x <- "variable"
+    #   
+    # } else {
+    #   
+    #   facet <- "variable"
+    #   x <- "parameter"
+    # 
+    # }
+    
+    # num_taxons <- length(input$taxons)
+    
+    
+   data <- reshape2::melt(trophie %>% 
+                     dplyr::filter(full_name %in% input$taxons) %>%
+                     rename(Optimum = optima, Seuil_minimum = range_min, Seuil_maximum = range_max), 
+                   id.vars = c("full_name", "parameter_full"), 
+                   measure.vars = c("Optimum", "Seuil_minimum", "Seuil_maximum"))  %>%
+     group_by(parameter_full) %>%
+     mutate(group = cur_group_id()) %>%
+     ungroup()
+   
+   
+   
+   if (nrow(data) == 0) {
+     showNotification(
+       "Ce taxon ne possède pas de profil trophique défini d'après l'étude de Carayon et al 2020",
+       type = "warning",
+       duration = 20
+     )
+     return(NULL)
+   }else{
+
+     p <- ggplot(data, aes(x = str_sub(full_name, start = -5, end = -2), y = value, fill = variable, group = group, text = variable)) +
+     geom_point(size = 4)+
+     geom_line(color = "black", size = 0.1) +
+     #scale_color_manual(values = c("Optimum" = "red", "Tolerance" = "blue", "Seuil_minimum" = "green", "Seuil_maximum" = "orange")) +  # Personnalisation des couleurs
+     labs(x = "", y = "Valeurs") +  # Définition des étiquettes des axes
+     theme_bw() +
+     theme(panel.spacing = unit(2, "lines"),
+           text=element_text(size=10),
+           strip.placement = "outside", strip.background = element_blank())+
+           # ,
+           # axis.text.x = element_text(angle = 45, hjust = 1)) +
+     facet_wrap(~ parameter_full, scales = "free", ncol = 4)
+   
+
+   l <- list(
+     font = list(
+       family = "sans-serif",
+       size = 20,
+       color = "green"),
+     bgcolor = "#E2E2E2",
+     bordercolor = "black",
+     x = 0.8, y = 0.2,
+     orientation = "l",
+     borderwidth = 3,
+     title=list(text='<b> Variable </b>'))
+
+   # Conversion du graphique ggplot en graphique Plotly
+   p <- ggplotly(p, height = 800, tooltip = "text") %>%
+     plotly::layout(title = "",
+            legend = l)
+   
+   
+   }
+   
+
+      # dplyr::filter(parameter %in% input$param) %>%
+      # ggplot(aes(x = get(x), y = value, fill = str_sub(full_name, -6))) +
+      # geom_bar(stat = "identity", position = "dodge") +
+      # ggplot2::labs(
+      #   title = "Profil Physico-chimique",
+      #   fill = "Espèce"
+      # ) +
+      # ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
+      # scale_fill_manual(values = c("blue", "red")) +
+      # scale_alpha_manual(values = c(0.6, 0.6)) +
+      # facet_wrap(~get(facet), scales = "free") +
+      # theme_classic() +
+      # theme(text = element_text(size = 20), 
+      #       axis.title.x = element_blank(),
+      #       axis.text.x = if (num_taxons == 1) ggplot2::element_text(angle = 45, vjust = 1, hjust = 1) else ggplot2::element_blank(),
+      #       strip.text = if (num_taxons == 1) ggplot2::element_blank() else ggplot2::element_text(size = 12))
+  
+  })
+  
+  
+  output$Profil <- renderPlotly({
+
+  req(input$taxons)
+
+   tab <- profiles %>%
+    dplyr::filter(full_name %in% input$taxons)
+   
+   
+   if (nrow(tab) == 0) {
+     showNotification(
+       "Ce taxon ne possède pas de profil écologique",
+       type = "warning",
+       duration = 20
+     )
+     return(NULL)}else{
+       
+       num_colors <- 7  # Nombre de couleurs dans le gradient
+       
+       colories <- colorRampPalette(c("red", "orange", "green"))(num_colors)
+       
+       p <- tab %>%
+         pivot_longer(
+           cols = starts_with("CL"),  
+           names_to = "Classe",  
+           values_to = "Valeur"  
+         ) %>%
+         mutate(Valeur = as.numeric(Valeur)) %>%
+         ggplot(aes(x = factor(Classe), y = Valeur,
+                    group = full_name,
+                    color = factor(Classe))) +
+         geom_point(size = 6) +
+         geom_smooth(se = FALSE, size = 0.5, method = "loess",span = 0.3,
+                     color = "black") +
+         ggplot2::labs(
+           title = "Probabilité de présence du ou des taxons sur les 7 classes de qualité"
+         ) +
+         ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
+         scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1), breaks = seq(0.1, 1, by = 0.1)) +
+         scale_color_manual(values = colories,
+                            name = "") +  # Utilisation d'une échelle de couleur discrète
+         theme_classic() +
+         theme(text = element_text(size = 10),
+               legend.title = element_blank(),
+               axis.text.x = element_blank(),
+               axis.title.x = element_blank(),
+               axis.title.y = element_blank(),
+               plot.margin = margin(t = 20, unit = "pt"))+
+         facet_wrap(~full_name)
+       
+     }
+   
+   p <- ggplotly(p, height = 600)
+   
   })
 
   output$downloadData2 <- shiny::downloadHandler(
@@ -545,10 +924,27 @@ server <- function(input, output, session) {
         dplyr::pull(full_name)), Sys.Date(), ".csv", sep = ".")
     },
     content = function(file) {
+      shinybusy::show_modal_spinner(
+        spin = "cube-grid",
+        color = "#009999",
+        text = "Téléchargement des données, cette opération peut prendre quelques minutes"
+      )
+      
       utils::write.csv2(data() %>% dplyr::filter(full_name %in% input$taxons), file)
+      
+      shinybusy::remove_modal_spinner()
+      
+      shinyWidgets::show_alert(
+        title = "Chargement terminé",
+        text = "Les données du taxon ont été téléchargées avec succès !",
+        type = "success"
+      )
+     
     }
+    
   )
 }
 
 # Run the app ----
 shiny::shinyApp(ui = ui, server = server)
+
