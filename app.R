@@ -69,13 +69,30 @@ ui <- shiny::fluidPage(
         .custom-heading {
           font-size: 20px;
         }
-      }"
-    )
+      }",
+      
+      HTML("
+  .navbar-default {
+    background-color: #66C1BF;
+    font-size: 15px;
+  }
+  .navbar-header {
+  float: left;
+  }
+  .navbar-brand {
+  padding: 0;
+  margin-right: 50px;
+  }
+  .navbar-brand img {
+  height: 40px; /* Ajustez la hauteur selon vos besoins */
+  }
+    
+")
+    ),
   ),
   shinyjs::useShinyjs(),
-  theme = shinythemes::shinytheme("cerulean"),
   shiny::navbarPage(
-    title = "Diatomées 2023",
+    title=div(img(src="INRAE.png"), "Diatomées 2023"),
     shiny::tabPanel(
       title = "Bienvenue",
       shiny::fluidRow(
@@ -93,7 +110,7 @@ ui <- shiny::fluidPage(
             "L'application est structurée en plusieurs onglets, chacun offrant des fonctionnalités spécifiques :"
           ),
           
-          shiny::div(style = "border: 4px solid #00CC99; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+          shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
           
           shiny::h3(class = "custom-heading", "Onglet Données Brutes"),
           
@@ -108,7 +125,7 @@ ui <- shiny::fluidPage(
           
             )),
           
-          shiny::div(style = "border: 4px solid #00CC99; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+          shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
           shiny::h3(class = "custom-heading", "Onglet Carte"),
           shiny::p(
             class = "custom-text",
@@ -124,7 +141,7 @@ ui <- shiny::fluidPage(
             "
           ),
           
-          shiny::div(style = "border: 4px solid #339966; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+          shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
           shiny::h3(class = "custom-heading", "Sous-Onglet Données"),
           shiny::p(
             class = "custom-text",
@@ -134,7 +151,7 @@ ui <- shiny::fluidPage(
           )),
           
           
-          shiny::div(style = "border: 4px solid #339966; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+          shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
           shiny::h3(class = "custom-heading", "Sous-Onglet Profile"),
           shiny::p(
             class = "custom-text",
@@ -178,7 +195,7 @@ ui <- shiny::fluidPage(
       title = "Carte",
       shiny::sidebarLayout(
         shiny::sidebarPanel(
-          shiny::selectInput("taxons", "Liste des taxons disponibles: ", "", multiple = TRUE),
+          shiny::selectizeInput("taxons", "Liste des taxons disponibles: ", "", multiple = TRUE),
           shiny::code(
             "Espèces comprises dans cette appelation: ",
             style = "font-size:15px;"
@@ -200,7 +217,13 @@ ui <- shiny::fluidPage(
             id = "tabs",
             shiny::tabPanel(
               "Chorologie",
-              shiny::fluidRow(leaflet::leafletOutput("mapFiltered", width = "100%", height = "800px"))
+              checkboxInput("toggleMaps", "Afficher la carte de densité"),
+              fluidRow(
+                leafletOutput("mapFiltered", width = "100%", height = "800px")
+              ),
+              fluidRow(
+                leafletOutput("mapFiltered2", width = "100%", height = "800px")
+              )
             ),
             shiny::tabPanel(
               "Données",
@@ -239,8 +262,15 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output, session) {
   
-  library(openxlsx)
-  library(lubridate)
+  observeEvent(input$toggleMaps, {
+    if (input$toggleMaps) {
+      shinyjs::hide("mapFiltered")
+      shinyjs::show("mapFiltered2")
+    } else {
+      shinyjs::hide("mapFiltered2")
+      shinyjs::show("mapFiltered")
+    }
+  })
   
   # Observer pour surveiller les changements dans l'input taxons
   observe({
@@ -249,8 +279,8 @@ server <- function(input, output, session) {
     
     # Si plus de deux éléments sont sélectionnés, mettre à jour le selectInput pour n'afficher que les deux premiers éléments sélectionnés
     if (selected > 2) {
-      updateSelectInput(session, "taxons", selected = input$taxons[1:2])
-      
+      updateSelectizeInput(session, "taxons", selected = input$taxons[1:2])
+     
       showNotification(
         "Vous ne pouvez pas comparer plus de deux taxons",
         type = "warning",
@@ -493,8 +523,8 @@ server <- function(input, output, session) {
 
     shinybusy::show_modal_spinner(
       spin = "cube-grid",
-      color = "#009999",
-      text = "Chargement des données NAIDES: Veuillez patienter"
+      color = "#66C1BF",
+      text = "Chargement des données NAIADES: Veuillez patienter"
     )
 
     # load(input$upload$datapath)
@@ -517,7 +547,7 @@ server <- function(input, output, session) {
     
     shinyWidgets::show_alert(
       title = "Chargement terminé",
-      text = "Les données NAIDES ont été chargées avec succès !",
+      text = "Les données NAIADES ont été chargées avec succès !",
       type = "success"
     )
 
@@ -558,7 +588,7 @@ server <- function(input, output, session) {
   })
 
   shiny::observe({
-    shiny::updateSelectInput(session, "taxons",
+    shiny::updateSelectizeInput(session, "taxons",
       choices = c("", selection_taxon())
     )
   })
@@ -603,7 +633,7 @@ server <- function(input, output, session) {
     content = function(file) {
       shinybusy::show_modal_spinner(
         spin = "cube-grid",
-        color = "#009999",
+        color = "#66C1BF",
         text = "Téléchargement des données, cette opération peut prendre quelques minutes"
       )
       utils::write.csv2(data(), file)
@@ -637,7 +667,7 @@ server <- function(input, output, session) {
         fill = if (length(input$taxons) == 1) "" else "Espèce"
       ) +
       ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
-      ggplot2::scale_fill_manual(values = color_palette) +
+      ggplot2::scale_fill_manual(values = c("#008C56", "#423089")) +
       theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1),
                      legend.position = if (length(input$taxons) == 1) "none" else "top",
@@ -662,20 +692,20 @@ server <- function(input, output, session) {
         fill = if (length(input$taxons) == 1) "" else "Espèce"
       ) +
       ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
-      ggplot2::scale_fill_manual(values = color_palette)+
+      ggplot2::scale_fill_manual(values = c("#008C56", "#423089"))+
       theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, vjust = 1, hjust = 1),
                      legend.position = if (length(input$taxons) == 1) "none" else "top",
                      text = element_text(size = 15))
   })
   
-  
+
   mapFiltered <- shiny::reactive({
     shiny::req(input$taxons)
     
     leaflet_data <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
-      dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
+      dplyr::mutate(annee = as.character(lubridate::year(DATE))) %>%
       mutate(grp = str_sub(full_name, -6)) %>%
       dplyr::group_by(grp) %>%
       dplyr::mutate(label = dplyr::cur_group_id()) %>%
@@ -690,17 +720,47 @@ server <- function(input, output, session) {
       color = color_palette[label]) %>%
       ungroup()
     
- 
+    points <- leaflet_data %>%
+      sf::st_as_sf(coords = c("long", "lat"), crs = 4326) %>%
+      dplyr::select(taxon, geometry)
+    
+    polygones <- hydro %>% st_transform(geometry, crs = 4326)
+    
+    points <- st_make_valid(points)
+    polygones <- st_make_valid(polygones)
+    
+    intersection_tab <- st_intersection(points, polygones) %>%
+      dplyr::select(taxon, NomHER1) %>%
+      group_by(NomHER1) %>%
+      summarise(count = n()) %>%
+      st_drop_geometry()
+
+    intersection_tab_final <- data.frame(hydro) %>% left_join(intersection_tab, by = "NomHER1") %>%
+      st_as_sf() %>% mutate(count = ifelse(is.na(count) == TRUE, 0, count))
+
+    leafIcons <- icons(
+      iconUrl = ifelse(leaflet_data$full_name == input$taxons[1],
+                       "www/marker-icon-2x-blue.png",
+                       "www/marker-icon-2x-green.png"
+      ),
+      iconWidth = 15, iconHeight = 25,
+      iconAnchorX = 5, iconAnchorY = 20,
+      shadowUrl = "www/marker-shadow.png",
+      shadowWidth = 0, shadowHeight = 0,
+      shadowAnchorX = 0, shadowAnchorY = 0
+    )
+
    map_base %>%
-     leaflet::addCircleMarkers(
+     leaflet::addMarkers(
        data = leaflet_data,
        lng = ~long, 
        lat = ~lat,
        group = ~annee,
-       color = ~color,
-       fill = ~color,
-       radius = 0.4,  # Utiliser la couleur définie dans la colonne "color"
-       fillColor = ~color,
+       # color = ~color,
+       # fill = ~color,
+       # fillColor = ~color,
+       # radius = 0.6,
+       icon = leafIcons,
        popup = ~ paste(
          "1- Année: ", annee, "<br>",
          "2- Taxon: ", full_name, "<br>",
@@ -708,13 +768,26 @@ server <- function(input, output, session) {
          "4- Longitude: ", round(long, 2), "<br>",
          "5- Latitude: ", round(lat, 2), "<br>",
          "5- Abondance relative pour 1000:", round(RESULTAT, 2), "<br>"
-       ),
+       ), 
        # clusterOptions = leaflet::markerClusterOptions(removeOutsideVisibleBounds = F),
        labelOptions = leaflet::labelOptions(
          noHide = F,
          direction = "auto"
        )
      ) %>%
+     
+     addPolygons(data = 
+                   # polygones,
+                 intersection_tab_final,
+                 label = 
+                   paste0(intersection_tab_final$NomHER1, " | Total: ",
+                                intersection_tab_final$count),
+                 # polygones$NomHER1,
+                 
+                 color = "black",
+                 fill = "grey",
+                 group = "Hydro écorégions",
+                 labelOptions =  labelOptions(textsize = "15px")) %>%
      
      leaflet::addLayersControl(
         position = "topleft",
@@ -724,21 +797,150 @@ server <- function(input, output, session) {
           "Fond noir",
           "Open Street Map"
         ),
-        overlayGroups = leaflet_data$annee,
+        overlayGroups = c(unique(leaflet_data$annee), "Hydro écorégions"),
         options = leaflet::layersControlOptions(collapsed = FALSE)
       ) %>%
       leaflet::hideGroup(group = unique(leaflet_data$annee)) %>%
       leaflet::setView(
         lng = 2,
         lat = 47,
-        zoom = 6)
+        zoom = 6) %>%
+     addControl(html = "<div id='custom-legend'>Référence marqueurs: Rubén de Celis Hernández.</div>",
+                position = "bottomleft")
 
     
+  })
+  
+
+  mapFiltered2 <- shiny::reactive({
+    
+    shiny::req(input$taxons)
+
+    leaflet_data <- data() %>%
+      dplyr::filter(full_name %in% input$taxons[1]) %>%
+      mutate(grp = str_sub(full_name, -6)) %>%
+      dplyr::group_by(grp) %>%
+      dplyr::mutate(label = dplyr::cur_group_id()) %>%
+      dplyr::distinct() %>%
+      dplyr::mutate(annee = lubridate::year(DATE))
+
+    years <- as.character(unique(leaflet_data$annee))
+
+    map_base %>%
+      
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[1]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[1],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[2]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[2],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[3]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[3],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[4]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[4],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[5]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[5],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[6]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[6],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[7]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[7],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[8]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[8],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[9]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[9],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[10]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[10],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[11]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[11],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[12]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[12],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[13]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[13],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[14]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[14],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[15]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[15],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[16]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[16],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[17]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[17],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[18]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[18],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[19]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[19],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[20]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[20],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[21]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[21],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[22]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[22],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[23]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[23],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[24]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[24],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[25]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[25],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[26]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[26],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[27]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[27],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[28]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[28],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[29]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[29],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[30]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[30],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[31]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[31],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[32]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[32],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[33]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[33],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[34]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[34],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[35]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[35],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[36]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[36],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[37]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[37],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[38]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[38],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[39]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[39],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[40]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[40],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[41]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[41],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[42]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[42],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      addHeatmap(data = leaflet_data %>% dplyr::filter(annee == years[43]), lng = ~long, lat = ~lat, blur = 5, max = 0.5, radius = 15, group = years[43],
+                 gradient = brewer.pal(9, "YlGnBu")) %>%
+      
+      leaflet::addLayersControl(
+        position = "topleft",
+        baseGroups = c(
+          "Fond satellite",
+          "Fond clair",
+          "Fond noir",
+          "Open Street Map"
+        ),
+        overlayGroups = leaflet_data$annee,
+        options = leaflet::layersControlOptions(collapsed = FALSE)) %>%
+      leaflet::hideGroup(group = unique(leaflet_data$annee)) %>%
+      leaflet::setView(
+        lng = 2,
+        lat = 47,
+        zoom = 6)
+
+
   })
   
   
   output$mapFiltered <- leaflet::renderLeaflet({
     mapFiltered()
+  })
+  
+  output$mapFiltered2 <- leaflet::renderLeaflet({
+    mapFiltered2()
   })
 
   output$Donnees2 <- DT::renderDataTable({
@@ -793,22 +995,22 @@ server <- function(input, output, session) {
                    measure.vars = c("Optimum", "Seuil_minimum", "Seuil_maximum"))  %>%
      group_by(parameter_full) %>%
      mutate(group = cur_group_id()) %>%
-     ungroup()
-   
+     ungroup() %>%
+     mutate(code = str_sub(full_name, start = -5, end = -2))
    
    
    if (nrow(data) == 0) {
      showNotification(
-       "Ce taxon ne possède pas de profil trophique défini d'après l'étude de Carayon et al 2020",
+       "Ce taxon ne possède pas de profil trophique défini d'après l'étude de Carayon et al 2019",
        type = "warning",
        duration = 20
      )
      return(NULL)
    }else{
 
-     p <- ggplot(data, aes(x = str_sub(full_name, start = -5, end = -2), y = value, fill = variable, group = group, text = variable)) +
+     p <- ggplot(data, aes(x = code, y = value, fill = variable, group = group, text = variable)) +
      geom_point(size = 4)+
-     geom_line(color = "black", size = 0.1) +
+     # geom_line(color = "black", size = 0.1, aes(group = parameter_full)) +
      #scale_color_manual(values = c("Optimum" = "red", "Tolerance" = "blue", "Seuil_minimum" = "green", "Seuil_maximum" = "orange")) +  # Personnalisation des couleurs
      labs(x = "", y = "Valeurs") +  # Définition des étiquettes des axes
      theme_bw() +
@@ -818,7 +1020,7 @@ server <- function(input, output, session) {
            # ,
            # axis.text.x = element_text(angle = 45, hjust = 1)) +
      facet_wrap(~ parameter_full, scales = "free", ncol = 4)
-   
+     
 
    l <- list(
      font = list(
@@ -826,14 +1028,14 @@ server <- function(input, output, session) {
        size = 20,
        color = "green"),
      bgcolor = "#E2E2E2",
-     bordercolor = "black",
+     bordercolor = "#00A3A6",
      x = 0.8, y = 0.2,
      orientation = "l",
      borderwidth = 3,
      title=list(text='<b> Variable </b>'))
 
    # Conversion du graphique ggplot en graphique Plotly
-   p <- ggplotly(p, height = 800, tooltip = "text") %>%
+     p <- ggplotly(p, height = 800, tooltip = "text") %>%
      plotly::layout(title = "",
             legend = l)
    

@@ -18,6 +18,7 @@ library(lubridate)
 library(quarto)
 library(shiny)
 library(sf)
+library(leaflet)
 library(plotly)
 # library(readr)
 library(leaflet)
@@ -33,11 +34,15 @@ library(shinyjs)
 # library(downloader)
 library(fs)
 library(git2r)
+library(leaflet.extras)
+library(openxlsx)
+library(shinymaterial)
 
 
 
 # cOuleur des plots 
-color_palette <- c("blue", "red")
+color_palette <- c("#008C56", "#423089")
+color_palette2 <- c(brewer.pal(9, "Purples"), brewer.pal(9, "Reds"))
 
 
 correspondance <- c("COND" = "Conductivité",
@@ -61,7 +66,9 @@ trophie <- as_tibble(read_excel("data/Sup_material_published.xlsx", sheet = "Num
   mutate(full_name = sub("\\_g.*", "", full_name)) %>%
   mutate(full_name = str_replace_all(full_name, "[^[:alnum:]]", " ")) %>%
   mutate(full_name = paste0(full_name, " ", "(", code, ")")) %>%
-  dplyr::select(full_name, code, parameter,optima, range_min, range_max, Class) %>%
+  dplyr::select(full_name, code, parameter, 
+                # tolerance, 
+                optima, range_min, range_max, Class) %>%
   mutate(parameter_full = correspondance[parameter])
   
 
@@ -85,6 +92,7 @@ trophie <- as_tibble(read_excel("data/Sup_material_published.xlsx", sheet = "Num
 
 load("data/profiles.RData")
 
+
 # Fond de carte
 map_base <- leaflet::leaflet() %>%
   leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas,
@@ -99,8 +107,11 @@ map_base <- leaflet::leaflet() %>%
   leaflet::addProviderTiles("OpenStreetMap",
                             group = "Open Street Map")
 
+
 #
 `%notin%` <- Negate(`%in%`)
+
+hydro <- st_read("data/Hydroecoregion1.shp")
 
 
 
@@ -115,6 +126,7 @@ folder_content <- gh::gh("/repos/:owner/:repo/contents/:path",
                          owner = "leolea12",
                          repo = "NAIDESexport",
                          path = folder_path)
+
 
 # Vecteur pour stocker les noms des fichiers .Rda
 rda_file_names <- character()
