@@ -233,24 +233,18 @@ ui <- shiny::fluidPage(
                   shiny::downloadButton("downloadData2", "Download")
                 )
               )
-            ),
+            ), 
             shiny::navbarMenu(
               "Profile",
               shiny::tabPanel(
                 "Trophique",
                 shiny::mainPanel(
-                  shiny::absolutePanel(
-                    top = 70, right = -300, width = "150px"
-                  ),
-                  shiny::div(
-                    class = "custom-plot",
-                    plotly::plotlyOutput("Trophie")
-                  )
+                    shiny::plotOutput("Trophie")
                 )
-              ),
+              ), 
               shiny::tabPanel(
                 "Écologique",
-                plotly::plotlyOutput("Profil")
+                shiny::plotOutput("Profil")
               )
             )
           )
@@ -290,24 +284,19 @@ server <- function(input, output, session) {
   })
 
 
-
-
-
-  shiny::observe({
-    if (is.null(input$upload)) {
-      return()
-    } else {
-      var_example <- 1
-    }
-  })
-  output$filesUploaded <- shiny::reactive({
-    val <- !(is.null(input$upload))
-    print(val)
-  })
-
-  shiny::outputOptions(output, "filesUploaded", suspendWhenHidden = FALSE)
-
-
+  # shiny::observe({
+  #   if (is.null(input$upload)) {
+  #     return()
+  #   } else {
+  #     var_example <- 1
+  #   }
+  # })
+  # output$filesUploaded <- shiny::reactive({
+  #   val <- !(is.null(input$upload))
+  #   print(val)
+  # })
+  # 
+  # shiny::outputOptions(output, "filesUploaded", suspendWhenHidden = FALSE)
 
   # ---------------------------- Pre-traitement des données
 
@@ -524,12 +513,12 @@ server <- function(input, output, session) {
     shinybusy::show_modal_spinner(
       spin = "cube-grid",
       color = "#66C1BF",
-      text = "Chargement des données NAIADES: Veuillez patienter"
+      text = "Chargement des données NAIADES: Cette opération peut prendre quelques minutes"
     )
 
     # load(input$upload$datapath)
     
-    githubURL <- paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/",fichier_plus_recent)
+    githubURL <- paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/", fichier_plus_recent)
     
     # tempfile <- tempfile()  # Crée un fichier temporaire pour stocker le fichier téléchargé
     # download.file(url = githubURL, destfile = tempfile, mode = "wb")  # Télécharge le fichier à partir de l'URL
@@ -538,7 +527,8 @@ server <- function(input, output, session) {
     
     load(url(githubURL))
     
-    shiny::updateRadioButtons(
+    
+shiny::updateRadioButtons(
       session = session,
       inputId = "radio",
       choiceNames = seq(min(lubridate::year(Diatom$DATE)), max(lubridate::year(Diatom$DATE))),
@@ -554,7 +544,9 @@ server <- function(input, output, session) {
     shinybusy::remove_modal_spinner()
     
 
-    Diatom
+    Diatom 
+    # %>% mutate(full_name = ifelse(full_name == "Aucun", paste0(Nom_latin_taxon, " (", taxon,")"), full_name))
+    
   })
 
 
@@ -563,35 +555,39 @@ server <- function(input, output, session) {
 
     data() %>%
       dplyr::select(full_name) %>%
-      unique() %>%
       dplyr::arrange(full_name) %>%
-      dplyr::pull(full_name)
+      dplyr::pull(full_name) %>%
+      unique()
+  })
+  
+  shiny::observe({
+    shiny::updateSelectizeInput(session, "taxons",
+                                choices = selection_taxon()
+    )
   })
 
   output$name_list <- shiny::renderText({
     as.character(data() %>%
       dplyr::filter(full_name %in% input$taxons[1]) %>%
-      dplyr::select(taxons_apparies) %>%
+      dplyr::select(taxons_apparies, CodeValid) %>%
       unique() %>%
-      dplyr::mutate(taxons_apparies = dplyr::if_else(is.na(taxons_apparies) == T, paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Aucun"), paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": ",taxons_apparies))))
+      dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Aucun"), 
+                                                     paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Code Valide = ",CodeValid, ", Taxons compris: ", taxons_apparies))))[1]
   })
   
   output$name_list2 <- shiny::renderText({
     if(length(input$taxons) == 2){
     as.character(data() %>%
                    dplyr::filter(full_name %in% input$taxons[2]) %>%
-                   dplyr::select(taxons_apparies) %>%
+                   dplyr::select(taxons_apparies, CodeValid) %>%
                    unique() %>%
-                   dplyr::mutate(taxons_apparies = dplyr::if_else(is.na(taxons_apparies) == T, paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Aucun"), paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": ",taxons_apparies))))
+                   dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Aucun"), 
+                                                                  paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Code Valide = ",CodeValid, ", Taxons compris: ", taxons_apparies))))[1]
     }else{""}
 
   })
 
-  shiny::observe({
-    shiny::updateSelectizeInput(session, "taxons",
-      choices = c("", selection_taxon())
-    )
-  })
+ 
 
 
   output$tab <- DT::renderDataTable({
@@ -600,7 +596,9 @@ server <- function(input, output, session) {
 
 
     DT::datatable(
-      data() %>% dplyr::filter(lubridate::year(DATE) == input$radio) %>%
+      data() %>% 
+        distinct(taxon, CODE_STATION, DATE, .keep_all = TRUE) %>%
+        dplyr::filter(lubridate::year(DATE) == input$radio) %>%
         dplyr::select(
           date = DATE,
           "n°station" = CODE_STATION,
@@ -654,8 +652,12 @@ server <- function(input, output, session) {
     
     req(length(input$taxons) <= 2)
     
-    data() %>%
+    Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::pull(CodeValid)
+    
+    data() %>%
+      dplyr::filter(full_name %in% Code_Valid) %>%
       dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
       dplyr::group_by(annee, full_name) %>%
       dplyr::summarise(Abondance_moyenne = mean(RESULTAT, na.rm = TRUE)) %>%
@@ -679,8 +681,12 @@ server <- function(input, output, session) {
     
     req(length(input$taxons) <= 2)
     
-    data() %>%
+    Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::pull(CodeValid)
+    
+    data() %>%
+      dplyr::filter(full_name %in% Code_Valid) %>%
       dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
       dplyr::group_by(annee, full_name) %>%
       dplyr::summarise(Occurence = dplyr::n()) %>%
@@ -703,11 +709,16 @@ server <- function(input, output, session) {
   mapFiltered <- shiny::reactive({
     shiny::req(input$taxons)
     
-    leaflet_data <- data() %>%
+    Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::pull(CodeValid)
+    
+    leaflet_data <- data() %>%
+      dplyr::filter(full_name %in% Code_Valid) %>%
+      mutate(full_name = CodeValid) %>%
       dplyr::mutate(annee = as.character(lubridate::year(DATE))) %>%
-      mutate(grp = str_sub(full_name, -6)) %>%
-      dplyr::group_by(grp) %>%
+      mutate(grp_color = str_sub(CodeValid, -6)) %>%
+      dplyr::group_by(grp_color) %>%
       dplyr::mutate(label = dplyr::cur_group_id()) %>%
       dplyr::distinct() %>%
       dplyr::ungroup() %>%
@@ -720,50 +731,38 @@ server <- function(input, output, session) {
       color = color_palette[label]) %>%
       ungroup()
     
-    points <- leaflet_data %>%
-      sf::st_as_sf(coords = c("long", "lat"), crs = 4326) %>%
-      dplyr::select(taxon, geometry)
+    # points <- leaflet_data %>%
+    #   sf::st_as_sf(coords = c("long", "lat"), crs = 4326) %>%
+    #   dplyr::select(taxon, geometry)
     
     polygones <- hydro %>% st_transform(geometry, crs = 4326)
     
-    points <- st_make_valid(points)
+    # points <- st_make_valid(points)
     polygones <- st_make_valid(polygones)
     
-    intersection_tab <- st_intersection(points, polygones) %>%
-      dplyr::select(taxon, NomHER1) %>%
-      group_by(NomHER1) %>%
-      summarise(count = n()) %>%
-      st_drop_geometry()
-
-    intersection_tab_final <- data.frame(hydro) %>% left_join(intersection_tab, by = "NomHER1") %>%
-      st_as_sf() %>% mutate(count = ifelse(is.na(count) == TRUE, 0, count))
-
-    leafIcons <- icons(
-      iconUrl = ifelse(leaflet_data$full_name == input$taxons[1],
-                       "www/marker-icon-2x-blue.png",
-                       "www/marker-icon-2x-green.png"
-      ),
-      iconWidth = 15, iconHeight = 25,
-      iconAnchorX = 5, iconAnchorY = 20,
-      shadowUrl = "www/marker-shadow.png",
-      shadowWidth = 0, shadowHeight = 0,
-      shadowAnchorX = 0, shadowAnchorY = 0
-    )
-
+    # intersection_tab <- st_intersection(points, polygones) %>%
+    #   dplyr::select(taxon, NomHER1) %>%
+    #   group_by(NomHER1) %>%
+    #   summarise(count = n()) %>%
+    #   st_drop_geometry()
+    # 
+    # intersection_tab_final <- data.frame(hydro) %>% left_join(intersection_tab, by = "NomHER1") %>%
+    #   st_as_sf() %>% mutate(count = ifelse(is.na(count) == TRUE, 0, count))
+    
    map_base %>%
-     leaflet::addMarkers(
+     leaflet::addCircleMarkers(
        data = leaflet_data,
        lng = ~long, 
        lat = ~lat,
        group = ~annee,
-       # color = ~color,
-       # fill = ~color,
-       # fillColor = ~color,
-       # radius = 0.6,
-       icon = leafIcons,
+       color = ~color,
+       fill = ~color,
+       fillColor = ~color,
+       radius = 0.6,
+       # icon = leafIcons,
        popup = ~ paste(
          "1- Année: ", annee, "<br>",
-         "2- Taxon: ", full_name, "<br>",
+         "2- Taxon: ", CodeValid, "<br>",
          "3- Commune: ", commune, "<br>",
          "4- Longitude: ", round(long, 2), "<br>",
          "5- Latitude: ", round(lat, 2), "<br>",
@@ -777,12 +776,12 @@ server <- function(input, output, session) {
      ) %>%
      
      addPolygons(data = 
-                   # polygones,
-                 intersection_tab_final,
+                   polygones,
+                 # intersection_tab_final,
                  label = 
-                   paste0(intersection_tab_final$NomHER1, " | Total: ",
-                                intersection_tab_final$count),
-                 # polygones$NomHER1,
+                   # paste0(intersection_tab_final$NomHER1, " | Total: ",
+                   #              intersection_tab_final$count),
+                 polygones$NomHER1,
                  
                  color = "black",
                  fill = "grey",
@@ -815,9 +814,13 @@ server <- function(input, output, session) {
   mapFiltered2 <- shiny::reactive({
     
     shiny::req(input$taxons)
+    
+    Code_Valid <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[1]) %>% 
+      dplyr::pull(CodeValid)
 
     leaflet_data <- data() %>%
-      dplyr::filter(full_name %in% input$taxons[1]) %>%
+      dplyr::filter(full_name %in% Code_Valid) %>%
       mutate(grp = str_sub(full_name, -6)) %>%
       dplyr::group_by(grp) %>%
       dplyr::mutate(label = dplyr::cur_group_id()) %>%
@@ -944,14 +947,20 @@ server <- function(input, output, session) {
   })
 
   output$Donnees2 <- DT::renderDataTable({
+    
     shiny::req(input$taxons)
+    
+    Code_valid <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::pull(CodeValid)
+    
     DT::datatable(
-      data() %>%
-        dplyr::filter(full_name %in% input$taxons) %>%
+      data() %>% 
+        dplyr::filter(full_name %in% Code_valid) %>%
         dplyr::mutate(RESULTAT = round(RESULTAT, 2)) %>%
         dplyr::select(
           date = DATE, station = CODE_STATION, commune,
-          taxon = full_name, Sandre = SANDRE,
+          taxon = CodeValid, Sandre = SANDRE,
           longitude = lon, latitude = lat,
           "ABONDANCE relative (‰)" = RESULTAT
         ),
@@ -964,10 +973,10 @@ server <- function(input, output, session) {
       class = 'custom-table'
     )
   })
-  
+ 
 
   # Combinaison des valeurs des colonnes optima, tolerance, range_min, range_max
-  output$Trophie <- plotly::renderPlotly({
+  output$Trophie <- renderPlot({
    
      shiny::req(input$taxons)
     
@@ -987,12 +996,15 @@ server <- function(input, output, session) {
     
     # num_taxons <- length(input$taxons)
     
+    Code_Valid <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::pull(CodeValid) %>% unique()
     
    data <- reshape2::melt(trophie %>% 
-                     dplyr::filter(full_name %in% input$taxons) %>%
-                     rename(Optimum = optima, Seuil_minimum = range_min, Seuil_maximum = range_max), 
+                     dplyr::filter(full_name %in% Code_Valid) %>%
+                     rename(Optimum = optima, Tolerance = tolerance, Seuil_minimum = range_min, Seuil_maximum = range_max), 
                    id.vars = c("full_name", "parameter_full"), 
-                   measure.vars = c("Optimum", "Seuil_minimum", "Seuil_maximum"))  %>%
+                   measure.vars = c("Optimum", "Tolerance", "Seuil_minimum", "Seuil_maximum"))  %>%
      group_by(parameter_full) %>%
      mutate(group = cur_group_id()) %>%
      ungroup() %>%
@@ -1007,38 +1019,43 @@ server <- function(input, output, session) {
      )
      return(NULL)
    }else{
-
-     p <- ggplot(data, aes(x = code, y = value, fill = variable, group = group, text = variable)) +
-     geom_point(size = 4)+
-     # geom_line(color = "black", size = 0.1, aes(group = parameter_full)) +
-     #scale_color_manual(values = c("Optimum" = "red", "Tolerance" = "blue", "Seuil_minimum" = "green", "Seuil_maximum" = "orange")) +  # Personnalisation des couleurs
-     labs(x = "", y = "Valeurs") +  # Définition des étiquettes des axes
-     theme_bw() +
-     theme(panel.spacing = unit(2, "lines"),
-           text=element_text(size=10),
-           strip.placement = "outside", strip.background = element_blank())+
-           # ,
-           # axis.text.x = element_text(angle = 45, hjust = 1)) +
-     facet_wrap(~ parameter_full, scales = "free", ncol = 4)
      
+     data2 <- data %>% group_by(full_name, parameter_full) %>%
+       pivot_wider(names_from = variable, values_from = value) %>%
+       rowwise() %>%
+       mutate(Distribution = list(rtruncnorm(n = 500, a = 0, b = Inf, mean = Optimum, sd = Tolerance))) %>%
+       ungroup()
 
-   l <- list(
-     font = list(
-       family = "sans-serif",
-       size = 20,
-       color = "green"),
-     bgcolor = "#E2E2E2",
-     bordercolor = "#00A3A6",
-     x = 0.8, y = 0.2,
-     orientation = "l",
-     borderwidth = 3,
-     title=list(text='<b> Variable </b>'))
-
-   # Conversion du graphique ggplot en graphique Plotly
-     p <- ggplotly(p, height = 800, tooltip = "text") %>%
-     plotly::layout(title = "",
-            legend = l)
-   
+     p <- data2 %>%
+       unnest(Distribution) %>%
+       ggplot(aes(x = code, y = Distribution, fill = parameter_full)) +
+       geom_violinhalf() +
+       labs(x = "", y = "Valeurs") +
+       theme_bw() +
+       theme(
+         panel.spacing = unit(2, "lines"),
+         text = element_text(size = 10),
+         strip.placement = "outside",
+         strip.background = element_blank()
+         # axis.text.x = element_text(angle = 45, hjust = 1)
+       )+
+       facet_wrap(~ parameter_full, scales = "free", ncol = 4)
+     
+     
+     # ggplot(data, aes(x = code, y = value, fill = variable, group = group, text = variable)) +
+     #   geom_violin() +
+     #   # geom_line(color = "black", size = 0.1, aes(group = parameter_full)) +
+     #   # scale_color_manual(values = c("Optimum" = "red", "Tolerance" = "blue", "Seuil_minimum" = "green", "Seuil_maximum" = "orange")) +
+     #   labs(x = "", y = "Valeurs") +
+     #   theme_bw() +
+     #   theme(
+     #     panel.spacing = unit(2, "lines"),
+     #     text = element_text(size = 10),
+     #     strip.placement = "outside",
+     #     strip.background = element_blank()
+     #     # axis.text.x = element_text(angle = 45, hjust = 1)
+     #   ) +
+     #   facet_wrap(~ parameter_full, scales = "free", ncol = 4)
    
    }
    
@@ -1060,15 +1077,21 @@ server <- function(input, output, session) {
       #       axis.text.x = if (num_taxons == 1) ggplot2::element_text(angle = 45, vjust = 1, hjust = 1) else ggplot2::element_blank(),
       #       strip.text = if (num_taxons == 1) ggplot2::element_blank() else ggplot2::element_text(size = 12))
   
+   p
+   
   })
   
   
-  output$Profil <- renderPlotly({
+  output$Profil <- renderPlot({
 
   req(input$taxons)
+    
+    Code_Valid <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::pull(CodeValid)
 
    tab <- profiles %>%
-    dplyr::filter(full_name %in% input$taxons)
+    dplyr::filter(full_name %in% Code_Valid)
    
    
    if (nrow(tab) == 0) {
@@ -1114,16 +1137,24 @@ server <- function(input, output, session) {
        
      }
    
-   p <- ggplotly(p, height = 600)
+   p
    
   })
 
   output$downloadData2 <- shiny::downloadHandler(
+   
     filename = function() {
       paste(as.character(data() %>%
-        dplyr::filter(full_name %in% input$taxons) %>%
-        unique() %>%
-        dplyr::pull(full_name)), Sys.Date(), ".csv", sep = ".")
+                           dplyr::filter(full_name %in% input$taxons[1]) %>%
+                           unique() %>%
+                           dplyr::pull(CodeValid) %>%
+                           unique()),
+            as.character(data() %>%
+                           dplyr::filter(full_name %in% input$taxons[2]) %>%
+                           unique() %>%
+                           dplyr::pull(CodeValid) %>%
+                           unique()),
+            Sys.Date(), ".csv", sep = ".")
     },
     content = function(file) {
       shinybusy::show_modal_spinner(
@@ -1132,7 +1163,8 @@ server <- function(input, output, session) {
         text = "Téléchargement des données, cette opération peut prendre quelques minutes"
       )
       
-      utils::write.csv2(data() %>% dplyr::filter(full_name %in% input$taxons), file)
+      utils::write.csv2(data() %>% dplyr::filter(full_name %in% input$taxons) %>%
+                          dplyr::mutate(full_name = CodeValid), file)
       
       shinybusy::remove_modal_spinner()
       

@@ -37,6 +37,8 @@ library(git2r)
 library(leaflet.extras)
 library(openxlsx)
 library(shinymaterial)
+library(see)
+library(truncnorm)
 
 
 
@@ -67,7 +69,7 @@ trophie <- as_tibble(read_excel("data/Sup_material_published.xlsx", sheet = "Num
   mutate(full_name = str_replace_all(full_name, "[^[:alnum:]]", " ")) %>%
   mutate(full_name = paste0(full_name, " ", "(", code, ")")) %>%
   dplyr::select(full_name, code, parameter, 
-                # tolerance, 
+                tolerance, 
                 optima, range_min, range_max, Class) %>%
   mutate(parameter_full = correspondance[parameter])
   
