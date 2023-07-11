@@ -116,7 +116,7 @@ correspondance <- c(
   "PO4" = "Phosphates",
   "SAT" = "Saturation en oxygène",
   "NORG" = "Azote organique",
-  "PH" = "PH"
+  "PH" = "pH"
 )
 
 # Trophie
