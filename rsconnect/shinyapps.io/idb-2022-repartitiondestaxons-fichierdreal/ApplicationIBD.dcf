@@ -5,9 +5,10 @@ account: idb-2022-repartitiondestaxons-fichierdreal
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 9391708
-bundleId: 7414285
+bundleId: 7444012
 url: https://idb-2022-repartitiondestaxons-fichierdreal.shinyapps.io/applicationIBD/
-when: 1688386830.92001
-lastSyncTime: 1688386830.92003
+when: 1689080074.79488
+lastSyncTime: 1689080074.79489
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: .Rbuildignore|Fiche-technique-Application-Diatomées-2023.html|Fiche technique Application Diatomées 2023.Rmd|LICENSE.md|myfile|README.md
