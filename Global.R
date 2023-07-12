@@ -44,15 +44,14 @@ library(fontawesome)
 
 
 
-# cOuleur des plots 
+# cOuleur des plots
 color_palette <- c("#9ED6E3", "#423089")
 color_palette2 <- c(brewer.pal(9, "Purples"), brewer.pal(9, "Reds"))
 
-shift_legend <- function(p){
-  
+shift_legend <- function(p) {
   # check if p is a valid object
-  if(!"gtable" %in% class(p)){
-    if("ggplot" %in% class(p)){
+  if (!"gtable" %in% class(p)) {
+    if ("ggplot" %in% class(p)) {
       gp <- ggplotGrob(p) # convert to grob
     } else {
       message("This is neither a ggplot object nor a grob generated from ggplotGrob. Returning original plot.")
@@ -61,77 +60,86 @@ shift_legend <- function(p){
   } else {
     gp <- p
   }
-  
+
   # check for unfilled facet panels
   facet.panels <- grep("^panel", gp[["layout"]][["name"]])
   empty.facet.panels <- sapply(facet.panels, function(i) "zeroGrob" %in% class(gp[["grobs"]][[i]]))
   empty.facet.panels <- facet.panels[empty.facet.panels]
-  if(length(empty.facet.panels) == 0){
+  if (length(empty.facet.panels) == 0) {
     message("There are no unfilled facet panels to shift legend into. Returning original plot.")
     return(p)
   }
-  
+
   # establish extent of unfilled facet panels (including any axis cells in between)
   empty.facet.panels <- gp[["layout"]][empty.facet.panels, ]
-  empty.facet.panels <- list(min(empty.facet.panels[["t"]]), min(empty.facet.panels[["l"]]),
-                             max(empty.facet.panels[["b"]]), max(empty.facet.panels[["r"]]))
+  empty.facet.panels <- list(
+    min(empty.facet.panels[["t"]]), min(empty.facet.panels[["l"]]),
+    max(empty.facet.panels[["b"]]), max(empty.facet.panels[["r"]])
+  )
   names(empty.facet.panels) <- c("t", "l", "b", "r")
-  
+
   # extract legend & copy over to location of unfilled facet panels
   guide.grob <- which(gp[["layout"]][["name"]] == "guide-box")
-  if(length(guide.grob) == 0){
+  if (length(guide.grob) == 0) {
     message("There is no legend present. Returning original plot.")
     return(p)
   }
-  gp <- gtable_add_grob(x = gp,
-                        grobs = gp[["grobs"]][[guide.grob]],
-                        t = empty.facet.panels[["t"]],
-                        l = empty.facet.panels[["l"]],
-                        b = empty.facet.panels[["b"]],
-                        r = empty.facet.panels[["r"]],
-                        name = "new-guide-box")
-  
+  gp <- gtable_add_grob(
+    x = gp,
+    grobs = gp[["grobs"]][[guide.grob]],
+    t = empty.facet.panels[["t"]],
+    l = empty.facet.panels[["l"]],
+    b = empty.facet.panels[["b"]],
+    r = empty.facet.panels[["r"]],
+    name = "new-guide-box"
+  )
+
   # squash the original guide box's row / column (whichever applicable)
   # & empty its cell
   guide.grob <- gp[["layout"]][guide.grob, ]
-  if(guide.grob[["l"]] == guide.grob[["r"]]){
+  if (guide.grob[["l"]] == guide.grob[["r"]]) {
     gp <- gtable_squash_cols(gp, cols = guide.grob[["l"]])
   }
-  if(guide.grob[["t"]] == guide.grob[["b"]]){
+  if (guide.grob[["t"]] == guide.grob[["b"]]) {
     gp <- gtable_squash_rows(gp, rows = guide.grob[["t"]])
   }
   gp <- gtable_remove_grobs(gp, "guide-box")
-  
+
   return(gp)
 }
 
 
-correspondance <- c("COND" = "Conductivité",
-                    "DBO5" = "Demande en oxygène à 5 jours",
-                    "NO3" = "Nitrates",
-                    "PO4" = "Phosphates",
-                    "SAT" = "Saturation en oxygène",
-                    "NORG" = "Azote organique",
-                    "PH" = "PH")
+correspondance <- c(
+  "COND" = "Conductivité",
+  "DBO5" = "Demande en oxygène à 5 jours",
+  "NO3" = "Nitrates",
+  "PO4" = "Phosphates",
+  "SAT" = "Saturation en oxygène",
+  "NORG" = "Azote organique",
+  "PH" = "pH"
+)
 
-#Trophie
+# Trophie
 trophie <- as_tibble(read_excel("data/Sup_material_published.xlsx", sheet = "Numbers")) %>%
   dplyr::left_join(as_tibble(read_excel("data/Sup_material_published.xlsx", sheet = "database synthesis")) %>%
-                     rename(code = "Code")) %>%
+    rename(code = "Code")) %>%
   left_join(as_tibble(utils::read.csv2("data/table_transcodage.csv", stringsAsFactors = FALSE)) %>%
-              select(code = "abre", True_name = "CodeValid", full_name = name_valid), by = "code") %>%
-  mutate(true_profile = if_else(code == True_name, 1,0)) %>%
+    select(code = "abre", True_name = "CodeValid", full_name = name_valid), by = "code") %>%
+  mutate(true_profile = if_else(code == True_name, 1, 0)) %>%
   dplyr::filter(true_profile == 1) %>%
   mutate(code = if_else(is.na(True_name) == T, code, True_name)) %>%
-  select(-True_name) %>% dplyr::filter(!is.na(code)) %>%
+  select(-True_name) %>%
+  dplyr::filter(!is.na(code)) %>%
   mutate(full_name = sub("\\_g.*", "", full_name)) %>%
   mutate(full_name = str_replace_all(full_name, "[^[:alnum:]]", " ")) %>%
   mutate(full_name = paste0(full_name, " ", "(", code, ")")) %>%
-  dplyr::select(full_name, code, parameter, 
-                tolerance, 
-                optima, range_min, range_max, Class) %>%
+  dplyr::select(
+    full_name, code, parameter,
+    tolerance,
+    optima, range_min, range_max, Class
+  ) %>%
   mutate(parameter_full = correspondance[parameter])
-  
+
 
 # profiles <- as_tibble(read.csv2(file = "data/IBD_params.csv", sep = ";",
 #                       dec = ",", header = TRUE, stringsAsFactors = FALSE)) %>%
@@ -157,16 +165,17 @@ load("data/profiles.RData")
 # Fond de carte
 map_base <- leaflet::leaflet() %>%
   leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas,
-                            group = "Fond clair"
+    group = "Fond clair"
   ) %>%
   leaflet::addProviderTiles(providers$CartoDB.DarkMatter,
-                            group = "Fond noir"
+    group = "Fond noir"
   ) %>%
   leaflet::addProviderTiles(providers$GeoportailFrance.orthos,
-                            group = "Fond satellite"
+    group = "Fond satellite"
   ) %>%
   leaflet::addProviderTiles("OpenStreetMap",
-                            group = "Open Street Map")
+    group = "Open Street Map"
+  )
 
 
 #
@@ -184,9 +193,10 @@ folder_path <- "data_raw"
 
 # Obtenir le contenu du dossier depuis l'API GitHub
 folder_content <- gh::gh("/repos/:owner/:repo/contents/:path",
-                         owner = "leolea12",
-                         repo = "NAIDESexport",
-                         path = folder_path)
+  owner = "leolea12",
+  repo = "NAIDESexport",
+  path = folder_path
+)
 
 
 # Vecteur pour stocker les noms des fichiers .Rda
@@ -230,6 +240,3 @@ fichier_plus_recent <- basename(rda_file_names[index_plus_recent])
 #     }
 #   )
 # })
-
-
-
