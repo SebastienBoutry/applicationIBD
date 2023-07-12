@@ -6,8 +6,7 @@ ui <- shiny::fluidPage(
   shiny::tags$head(
     shiny::tags$style(
     
-    ".navbar{padding-left:650px;
-    padding-right:0px ; margin-right:auto; margin-left:auto;}",
+    ".navbar{margin-right:auto; margin-left:auto;}",
       
   ".custom-table {",
     "border: 1px solid black;",
