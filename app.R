@@ -5,51 +5,27 @@ ui <- shiny::fluidPage(
   
   shiny::tags$head(
     shiny::tags$style(
+    
+    ".navbar{padding-left:650px;
+    padding-right:0px ; margin-right:auto; margin-left:auto;}",
       
-      "
-  .custom-table {
-    border: 1px solid black;
-  }
-  
-  .custom-table th {
-    background-color: #f2f2f2;  
-    font-weight: bold;          
-    text-align: center;         
-  }
-  
-  .custom-table td {
-    text-align: center;         
-  }
-",
+  ".custom-table {",
+    "border: 1px solid black;",
+    "margin-top: 40px; ", 
+    "font-weight: bold;",
+  "}",
+
       ".custom-plot {",
       "  width: 800px;",
       # "  height: 400px;",
       "  margin-top: 40px;",  # Définir la marge supérieure personnalisée en pixels
       "}",
-      ".custom-notification {",
-      "  font-size: 40px;",
-      "  text-align: center;",
-      "  width: 300px;",
-      "  position: fixed;",
-      "  top: 50%;",
-      "  left: 50%;",
-      "  transform: translate(-50%, -50%);",
-      "  color: pink;",
-      "}",
-      ".custom-notification2 {",
-      "  font-size: 40px;",
-      "  text-align: center;",
-      "  width: 300px;",
-      "  position: fixed;",
-      "  top: 50%;",
-      "  left: 50%;",
-      "  transform: translate(-50%, -50%);",
-      "  color: pink;",
-      "}",
+  
       ".custom-text {
         font-size: 18px;
         margin-bottom: 10px;
       }",
+  
       ".custom-heading {
         font-size: 24px;
         font-weight: bold;
@@ -77,11 +53,11 @@ ui <- shiny::fluidPage(
       .navbar-default .navbar-brand {color: black;font-size: 30px;}
         .navbar-default .navbar-brand:hover {color: black;}
         .navbar { background-color: #66C1BF;}
-        .navbar-default .navbar-nav > li > a {color:black;}
+        .navbar-default .navbar-nav > li > a {color:white;}
         .navbar-default .navbar-nav > .active > a,
         .navbar-default .navbar-nav > .active > a:focus,
         .navbar-default .navbar-nav > .active > a:hover {color: white;background-color: #66C1BF;font-size: 25px;}
-        .navbar-default .navbar-nav > li > a:hover {color: black;background-color:#66C1BF;text-decoration:underline;}
+        .navbar-default .navbar-nav > li > a:hover {color: white;background-color:#66C1BF;text-decoration:underline; font-size: 25px;}
         .navbar-default .navbar-nav > li > a[data-value='Données Brutes'] {color: white;background-color: #66C1BF;font-size: 25px;}
         .navbar-default .navbar-nav > li > a[data-value='Visualisation'] {color: white;background-color: #66C1BF;font-size: 25px;}
         .navbar-default .navbar-nav > li > a[data-value='Profiles'] {color: white;background-color: #66C1BF;font-size: 25px;}
@@ -97,8 +73,8 @@ ui <- shiny::fluidPage(
     style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fff; z-index: 9999; text-align: center;",
     
     img(
-      src = "VisualDiatom.gif",
-      style = "width: 1500px; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
+      src = "VisualDiatom2.gif",
+      style = "width: 1000px; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
       onclick = "shinyjs.toggle('welcome_page'); shinyjs.toggle('app_content');"
     )
   ),
@@ -108,231 +84,240 @@ ui <- shiny::fluidPage(
     id = "app_content",
     style = "display: none;",
     
-  shiny::navbarPage(
-    title = "",
-    shiny::tabPanel(
-      title = "Accueil",
-      shiny::fluidRow(
-        shiny::column(
-          width = 12,
-          
-          div(class = "container",
-              style = "display: flex; justify-content: center; align-items: center; margin-top: 15px; background-color: white; padding: 20px;",
+    shiny::navbarPage(
+      title = "",
+      shiny::tabPanel(
+        title = "Accueil",
+        shiny::fluidRow(
+          shiny::column(
+            width = 12,
+            
+            div(class = "container",
+                style = "display: flex; justify-content: center; align-items: center; margin-top: 15px; background-color: white; padding: 20px;",
+                div(
+                  style = "margin-right: 40px;",
+                  img(src = "VisualDiatoms Logo2.png", width = "200px")
+                )),
+            
+            div(
+              class = "container",
+              style = "display: flex; justify-content: center; align-items: center; margin-top: 2px; background-color: white; padding: 20px;",
               div(
-                style = "margin-right: 40px;",
-                img(src = "VisualDiatoms Logo.png", width = "200px")
+                style = "margin-right: 60px;",
+                img(src = "INRAE.png", width = "100px")
+              ),
+              div(
+                style = "margin-right: 60px;",
+                img(src = "ECOVEA.png", width = "100px")
+              ),
+              div(
+                style = "margin-right: 60px;",
+                img(src = "logo_Aquaref.png", width = "100px")
+              )
+            ),
+            
+            div(
+              class = "container",
+              style = "display: flex; justify-content: center; align-items: center; margin-top: 2px; background-color: white; padding: 5px;",
+              div(
+                style = "margin-right: 10px;",
+                "Auteur Principal: Léonard Heinry, Co-Auteurs: Sebastien Boutry, Juliette Rosebery"
               )),
-    
-          div(
-            class = "container",
-            style = "display: flex; justify-content: center; align-items: center; margin-top: 2px; background-color: white; padding: 20px;",
-            div(
-              style = "margin-right: 60px;",
-              img(src = "INRAE.png", width = "100px")
-            ),
-            div(
-              style = "margin-right: 60px;",
-              img(src = "ECOVEA.png", width = "100px")
-            ),
-            div(
-              style = "margin-right: 60px;",
-              img(src = "logo_Aquaref.png", width = "100px")
-            )
-          ),
-          
-          div(
-            class = "container",
-            style = "display: flex; justify-content: center; align-items: center; margin-top: 2px; background-color: white; padding: 5px;",
-            div(
-              style = "margin-right: 10px;",
-              "Auteur Principal: Léonard Heinry, Co-Auteurs: Sebastien Boutry, Juliette Rosebery"
-            )),
-
-          
-          shiny::div(style = "border: 2px solid #66C1BF; border-radius: 10px; padding: 10px; margin-top: 20px; margin-bottom: 10px; background-color: #f2f2f2;",
-          
-          shiny::h1("Bienvenue dans l'application VisualDiatoms !"),
-          
-          shiny::p(
-            class = "custom-text",
-            paste0("Cette application vous permet de visualiser et de comparer les données de prélèvements diatomiques présents sur la base publique NAIADES.
+            
+            
+            shiny::div(style = "border: 2px solid #66C1BF; border-radius: 10px; padding: 10px; margin-top: 20px; margin-bottom: 10px; background-color: #f2f2f2;",
+                       
+                       shiny::h1("Bienvenue dans l'application VisualDiatoms !"),
+                       
+                       shiny::p(
+                         class = "custom-text",
+                         paste0("Cette application vous permet de visualiser et de comparer les données de prélèvements diatomiques présents sur la base publique NAIADES.
             Si c'est la première fois que vous entrez sur l'application, une notice d'utilisation est à votre disposition ci-dessous. Bonne visite !"
-          )),
-          
-          
-          shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                     
-                     shiny::h3(class = "custom-heading", "Introduction"),
-                     
-                     shiny::p(
-                       class = "custom-text",
-                       "L'objectif de cette application est d'améliorer la compréhension de la donnée diatomique, en proposant à l'utilisateur de visualiser 
+                         )),
+                       
+                       
+                       shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                                  
+                                  shiny::h3(class = "custom-heading", "Introduction"),
+                                  
+                                  shiny::p(
+                                    class = "custom-text",
+                                    "L'objectif de cette application est d'améliorer la compréhension de la donnée diatomique, en proposant à l'utilisateur de visualiser 
                        les taxons enregistrés sur la base de données publique NAIADES. Grâce à l'interface interactive, vous allez pouvoir sélectionner, télécharger et 
                        même comparer les données des prélèvements floristiques opérés par les agences de l'eau depuis 2007. Notre application se décompose en plusieurs
-                       onlget qui rendent la navigation simple et intuitive. Pour être certains que vous profiterez pleinement de l'expérience, la suite des éléments des cet
-                       onglet décrit de manière synthétique les fonctionnalités que vous retrouverez dans l'application."
+                       onglets qui rendent la navigation simple et intuitive. Pour être certains que vous profiterez pleinement de l'expérience, la suite de cette page
+                       décrit de manière synthétique les fonctionnalités que vous retrouverez dans l'application."
+                                    
+                                  )),
                        
-                     )),
-          
-          shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                     
-                     shiny::h3(class = "custom-heading", "L'onglet Données Brutes"),
-                     
-                     shiny::p(
-                       class = "custom-text",
-                       "En cliquant sur cet onglet, vous avez directement accès à la dernière version des données brutes extraites et formatées depuis NAIADES. 
+                       shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                                  
+                                  shiny::h3(class = "custom-heading", "L'onglet Données Brutes"),
+                                  
+                                  shiny::p(
+                                    class = "custom-text",
+                                    "En cliquant sur cet onglet, vous avez directement accès à la dernière version des données brutes extraites et formatées depuis NAIADES. 
             Servez-vous du panneau de gauche pour naviguer entre les années de prélèvements. 
             Chaque tableau d'une année est construit de la même façon, les colonnes sont requêtables pour celles présentant des caractères. 
             Les colonnes numérique peuvent quand à elles être filtrées à l'aide d'un curseur qui apparaît lorsque vous cliquez dans la barre de recherche de la colonne.
             Enfin, si vous en avez besoin, vous pouvez télécharger les données d'une année au format CSV à l'aide du bouton 'Download' situé en bas de chaque tableau.
             Veuillez noter que le volume des données est assez important et peut donc prendre plusieurs secondes voir quelques minutes !"
+                                    
+                                  )),
                        
-                     )),
-          
-          shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                     shiny::h3(class = "custom-heading", "L'onglet Visualisation"),
-                     shiny::p(
-                       class = "custom-text",
-                       "Cet onglet est composé de plusieurs éléments. Le panneau 'Chorologie' vous permet de visualiser les données de la base brute avec une vue centrée sur les taxons. 
+                       shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                                  shiny::h3(class = "custom-heading", "L'onglet Visualisation"),
+                                  shiny::p(
+                                    class = "custom-text",
+                                    "Cet onglet est composé de plusieurs éléments. Le panneau 'Chorologie' vous permet de visualiser les données de la base brute avec une vue centrée sur les taxons. 
             Sélectionnez le ou les taxons à afficher à l'aide de la liste déroulante 'Liste des taxons disponibles'. 
             La carte de l'onglet affichera ensuite les emplacements géographiques des taxons sélectionnés, et un menu vous permettra de cocher les années que vous souhaitez observer. 
             Vous pouvez sélectionner jusqu'à deux taxons. Chaque point de la carte est cliquable et affichera les informations du prélèvement que vous regardez.
             En dessous de 'Liste des taxons disponibles', les taxons appariés à celui ou ceux que vous avez choisit vous sont précisés.
             Enfin, deux histogrammes interactifs sont activables via les boutons 'Afficher les Abondances Moyennes' et 'Afficher les occurences'. Ils présentent l'évolution de l'abondance relative (en pour 1000) et 
-            l'évolution du nombre d'occurences du ou des taxons dans les relevés des années ou il(s) est/sont vu, ce qui vous permet d'avoir une idée de son/leur importance.
+            l'évolution du nombre d'occurences du ou des taxons dans les relevés des années ou il(s) est/sont vu(s), ce qui vous permet d'avoir une idée de son/leur importance.
             Lorsque vous sélectionnez un deuxième taxon, les représentations graphiques de chacun (Carte et Plot) se superposent pour vous permettre de comparer 
-            l'évolution des deux.
+            les deux.
             "
-                     ),
-                     
-                     shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                                shiny::h3(class = "custom-heading", "Le sous-Onglet Données"),
-                                shiny::p(
-                                  class = "custom-text",
-                                  "Dans ce panneau, 
+                                  ),
+                                  
+                                  shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                                             shiny::h3(class = "custom-heading", "Le sous-Onglet Données"),
+                                             shiny::p(
+                                               class = "custom-text",
+                                               "Dans ce panneau, 
             vous pouvez afficher et télécharger les données des taxons que vous avez sélectionnés depuis le panneau Chorologie. 
             Utilisez le bouton 'Download' pour télécharger les données au format CSV."
-                                )),
-                     
-                     
-                     shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                                shiny::h3(class = "custom-heading", "Le sous-Onglet Profile"),
-                                shiny::p(
-                                  class = "custom-text",
-                                  "Ce panneau comporte deux onglets: 'Trophique' et 'Écologique'."
-                                ),
-                                shiny::p(class = "custom-text",
-                                         "Dans l'onglet 'Trophique', vous pouvez afficher les informations concernant les paramètres pyshico-chimiques des milieux dans lesquels le taxon que 
-                   vous avez sélectionné est vu. Ces informations ont été récupérées grâce aux travaux de David Carayon en 2019 qui a dréssé un tableau 
+                                             )),
+                                  
+                                  
+                                  shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                                             shiny::h3(class = "custom-heading", "Le sous-Onglet Profil"),
+                                             shiny::p(
+                                               class = "custom-text",
+                                               "Ce panneau comporte deux onglets: 'Trophique' et 'Écologique'."
+                                             ),
+                                             shiny::p(class = "custom-text",
+                                                      "Dans l'onglet 'Trophique', vous pouvez afficher les informations concernant les préférenda pyshico-chimiques des taxons que 
+                   vous avez sélectionné. Ces informations ont été récupérées grâce aux travaux de David Carayon en 2019 qui a dréssé un tableau 
                    de profils physico-chimiques d'un grand nombre de taxons. Si un taxon n'est pas présent dans la base de David Carayon,
                    alors un message apparaîtra vous le précisant. Les valeurs des paramètres se superposent la encore si vous sélectionnez deux taxons."),
-                                shiny::p(class = "custom-text",
-                                         "Dans l'onglet 'Écologique', vous pouvez voir si le taxon sélectionné est indicateur ou pas de l'Indice Biologique Diatomées (IBD).
+                                             shiny::p(class = "custom-text",
+                                                      "Dans l'onglet 'Écologique', vous pouvez voir si le taxon sélectionné est indicateur ou pas de l'Indice Biologique Diatomées (IBD).
                    Si il l'est, vous verrez le profil écologique du taxon en question s'afficher à l'écran, sinon un message apparaîtra, comme pour l'onglet Trophique"))),
-          
-          shiny::p(class = "custom-text",
-                   "A présent je vous laisse profiter de l'application VisualDiatoms!"),
-          
-          div(
-            class = "container",
-            style = "display: flex; justify-content: center; align-items: center; margin-top: 30px; background-color: white; padding: 20px; border: 2px solid black;",
-            div(
-              style = "margin-right: 20px;",
-              HTML("<p>Références bibliograpiques:</p>"),
-              
-              HTML("<p>Carayon, D., Tison-Rosebery, J., & Delmas, F., 2019. Defining a new autoecological trait matrix for French stream benthic diatoms. Ecological Indicators, 103, 650-658.</p>"),
-              
-              HTML("<p>Coste, M., Boutry, S., Tison-Rosebery, J., Delmas, F., 2009. Improvements of the Biological Diatom Index (IBD): description and efficiency of the new version (IBD-2006). Ecological Indicators, 9, 621–650. https://doi.org/10.1016/j.ecolind.2008.06.003.</p>"),
-              
-              uiOutput("link")
-              
-              ))
+                       
+                       
+                       div(
+                         class = "container",
+                         style = "display: flex; justify-content: center; align-items: center; margin-top: 30px; background-color: white; padding: 20px; border: 2px solid black;",
+                         div(
+                           style = "margin-right: 30px;",
+                           HTML("<p>Références bibliograpiques:</p>"),
+                           
+                           HTML("<p>Carayon, D., Tison-Rosebery, J., & Delmas, F., 2019. Defining a new autoecological trait matrix for French stream benthic diatoms. Ecological Indicators, 103, 650-658.</p>"),
+                           
+                           HTML("<p>Coste, M., Boutry, S., Tison-Rosebery, J., Delmas, F., 2009. Improvements of the Biological Diatom Index (IBD): description and efficiency of the new version (IBD-2006). Ecological Indicators, 9, 621–650. https://doi.org/10.1016/j.ecolind.2008.06.003.</p>"),
+                           
+                           uiOutput("link")
+                           
+                         ))
+            )
+            
+          )
         )
-          
-        )
-      )
-    ),
-    shiny::tabPanel(
-      title = "Données Brutes",
-      shiny::sidebarLayout(
-        shiny::sidebarPanel(
-          shiny::radioButtons(
-            inputId = "radio",
-            label = "Visualisation des données brutes",
-            choices = c("Nothing Selected" = ""),
-            selected = NULL
-          ),
-          width = 3
-        ),
-        shiny::mainPanel(
-          DT::dataTableOutput("tab"),
-          shiny::downloadButton("downloadData", "Download")
-        )
-      )
-    ),
-    shiny::tabPanel(
-      title = "Visualisation",
-      shiny::sidebarLayout(
-        shiny::sidebarPanel(
-          shiny::selectizeInput("taxons", "Liste des taxons disponibles: ", "", multiple = TRUE),
-          shiny::code(
-            "Espèces comprises dans cette appelation: ",
-            style = "font-size:15px;"
-          ),
-          shiny::p(
-            shiny::textOutput("name_list"),
-            style = "font-size:15px;color:black;"
-          ),
-          shiny::p(
-            shiny::textOutput("name_list2"),
-            style = "font-size:15px;color:black;"
-          ),
-          checkboxInput("toggleMaps", "Afficher les Abondances Moyennes"),
-          checkboxInput("toggleMaps2", "Afficher les Occurences"),
-          plotly::plotlyOutput("Plot1"),
-          plotly::plotlyOutput("Plot2"),
-          width = 4
-        ),
-        shiny::mainPanel(
-          shiny::tabsetPanel(
-            id = "tabs",
-            shiny::tabPanel(
-              "Chorologie",
-              fluidRow(
-                leafletOutput("mapFiltered", width = "100%", height = "800px")
-              )
-              # fluidRow(
-              #   leafletOutput("mapFiltered2", width = "100%", height = "800px")
-              # )
+      ),
+      shiny::tabPanel(
+        title = "Données Brutes",
+        shiny::sidebarLayout(
+          shiny::sidebarPanel(
+            shiny::radioButtons(
+              inputId = "radio",
+              label = "Visualisation des données brutes",
+              choices = c("Nothing Selected" = ""),
+              selected = NULL
             ),
-            shiny::tabPanel(
-              "Données",
-              shiny::fluidRow(
-                shiny::mainPanel(
-                  DT::dataTableOutput("Donnees2", width = "100%"),
-                  shiny::downloadButton("downloadData2", "Download")
-                )
-              )
-            ), 
-            shiny::navbarMenu(
-              "Profile",
+            width = 3
+          ),
+          shiny::mainPanel(
+            DT::dataTableOutput("tab"),
+            shiny::downloadButton("downloadData", "Download")
+          )
+        )
+      ),
+      shiny::tabPanel(
+        title = "Visualisation",
+        shiny::sidebarLayout(
+          shiny::sidebarPanel(
+            shiny::selectizeInput("taxons", "Liste des taxons disponibles: ", "", multiple = TRUE),
+            shiny::code(
+              "Espèces comprises dans cette appelation: ",
+              style = "font-size:15px;"
+            ),
+            shiny::p(
+              shiny::textOutput("name_list"),
+              style = "font-size:15px;color:black;"
+            ),
+            shiny::p(
+              shiny::textOutput("name_list2"),
+              style = "font-size:15px;color:black;"
+            ),
+            checkboxInput("toggleMaps", "Afficher les Abondances Moyennes"),
+            checkboxInput("toggleMaps2", "Afficher les Occurences"),
+            plotly::plotlyOutput("Plot1"),
+            plotly::plotlyOutput("Plot2"),
+            width = 4
+          ),
+          shiny::mainPanel(
+            shiny::tabsetPanel(
+              id = "tabs",
               shiny::tabPanel(
-                "Trophique",
-                shiny::mainPanel(
-                  shiny::plotOutput("Trophie", width = "100%")
+                "Chorologie",
+                fluidRow(
+                  leafletOutput("mapFiltered", width = "100%", height = "800px")
+                )
+                # fluidRow(
+                #   leafletOutput("mapFiltered2", width = "100%", height = "800px")
+                # )
+              ),
+              shiny::tabPanel(
+                "Données",
+                shiny::fluidRow(
+                  shiny::mainPanel(
+                    DT::dataTableOutput("Donnees2", width = "100%"),
+                    shiny::downloadButton("downloadData2", "Download")
+                  )
                 )
               ), 
-              shiny::tabPanel(
-                "Écologique",
-                shiny::plotOutput("Profil", width = "100%")
+              shiny::navbarMenu(
+                "Profile",
+                shiny::tabPanel(
+                  "Trophique",
+                  shiny::mainPanel(
+                    div(class = "custom-plot",
+                    shiny::plotOutput("Trophie", width = "100%"))
+                  )
+                ), 
+                shiny::tabPanel(
+                  "Écologique",
+                  shiny::mainPanel(
+                    shiny::tags$div(
+                      shiny::h3("Informations sur le profil écologique"),
+                      shiny::br(),
+                      shiny::p(
+                        "Le profil écologique d'un taxon est définis d'après une probabilité de présence en pourcentage le long d'un gradient de 7 classes de qualités d'eau. Ce gradient est basé sur une liste de paramètres physico-chimique comprenant le pH, la conductivité, l'oxygène dissous, la demande biologique en oxygène, l'ammonium, les orthophosphates et les nitrates. Il est callilbré à l'échelle Européenne.",
+                        "Le graphique que vous voyez ci-dessous présente le(s) profil(s) écologique(s) du/des taxon(s) que vous avez sélectionné."
+                      )
+                    ),
+                    shiny::plotOutput("Profil", width = "100%")
+                  )
+                )
               )
             )
           )
         )
       )
     )
-  )
-))
+  ))
 
 server <- function(input, output, session) {
   
@@ -341,7 +326,7 @@ server <- function(input, output, session) {
   observeEvent(input$welcome_page, {
     shinyjs::toggle("welcome_page")
     shinyjs::toggle("app_content")
-
+    
   })
   
   url <- a("https://naiades.eaufrance.fr", href="https://naiades.eaufrance.fr", 
@@ -349,11 +334,10 @@ server <- function(input, output, session) {
   output$link <- renderUI({
     tagList("Lien vers NAIADES:", url)
   })
- 
+  
   observeEvent(input$toggleMaps, {
     if (input$toggleMaps) {
       shinyjs::show("Plot1")
-      shinyjs::hide("Plot2")
     } else {
       shinyjs::hide("Plot1")
     }
@@ -361,7 +345,6 @@ server <- function(input, output, session) {
   
   observeEvent(input$toggleMaps2, {
     if (input$toggleMaps2) {
-      shinyjs::hide("Plot1")
       shinyjs::show("Plot2")
     } else {
       shinyjs::hide("Plot2")
@@ -686,7 +669,7 @@ server <- function(input, output, session) {
                    dplyr::select(taxons_apparies, CodeValid) %>%
                    unique() %>%
                    dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Aucun"), 
-                                                                  paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,", Code Valide = ",CodeValid))))[1]
+                                                                  paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,",       Code Valide = ",CodeValid))))[1]
   })
   
   output$name_list2 <- shiny::renderText({
@@ -696,7 +679,7 @@ server <- function(input, output, session) {
                      dplyr::select(taxons_apparies, CodeValid) %>%
                      unique() %>%
                      dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Aucun"), 
-                                                                    paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,", Code Valide = ",CodeValid))))[1]
+                                                                    paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,",       Code Valide = ",CodeValid))))[1]
     }else{""}
     
   })
@@ -725,7 +708,7 @@ server <- function(input, output, session) {
         ),
       extensions = "Buttons",
       options = list(
-        pageLength = 20,
+        pageLength = 10,
         scroller = TRUE
       ),
       filter = "top", selection = "multiple", escape = FALSE,
@@ -783,14 +766,21 @@ server <- function(input, output, session) {
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% unique()
     
-    data() %>%
+    plot_data <- data() %>%
       dplyr::filter(full_name %in% Code_Valid) %>%
       dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
       dplyr::group_by(annee, full_name) %>%
-      dplyr::summarise(Abondance_moyenne = mean(RESULTAT, na.rm = TRUE)) %>%
+      dplyr::summarise(Abondance_moyenne = mean(RESULTAT, na.rm = TRUE))
+    
+      
+    plot_data %>%
       
       plot_ly(x = ~annee, y = ~round(Abondance_moyenne, 0), color = ~str_sub(full_name, -6), type = "bar",
-              colors = c("#66C1BF", "#423089")) %>%
+              colors = case_when(
+                length(unique(plot_data$full_name)) == 1 ~c("#66C1BF"),
+                length(unique(plot_data$full_name)) == 2 ~c("#66C1BF", "#423089")
+                
+                )) %>%
       plotly::layout(
         title = "",
         xaxis = list(title = "", tickangle = 45, tickfont = list(size = 10)),
@@ -800,7 +790,7 @@ server <- function(input, output, session) {
         showlegend = length(input$taxons) > 1,
         font = list(size = 15)
       )
-  
+    
   })
   
   output$Plot2 <- plotly::renderPlotly({
@@ -809,14 +799,20 @@ server <- function(input, output, session) {
     Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% unique()
-
-    data() %>%
+    
+    plot_data <- data() %>%
       dplyr::filter(full_name %in% Code_Valid) %>%
       dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
       dplyr::group_by(annee, full_name) %>%
-      dplyr::summarise(Occurence = dplyr::n()) %>%
+      dplyr::summarise(Occurence = dplyr::n())
+    
+    plot_data %>%
       plot_ly(x = ~annee, y = ~Occurence, color = ~str_sub(full_name, -6), type = "bar",
-              colors = c("#66C1BF", "#423089")) %>%
+              colors = case_when(
+                length(unique(plot_data$full_name)) == 1 ~c("#66C1BF"),
+                length(unique(plot_data$full_name)) == 2 ~c("#66C1BF", "#423089")
+                
+              )) %>%
       # add_trace(position = "stack", hoverinfo = "text",
       #           text = ~paste("Espèce: ", str_sub(full_name, -6), "<br>Annee: ", annee, "<br>Occurence: ", Occurence),
       #           marker = list(color = ~str_sub(full_name, -6))) %>%
@@ -929,7 +925,7 @@ server <- function(input, output, session) {
         lng = 2,
         lat = 47,
         zoom = 6) %>%
-      addControl(html = "<div id='custom-legend'>Référence Données: https://naiades.eaufrance.fr/ .</div>",
+      addControl(html = "<div id='custom-legend'>Référence Données: https://naiades.eaufrance.fr </div>",
                  position = "bottomleft")
     
     
@@ -1148,7 +1144,7 @@ server <- function(input, output, session) {
       data2 <- data %>% group_by(full_name, parameter_full) %>%
         pivot_wider(names_from = variable, values_from = value) %>%
         rowwise() %>%
-        mutate(Distribution = list(rtruncnorm(n = 500, a = 0, b = Inf, mean = Optimum, sd = Tolerance))) %>%
+        mutate(Distribution = list(rtruncnorm(n = 2000, a = 0, b = Inf, mean = Optimum, sd = Tolerance))) %>%
         ungroup()
       
       p <- data2 %>%
@@ -1156,18 +1152,25 @@ server <- function(input, output, session) {
         ggplot(aes(x = code, y = Distribution, color = parameter_full, fill = full_name)) +
         geom_violinhalf() +
         facet_wrap(~ parameter_full, scales = "free", ncol = 4)+
-        labs(x = "", y = "Valeurs") +
+        labs(x = "", y = "") +
         theme_bw() +
         theme(
           panel.spacing = unit(2, "lines"),
-          text = element_text(size = 12),
+          legend.text = element_text(size = 12),
+          axis.text.x = element_text(size = 15),
+          axis.text.y = element_text(size = 15),
           strip.placement = "outside",
-          strip.background = element_blank()
+          strip.background = element_blank(),
+          strip.text = element_text(size = 15)
           # axis.text.x = element_text(angle = 45, hjust = 1)
         ) +
-        scale_fill_manual(values = c("#9ED6E3", "#423089"))+
+        scale_fill_manual(values = case_when(
+          length(unique(data2$full_name)) == 1 ~c("#423089"),
+          length(unique(data2$full_name)) == 2 ~c("#66C1BF", "#423089")
+          
+        ))+
         scale_color_manual(values = rep("#000000", length(unique(data2$parameter_full))))+
-        guides(color = FALSE)
+        guides(color = FALSE, fill = guide_legend(title = NULL))
       
       
       
@@ -1209,7 +1212,7 @@ server <- function(input, output, session) {
     
     grid.draw(shift_legend(p))
     
-  }, height = 800, width = 800)
+  }, height = 800, width = 1000)
   
   
   output$Profil <- renderPlot({
@@ -1249,7 +1252,7 @@ server <- function(input, output, session) {
                                    color = factor(Classe))) +
           geom_smooth(se = FALSE, size = 0.5, method = "loess",span = 0.3, color = "black") +
           ggplot2::labs(
-            title = "Probabilité de présence le long des 7 classes de qualité"
+            title = ""
           ) +
           ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
           scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1), breaks = seq(0.1, 1, by = 0.1)) +

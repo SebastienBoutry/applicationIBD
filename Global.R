@@ -45,7 +45,7 @@ library(fontawesome)
 
 
 # cOuleur des plots
-color_palette <- c("#9ED6E3", "#423089")
+color_palette <- c("#66C1BF", "#423089")
 color_palette2 <- c(brewer.pal(9, "Purples"), brewer.pal(9, "Reds"))
 
 shift_legend <- function(p) {
@@ -110,12 +110,12 @@ shift_legend <- function(p) {
 
 
 correspondance <- c(
-  "COND" = "Conductivité",
-  "DBO5" = "Demande en oxygène à 5 jours",
-  "NO3" = "Nitrates",
-  "PO4" = "Phosphates",
-  "SAT" = "Saturation en oxygène",
-  "NORG" = "Azote organique",
+  "COND" = "Conductivité (μS/cm)",
+  "DBO5" = "Demande en oxygène (mg/L)",
+  "NO3" = "Nitrates (mg/L)",
+  "PO4" = "Phosphates (mg/L)",
+  "SAT" = "Saturation en oxygène (%)",
+  "NORG" = "Azote organique (mg/L)",
   "PH" = "pH"
 )
 

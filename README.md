@@ -1,34 +1,33 @@
 # applicationIBD
 
 
-# Application Diatomées 2023
+# Application VisualDiatoms
 
-Cette application Shiny, appelée "Diatomées 2023", permet de visualiser et de comparer les données de prélèvements diatomiques provenant de la base publique NAIADES qui répertorie l'ensemble des espèces de diatomées prélevées sur le territoire Français depuis 2007. L'application est structurée en plusieurs onglets, chacun offrant des fonctionnalités spécifiques. Au démarrage de l'application, le chargement de la dernière version des données est effectué, ce qui peut prendre quelques instants. Une fois chargées, les données sont formatées et rendues disponibles directement.
+Cette application vous permet de visualiser et de comparer les données de prélèvements diatomiques présents sur la base publique NAIADES.
+            Si c'est la première fois que vous entrez sur l'application, une notice d'utilisation est à votre disposition ci-dessous.
 
-## Onglet "Bienvenue"
+## Introduction
 
-Dans cet onglet, une brève introduction à l'application est donnée. L'utilisateur est informé que l'application permet de visualiser et de comparer les données de prélèvements diatomiques de la base NAIADES. Les fonctionnalités spécifiques de chaque onglet sont également mentionnées. Si l'utilisateur a un doute, il peut revenir à cet onglet autant de fois qu'il le souhaite pour prendre en main l'application.
+L'objectif de cette application est d'améliorer la compréhension de la donnée diatomique, en proposant à l'utilisateur de visualiser les taxons enregistrés sur la base de données publique NAIADES. Grâce à l'interface interactive, vous allez pouvoir sélectionner, télécharger et même comparer les données des prélèvements floristiques opérés par les agences de l'eau depuis 2007. Notre application se décompose en plusieurs onglets qui rendent la navigation simple et intuitive. Pour être certains que vous profiterez pleinement de l'expérience, la suite de cette page décrit de manière synthétique les fonctionnalités que vous retrouverez dans l'application.
 
 ## Onglet "Données Brutes"
 
-Cet onglet permet d'accéder aux données brutes extraites depuis NAIADES. Une interface de navigation par années de prélèvements est fournie dans le panneau de gauche. Chaque année est représentée par un tableau qui peut être filtré en fonction des vameurs présentes dans les colonnes. 
-
-Les données peuvent être téléchargées au format CSV en utilisant le bouton "Download" situé en bas de chaque tableau. Le téléchargement peut être long, surtout pour les années récentes (à partir de 2015), ainsi l'utilisateur doit éviter d'utiliser le bouton 'Download' de cet onglet sans avoir été prévenu du temps de traitement de cette demande.
+En cliquant sur cet onglet, vous avez directement accès à la dernière version des données brutes extraites et formatées depuis NAIADES. Servez-vous du panneau de gauche pour naviguer entre les années de prélèvements. Chaque tableau d'une année est construit de la même façon, les colonnes sont requêtables pour celles présentant des caractères. Les colonnes numérique peuvent quand à elles être filtrées à l'aide d'un curseur qui apparaît lorsque vous cliquez dans la barre de recherche de la colonne. Enfin, si vous en avez besoin, vous pouvez télécharger les données d'une année au format CSV à l'aide du bouton 'Download' situé en bas de chaque tableau.Veuillez noter que le volume des données est assez important et peut donc prendre plusieurs secondes voir quelques minutes !
 
 ## Onglet "Carte"
 
-Cet onglet est l'onglet principal de l'application. Il permet de visualiser les données sur une carte interactive centrée sur les taxons présents dans la base de données brute. L'utilisateur peut sélectionner un ou plusieurs taxons à afficher à l'aide d'une liste déroulante. Lorsqu'un ou plusieurs taxons sont sélectionnés, les taxons compris dans l'appelation apparaissent en dessous de la lise déroulante. Sur la droite, la carte affiche les emplacements géographiques du ou des taxons sélectionnés, et un menu permet de cocher les années à observer. Les points de la carte sont cliquables et affichent les informations du prélèvement correspondant. Deux histogrammes présentent l'évolution de l'abondance relative et du nombre d'occurrences du taxon sélectionné. Lorsqu'un deuxième taxon est sélectionné, les représentations graphiques des deux taxons se superposent pour permettre la comparaison. Attention, seulement deux taxons sont autorisés pour la comparaison afin d'éviter des problèmes d'affichage.
+Cet onglet est composé de plusieurs éléments. Le panneau 'Chorologie' vous permet de visualiser les données de la base brute avec une vue centrée sur les taxons. Sélectionnez le ou les taxons à afficher à l'aide de la liste déroulante 'Liste des taxons disponibles'. La carte de l'onglet affichera ensuite les emplacements géographiques des taxons sélectionnés, et un menu vous permettra de cocher les années que vous souhaitez observer. Vous pouvez sélectionner jusqu'à deux taxons. Chaque point de la carte est cliquable et affichera les informations du prélèvement que vous regardez. En dessous de 'Liste des taxons disponibles', les taxons appariés à celui ou ceux que vous avez choisit vous sont précisés. Enfin, deux histogrammes interactifs sont activables via les boutons 'Afficher les Abondances Moyennes' et 'Afficher les occurences'. Ils présentent l'évolution de l'abondance relative (en pour 1000) et l'évolution du nombre d'occurences du ou des taxons dans les relevés des années ou il(s) est/sont vu(s), ce qui vous permet d'avoir une idée de son/leur importance. Lorsque vous sélectionnez un deuxième taxon, les représentations graphiques de chacun (Carte et Plot) se superposent pour vous permettre de comparer les deux.
 
 ### Sous-Onglet "Données"
 
-Ce sous-onglet affiche les données du ou des taxons sélectionnés depuis le panneau "Carte". Les données peuvent également être téléchargées au format CSV en utilisant le bouton "Download" et peuvent être filtré de la même manière que celle du panneau "Données Brutes".
+Dans ce panneau, vous pouvez afficher et télécharger les données des taxons que vous avez sélectionnés depuis le panneau Chorologie. Utilisez le bouton 'Download' pour télécharger les données au format CSV.
 
-### Sous-Onglet "Profile"
+### Sous-Onglet "Profils"
 
 Ce sous-onglet comporte deux onglets : "Trophique" et "Écologique".
 
-L'onglet "Trophique" permet de visualiser les préférenda physico-chimiques du ou des taxons sélectionnés. Au total 6 variables sont prises en compte à savoir la conductivité, l'azote organique, les nitrates, le phosphore, le PH, la saturation en oxygène et la demande en oxygène à 5 jours. Pour chaque paramètre, il est possible d'accéder aux seuils minimum et maximum pour lesquels le ou les taxons sont retrouvés ainsi que leur optimum. Ces informations ont été récupérées à partir des travaux de David Carayon en 2019, qui a dressé un tableau de profils physico-chimiques pour de nombreux taxons. Si un taxon n'est pas présent dans la base de David Carayon, un message d'information est affiché. Les valeurs des paramètres se superposent lorsque deux taxons sont sélectionnés, toujours pour permettre la comparaison.
+Dans l'onglet 'Trophique', vous pouvez afficher les informations concernant les préférenda pyshico-chimiques des taxons que vous avez sélectionné. Ces informations ont été récupérées grâce aux travaux de David Carayon en 2019 qui a dréssé un tableau de profils physico-chimiques d'un grand nombre de taxons. Si un taxon n'est pas présent dans la base de David Carayon, alors un message apparaîtra vous le précisant. Les valeurs des paramètres se superposent la encore si vous sélectionnez deux taxons.
 
-Dans l'onglet "Écologique", on peut vérifier si le ou les taxons sélectionnés sont indicateurs de l'Indice Biologique Diatomées (IBD). Si c'est le cas, les graphiques des profiles écologiques s'affichent à l'écran, sinon un message est renvoyé.
+Dans l'onglet 'Écologique', vous pouvez voir si le taxon sélectionné est indicateur ou pas de l'Indice Biologique Diatomées (IBD). Si il l'est, vous verrez le profil écologique du taxon en question s'afficher à l'écran, sinon un message apparaîtra, comme pour l'onglet Trophique
 
 ---
