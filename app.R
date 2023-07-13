@@ -262,8 +262,8 @@ ui <- shiny::fluidPage(
             ),
             checkboxInput("toggleMaps", "Afficher les Abondances Moyennes"),
             checkboxInput("toggleMaps2", "Afficher les Occurences"),
-            plotly::plotlyOutput("Plot1"),
-            plotly::plotlyOutput("Plot2"),
+            shiny::plotOutput("Plot1"),
+            shiny::plotOutput("Plot2"),
             width = 4
           ),
           shiny::mainPanel(
@@ -757,7 +757,7 @@ server <- function(input, output, session) {
   # Définir une palette de couleurs fixe
   
   
-  output$Plot1 <- plotly::renderPlotly({
+  output$Plot1 <- shiny::renderPlot({
     
     req(length(input$taxons) <= 2)
     
@@ -765,64 +765,92 @@ server <- function(input, output, session) {
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% unique()
     
-    plot_data <- data() %>%
-      dplyr::filter(full_name %in% Code_Valid) %>%
-      dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
-      dplyr::group_by(annee, full_name) %>%
-      dplyr::summarise(Abondance_moyenne = mean(RESULTAT, na.rm = TRUE))
+    Code_Valid1 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[1]) %>%
+      dplyr::pull(CodeValid) %>% unique()
     
-      
+    Code_Valid2 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[2]) %>%
+      dplyr::pull(CodeValid) %>% unique()
+    
+    plot_data <- Diatom %>% 
+      dplyr::filter(full_name %in% Code_Valid) %>%
+      dplyr::mutate(
+        annee = as.factor(lubridate::year(DATE)),
+        Code = ifelse(full_name == Code_Valid1, "first", "second"),
+        Code  = factor(Code, levels = c("first", "second"))) %>%
+      dplyr::group_by(annee, full_name, Code) %>%
+      dplyr::summarise(Abondance_moyenne = mean(RESULTAT, na.rm = TRUE)) %>%
+      ungroup()
+    
     plot_data %>%
-      
-      plot_ly(x = ~annee, y = ~round(Abondance_moyenne, 0), color = ~str_sub(full_name, -6), type = "bar",
-              colors = case_when(
-                length(unique(plot_data$full_name)) == 1 ~c("#66C1BF"),
-                length(unique(plot_data$full_name)) == 2 ~c("#66C1BF", "#423089")
-                
-                )) %>%
-      plotly::layout(
-        title = "",
-        xaxis = list(title = "", tickangle = 45, tickfont = list(size = 10)),
-        yaxis = list(title = "", tickfont = list(size = 10)),
-        barmode = "group",
-        legend = list(orientation = "h", x = 0.5, y = -0.15),
-        showlegend = length(input$taxons) > 1,
-        font = list(size = 15)
+      ggplot(aes(x = annee, y = Abondance_moyenne, fill = Code)) +
+      geom_bar(stat = "identity", position = "stack", color = "black") +
+      theme_classic() +
+      scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(str_sub(Code_Valid1,-6), 
+                                                                     str_sub(Code_Valid2, -6))) +
+      theme(
+        legend.text = element_text(size = 12),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1)
+      ) +
+      guides(fill = guide_legend(title = NULL)) +
+      geom_text(
+        aes(label = ifelse(duplicated(annee), "*", "")),
+        color = "red",
+        size = 8,
+        position = position_dodge(width = 0)
       )
+  
     
   })
   
-  output$Plot2 <- plotly::renderPlotly({
+  output$Plot2 <- shiny::renderPlot({
     req(length(input$taxons) <= 2)
     
     Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% unique()
     
-    plot_data <- data() %>%
+    Code_Valid1 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[1]) %>%
+      dplyr::pull(CodeValid) %>% unique()
+    
+    Code_Valid2 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[2]) %>%
+      dplyr::pull(CodeValid) %>% unique()
+    
+    plot_data2 <- data() %>%
       dplyr::filter(full_name %in% Code_Valid) %>%
-      dplyr::mutate(annee = as.factor(lubridate::year(DATE))) %>%
+      dplyr::mutate(
+        annee = as.factor(lubridate::year(DATE)),
+        Code = ifelse(full_name == Code_Valid1, "first", "second"),
+        Code  = factor(Code, levels = c("first", "second"))) %>%
+      dplyr::group_by(annee, full_name, Code) %>%
       dplyr::group_by(annee, full_name) %>%
       dplyr::summarise(Occurence = dplyr::n())
     
-    plot_data %>%
-      plot_ly(x = ~annee, y = ~Occurence, color = ~str_sub(full_name, -6), type = "bar",
-              colors = case_when(
-                length(unique(plot_data$full_name)) == 1 ~c("#66C1BF"),
-                length(unique(plot_data$full_name)) == 2 ~c("#66C1BF", "#423089")
-                
-              )) %>%
-      # add_trace(position = "stack", hoverinfo = "text",
-      #           text = ~paste("Espèce: ", str_sub(full_name, -6), "<br>Annee: ", annee, "<br>Occurence: ", Occurence),
-      #           marker = list(color = ~str_sub(full_name, -6))) %>%
-      plotly::layout(
-        title = "",
-        xaxis = list(title = "", tickangle = 45, tickfont = list(size = 10)),
-        yaxis = list(title = "", tickfont = list(size = 10)),
-        barmode = "group",
-        legend = list(orientation = "h", x = 0.5, y = -0.15),
-        showlegend = length(input$taxons) > 1,
-        font = list(size = 15)
+    plot_data2 %>%
+      ggplot(aes(x = annee, y = Occurence, fill = full_name)) +
+      geom_bar(stat = "identity", position = "stack", color = "black") +
+      theme_classic() +
+      scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(str_sub(Code_Valid1,-6), 
+                                                                     str_sub(Code_Valid2, -6))) +
+      theme(
+        legend.text = element_text(size = 12),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 10),
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1)
+      ) +
+      guides(fill = guide_legend(title = NULL)) +
+      geom_text(
+        aes(label = ifelse(duplicated(annee), "*", "")),
+        color = "red",
+        size = 8,
+        position = position_dodge(width = 0)
       )
   })
   
@@ -852,6 +880,12 @@ server <- function(input, output, session) {
       color = color_palette[label]) %>%
       ungroup()
     
+    
+    pal <- colorFactor(
+      palette = c("#66C1BF", "#423089"),
+      domain = leaflet_data$CodeValid
+    )
+    
     # points <- leaflet_data %>%
     #   sf::st_as_sf(coords = c("long", "lat"), crs = 4326) %>%
     #   dplyr::select(taxon, geometry)
@@ -875,7 +909,7 @@ server <- function(input, output, session) {
         lng = ~long, 
         lat = ~lat,
         group = ~annee,
-        color = ~color,
+        color = ~pal(CodeValid),
         fillOpacity = 1,
         weight = 1,
         radius = 5,
@@ -1120,6 +1154,14 @@ server <- function(input, output, session) {
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% unique()
     
+    Code_Valid1 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[1]) %>%
+      dplyr::pull(CodeValid) %>% unique()
+    
+    Code_Valid2 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[2]) %>%
+      dplyr::pull(CodeValid) %>% unique()
+    
     data <- reshape2::melt(trophie %>% 
                              dplyr::filter(full_name %in% Code_Valid) %>%
                              rename(Optimum = optima, Tolerance = tolerance, Seuil_minimum = range_min, Seuil_maximum = range_max), 
@@ -1163,11 +1205,9 @@ server <- function(input, output, session) {
           strip.text = element_text(size = 15)
           # axis.text.x = element_text(angle = 45, hjust = 1)
         ) +
-        scale_fill_manual(values = case_when(
-          length(unique(data2$full_name)) == 1 ~c("#423089"),
-          length(unique(data2$full_name)) == 2 ~c("#66C1BF", "#423089")
-          
-        ))+
+        scale_fill_manual(breaks = c(Code_Valid1, Code_Valid2),
+          values = c("#66C1BF", "#423089"))+
+        
         scale_color_manual(values = rep("#000000", length(unique(data2$parameter_full))))+
         guides(color = FALSE, fill = guide_legend(title = NULL))
       
