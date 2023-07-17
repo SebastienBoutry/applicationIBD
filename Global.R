@@ -41,18 +41,18 @@ library(gtable)
 library(cowplot)
 library(grid)
 library(fontawesome)
+library(shinycssloaders)
 
 
 
 # cOuleur des plots
-color_palette <- c("#66C1BF", "#423089")
-color_palette2 <- c(brewer.pal(9, "Purples"), brewer.pal(9, "Reds"))
+# color_palette2 <- c(brewer.pal(9, "Purples"), brewer.pal(9, "Reds"))
 
 shift_legend <- function(p) {
   # check if p is a valid object
   if (!"gtable" %in% class(p)) {
     if ("ggplot" %in% class(p)) {
-      gp <- ggplotGrob(p) # convert to grob
+      gp <- ggplot2::ggplotGrob(p) # convert to grob
     } else {
       message("This is neither a ggplot object nor a grob generated from ggplotGrob. Returning original plot.")
       return(p)
@@ -84,7 +84,7 @@ shift_legend <- function(p) {
     message("There is no legend present. Returning original plot.")
     return(p)
   }
-  gp <- gtable_add_grob(
+  gp <- gtable::gtable_add_grob(
     x = gp,
     grobs = gp[["grobs"]][[guide.grob]],
     t = empty.facet.panels[["t"]],
@@ -98,12 +98,12 @@ shift_legend <- function(p) {
   # & empty its cell
   guide.grob <- gp[["layout"]][guide.grob, ]
   if (guide.grob[["l"]] == guide.grob[["r"]]) {
-    gp <- gtable_squash_cols(gp, cols = guide.grob[["l"]])
+    gp <- cowplot::gtable_squash_cols(gp, cols = guide.grob[["l"]])
   }
   if (guide.grob[["t"]] == guide.grob[["b"]]) {
-    gp <- gtable_squash_rows(gp, rows = guide.grob[["t"]])
+    gp <- cowplot::gtable_squash_rows(gp, rows = guide.grob[["t"]])
   }
-  gp <- gtable_remove_grobs(gp, "guide-box")
+  gp <- cowplot::gtable_remove_grobs(gp, "guide-box")
 
   return(gp)
 }
@@ -120,25 +120,25 @@ correspondance <- c(
 )
 
 # Trophie
-trophie <- as_tibble(read_excel("data/Sup_material_published.xlsx", sheet = "Numbers")) %>%
-  dplyr::left_join(as_tibble(read_excel("data/Sup_material_published.xlsx", sheet = "database synthesis")) %>%
-    rename(code = "Code")) %>%
-  left_join(as_tibble(utils::read.csv2("data/table_transcodage.csv", stringsAsFactors = FALSE)) %>%
-    select(code = "abre", True_name = "CodeValid", full_name = name_valid), by = "code") %>%
-  mutate(true_profile = if_else(code == True_name, 1, 0)) %>%
+trophie <- tidyr::as_tibble(readxl::read_excel("data/Sup_material_published.xlsx", sheet = "Numbers")) %>%
+  dplyr::left_join(tidyr::as_tibble(readxl::read_excel("data/Sup_material_published.xlsx", sheet = "database synthesis")) %>%
+    dplyr::rename(code = "Code")) %>%
+  dplyr::left_join(tidyr::as_tibble(utils::read.csv2("data/table_transcodage.csv", stringsAsFactors = FALSE)) %>%
+    dplyr::select(code = "abre", True_name = "CodeValid", full_name = name_valid), by = "code") %>%
+  dplyr::mutate(true_profile = dplyr::if_else(code == True_name, 1, 0)) %>%
   dplyr::filter(true_profile == 1) %>%
-  mutate(code = if_else(is.na(True_name) == T, code, True_name)) %>%
-  select(-True_name) %>%
+  dplyr::mutate(code = dplyr::if_else(is.na(True_name) == T, code, True_name)) %>%
+  dplyr::select(-True_name) %>%
   dplyr::filter(!is.na(code)) %>%
-  mutate(full_name = sub("\\_g.*", "", full_name)) %>%
-  mutate(full_name = str_replace_all(full_name, "[^[:alnum:]]", " ")) %>%
-  mutate(full_name = paste0(full_name, " ", "(", code, ")")) %>%
+  dplyr::mutate(full_name = sub("\\_g.*", "", full_name)) %>%
+  plotly::mutate(full_name = stringr::str_replace_all(full_name, "[^[:alnum:]]", " ")) %>%
+  plotly::mutate(full_name = paste0(full_name, " ", "(", code, ")")) %>%
   dplyr::select(
     full_name, code, parameter,
     tolerance,
     optima, range_min, range_max, Class
   ) %>%
-  mutate(parameter_full = correspondance[parameter])
+  dplyr::mutate(parameter_full = correspondance[parameter])
 
 
 # profiles <- as_tibble(read.csv2(file = "data/IBD_params.csv", sep = ";",
@@ -181,7 +181,7 @@ map_base <- leaflet::leaflet() %>%
 #
 `%notin%` <- Negate(`%in%`)
 
-hydro <- st_read("data/Hydroecoregion1.shp")
+hydro <- sf::st_read("data/Hydroecoregion1.shp")
 
 
 

@@ -1,6 +1,5 @@
 source("Global.R")
 
-# prefixer()
 ui <- shiny::fluidPage(
   
   shiny::tags$head(
@@ -67,10 +66,10 @@ ui <- shiny::fluidPage(
   ),
   shinyjs::useShinyjs(),
   
-  div(
+  shiny::div(
     id = "welcome_page",
     style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fff; z-index: 9999; text-align: center;",
-    
+
     img(
       src = "VisualDiatom2.gif",
       style = "width: 1000px; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
@@ -79,7 +78,7 @@ ui <- shiny::fluidPage(
   ),
   
   
-  div(
+  shiny::div(
     id = "app_content",
     style = "display: none;",
     
@@ -91,34 +90,34 @@ ui <- shiny::fluidPage(
           shiny::column(
             width = 12,
             
-            div(class = "container",
+            shiny::div(class = "container",
                 style = "display: flex; justify-content: center; align-items: center; margin-top: 15px; background-color: white; padding: 20px;",
                 div(
                   style = "margin-right: 40px;",
                   img(src = "VisualDiatoms Logo2.png", width = "200px")
                 )),
             
-            div(
+            shiny::div(
               class = "container",
               style = "display: flex; justify-content: center; align-items: center; margin-top: 2px; background-color: white; padding: 20px;",
-              div(
+              shiny::div(
                 style = "margin-right: 60px;",
                 img(src = "INRAE.png", width = "100px")
               ),
-              div(
+              shiny::div(
                 style = "margin-right: 60px;",
                 img(src = "ECOVEA.png", width = "100px")
               ),
-              div(
+              shiny::div(
                 style = "margin-right: 60px;",
                 img(src = "logo_Aquaref.png", width = "100px")
               )
             ),
             
-            div(
+            shiny::div(
               class = "container",
               style = "display: flex; justify-content: center; align-items: center; margin-top: 2px; background-color: white; padding: 5px;",
-              div(
+              shiny::div(
                 style = "margin-right: 10px;",
                 "Auteur Principal: Léonard Heinry, Co-Auteurs: Sebastien Boutry, Juliette Rosebery"
               )),
@@ -176,7 +175,7 @@ ui <- shiny::fluidPage(
             Enfin, deux histogrammes interactifs sont activables via les boutons 'Afficher les Abondances Moyennes' et 'Afficher les occurences'. Ils présentent l'évolution de l'abondance relative (en pour 1000) et 
             l'évolution du nombre d'occurences du ou des taxons dans les relevés des années ou il(s) est/sont vu(s), ce qui vous permet d'avoir une idée de son/leur importance.
             Lorsque vous sélectionnez un deuxième taxon, les représentations graphiques de chacun (Carte et Plot) se superposent pour vous permettre de comparer 
-            les deux.
+            les deux. Sur les barplots, des croix rouges apparaissent si deux taxons sont échantillonnés une même année. 
             "
                                   ),
                                   
@@ -206,10 +205,10 @@ ui <- shiny::fluidPage(
                    Si il l'est, vous verrez le profil écologique du taxon en question s'afficher à l'écran, sinon un message apparaîtra, comme pour l'onglet Trophique"))),
                        
                        
-                       div(
+                       shiny::div(
                          class = "container",
                          style = "display: flex; justify-content: center; align-items: center; margin-top: 30px; background-color: white; padding: 20px; border: 2px solid black;",
-                         div(
+                         shiny::div(
                            style = "margin-right: 30px;",
                            HTML("<p>Références bibliograpiques:</p>"),
                            
@@ -247,7 +246,8 @@ ui <- shiny::fluidPage(
         title = "Visualisation",
         shiny::sidebarLayout(
           shiny::sidebarPanel(
-            shiny::selectizeInput("taxons", "Liste des taxons disponibles: ", "", multiple = TRUE),
+            shiny::selectizeInput("taxons", "Liste des taxons disponibles: ", "", multiple = TRUE,
+                                  options = list(maxOptions = 10000)),
             shiny::code(
               "Espèces comprises dans cette appelation: ",
               style = "font-size:15px;"
@@ -259,11 +259,13 @@ ui <- shiny::fluidPage(
             shiny::p(
               shiny::textOutput("name_list2"),
               style = "font-size:15px;color:black;"
-            ),
-            checkboxInput("toggleMaps", "Afficher les Abondances Moyennes"),
-            checkboxInput("toggleMaps2", "Afficher les Occurences"),
-            shiny::plotOutput("Plot1"),
-            shiny::plotOutput("Plot2"),
+            ), 
+            shiny::checkboxInput("toggleMaps", "Afficher les Abondances Moyennes"),
+            shiny::checkboxInput("toggleMaps2", "Afficher les Occurences"),
+          shinycssloaders::withSpinner(plotOutput("Plot1", width = "100%", height = "400px"), type = 1, id = "spinnerPlot1"),
+            
+            # Utilisation de withSpinner pour le deuxième plot
+          shinycssloaders::withSpinner(plotOutput("Plot2", width = "100%", height = "400px"), type = 1, id = "spinnerPlot2"),
             width = 4
           ),
           shiny::mainPanel(
@@ -272,7 +274,7 @@ ui <- shiny::fluidPage(
               shiny::tabPanel(
                 "Chorologie",
                 fluidRow(
-                  leafletOutput("mapFiltered", width = "100%", height = "800px")
+                  shinycssloaders::withSpinner(leafletOutput("mapFiltered", width = "100%", height = "800px"))
                 )
                 # fluidRow(
                 #   leafletOutput("mapFiltered2", width = "100%", height = "800px")
@@ -292,8 +294,8 @@ ui <- shiny::fluidPage(
                 shiny::tabPanel(
                   "Trophique",
                   shiny::mainPanel(
-                    div(class = "custom-plot",
-                    shiny::plotOutput("Trophie", width = "100%"))
+                    shiny::div(class = "custom-plot",
+                        shinycssloaders::withSpinner(shiny::plotOutput("Trophie", width = "100%")))
                   )
                 ), 
                 shiny::tabPanel(
@@ -307,7 +309,7 @@ ui <- shiny::fluidPage(
                         "Le graphique que vous voyez ci-dessous présente le(s) profil(s) écologique(s) du/des taxon(s) que vous avez sélectionné."
                       )
                     ),
-                    shiny::plotOutput("Profil", width = "100%")
+                    shinycssloaders::withSpinner(shiny::plotOutput("Profil", width = "100%"))
                   )
                 )
               )
@@ -322,7 +324,7 @@ server <- function(input, output, session) {
   
   shinyjs::hide("app_content")
   
-  observeEvent(input$welcome_page, {
+  shiny::observeEvent(input$welcome_page, {
     shinyjs::toggle("welcome_page")
     shinyjs::toggle("app_content")
     
@@ -334,19 +336,23 @@ server <- function(input, output, session) {
     tagList("Lien vers NAIADES:", url)
   })
   
-  observeEvent(input$toggleMaps, {
+  shiny::observeEvent(input$toggleMaps, {
     if (input$toggleMaps) {
       shinyjs::show("Plot1")
+      shinyjs::show("spinnerPlot1")
     } else {
       shinyjs::hide("Plot1")
+      shinyjs::hide("spinnerPlot1")
     }
   })
   
-  observeEvent(input$toggleMaps2, {
+  shiny::observeEvent(input$toggleMaps2, {
     if (input$toggleMaps2) {
       shinyjs::show("Plot2")
+      shinyjs::show("spinnerPlot2")
     } else {
       shinyjs::hide("Plot2")
+      shinyjs::hide("spinnerPlot2")
     }
   })
   
@@ -361,15 +367,15 @@ server <- function(input, output, session) {
   # })
   
   # Observer pour surveiller les changements dans l'input taxons
-  observe({
+  shiny::observe({
     # Obtenir le nombre d'éléments sélectionnés
-    selected <- length(input$taxons)
+    selected <- base::length(input$taxons)
     
     # Si plus de deux éléments sont sélectionnés, mettre à jour le selectInput pour n'afficher que les deux premiers éléments sélectionnés
     if (selected > 2) {
-      updateSelectizeInput(session, "taxons", selected = input$taxons[1:2])
+      shiny::updateSelectizeInput(session, "taxons", selected = input$taxons[1:2])
       
-      showNotification(
+      shiny::showNotification(
         "Vous ne pouvez pas comparer plus de deux taxons",
         type = "warning",
         duration = 20
@@ -612,14 +618,14 @@ server <- function(input, output, session) {
     
     # load(input$upload$datapath)
     
-    githubURL <- paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/", fichier_plus_recent)
+    githubURL <- base::paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/", fichier_plus_recent)
     
     # tempfile <- tempfile()  # Crée un fichier temporaire pour stocker le fichier téléchargé
     # download.file(url = githubURL, destfile = tempfile, mode = "wb")  # Télécharge le fichier à partir de l'URL
     # 
     # load(tempfile)
     
-    load(url(githubURL))
+    base::load(url(githubURL))
     
     # load("data/Diatom.RData")
     
@@ -653,7 +659,7 @@ server <- function(input, output, session) {
       dplyr::select(full_name) %>%
       dplyr::arrange(full_name) %>%
       dplyr::pull(full_name) %>%
-      unique()
+      base::unique()
   })
   
   shiny::observe({
@@ -667,8 +673,8 @@ server <- function(input, output, session) {
                    dplyr::filter(full_name %in% input$taxons[1]) %>%
                    dplyr::select(taxons_apparies, CodeValid) %>%
                    unique() %>%
-                   dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Aucun"), 
-                                                                  paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,",       Code Valide = ",CodeValid))))[1]
+                   dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", base::paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Aucun"), 
+                                                                  base::paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,",       Code Valide = ",CodeValid))))[1]
   })
   
   output$name_list2 <- shiny::renderText({
@@ -677,8 +683,8 @@ server <- function(input, output, session) {
                      dplyr::filter(full_name %in% input$taxons[2]) %>%
                      dplyr::select(taxons_apparies, CodeValid) %>%
                      unique() %>%
-                     dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Aucun"), 
-                                                                    paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,",       Code Valide = ",CodeValid))))[1]
+                     dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", base::paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Aucun"), 
+                                                                    base::paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,",       Code Valide = ",CodeValid))))[1]
     }else{""}
     
   })
@@ -693,7 +699,7 @@ server <- function(input, output, session) {
     
     DT::datatable(
       data() %>% 
-        mutate(lon = round(lon, 2), lat = round(lat, 2)) %>%
+        dplyr::mutate(lon = round(lon, 2), lat = round(lat, 2)) %>%
         distinct(taxon, CODE_STATION, DATE, .keep_all = TRUE) %>%
         dplyr::filter(lubridate::year(DATE) == input$radio) %>%
         dplyr::select(
@@ -723,7 +729,7 @@ server <- function(input, output, session) {
   
   output$downloadData <- shiny::downloadHandler(
     filename = function() {
-      paste("Données pour l'année ", as.character(unique(lubridate::year(data()$DATE))), ".csv", sep = ".")
+      base::paste("Données pour l'année ", as.character(unique(lubridate::year(data()$DATE))), ".csv", sep = ".")
     },
     content = function(file) {
       shinybusy::show_modal_spinner(
@@ -759,21 +765,21 @@ server <- function(input, output, session) {
   
   output$Plot1 <- shiny::renderPlot({
     
-    req(length(input$taxons) <= 2)
+    req(input$taxons)
     
     Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
     Code_Valid1 <- data() %>% 
       dplyr::filter(full_name %in% input$taxons[1]) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
     Code_Valid2 <- data() %>% 
       dplyr::filter(full_name %in% input$taxons[2]) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
-    plot_data <- Diatom %>% 
+    plot_data <- data() %>% 
       dplyr::filter(full_name %in% Code_Valid) %>%
       dplyr::mutate(
         annee = as.factor(lubridate::year(DATE)),
@@ -783,21 +789,24 @@ server <- function(input, output, session) {
       dplyr::summarise(Abondance_moyenne = mean(RESULTAT, na.rm = TRUE)) %>%
       ungroup()
     
+    levels_order <- c(Code_Valid1, Code_Valid2)
+    
     plot_data %>%
-      ggplot(aes(x = annee, y = Abondance_moyenne, fill = Code)) +
-      geom_bar(stat = "identity", position = "stack", color = "black") +
-      theme_classic() +
-      scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(str_sub(Code_Valid1,-6), 
-                                                                     str_sub(Code_Valid2, -6))) +
-      theme(
+      ggplot2::ggplot(aes(x = annee, y = Abondance_moyenne, fill = full_name)) +
+      ggplot2::geom_bar(stat = "identity", position = "stack", color = "black") +
+      ggplot2::theme_classic() +
+      ggplot2::scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(stringr::str_sub(Code_Valid1,-6), 
+                                                                     stringr::str_sub(Code_Valid2, -6)),
+                       breaks = levels_order) + 
+      ggplot2::theme(
         legend.text = element_text(size = 12),
         axis.title.y = element_blank(),
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 10),
         axis.text.x = element_text(size = 10, angle = 45, hjust = 1)
-      ) +
-      guides(fill = guide_legend(title = NULL)) +
-      geom_text(
+      ) + 
+      ggplot2::guides(fill = guide_legend(title = NULL)) +
+      ggplot2::geom_text(
         aes(label = ifelse(duplicated(annee), "*", "")),
         color = "red",
         size = 8,
@@ -810,17 +819,18 @@ server <- function(input, output, session) {
   output$Plot2 <- shiny::renderPlot({
     req(length(input$taxons) <= 2)
     
+
     Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
     Code_Valid1 <- data() %>% 
       dplyr::filter(full_name %in% input$taxons[1]) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
     Code_Valid2 <- data() %>% 
       dplyr::filter(full_name %in% input$taxons[2]) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
     plot_data2 <- data() %>%
       dplyr::filter(full_name %in% Code_Valid) %>%
@@ -832,21 +842,24 @@ server <- function(input, output, session) {
       dplyr::group_by(annee, full_name) %>%
       dplyr::summarise(Occurence = dplyr::n())
     
+    levels_order <- c(Code_Valid1, Code_Valid2)
+    
     plot_data2 %>%
-      ggplot(aes(x = annee, y = Occurence, fill = full_name)) +
-      geom_bar(stat = "identity", position = "stack", color = "black") +
-      theme_classic() +
-      scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(str_sub(Code_Valid1,-6), 
-                                                                     str_sub(Code_Valid2, -6))) +
-      theme(
+      ggplot2::ggplot(aes(x = annee, y = Occurence, fill = full_name)) +
+      ggplot2::geom_bar(stat = "identity", position = "stack", color = "black") +
+      ggplot2::theme_classic() +
+      ggplot2::scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(stringr::str_sub(Code_Valid1,-6), 
+                                                                     stringr::str_sub(Code_Valid2, -6)),
+                        breaks = levels_order) +
+      ggplot2::theme(
         legend.text = element_text(size = 12),
         axis.title.y = element_blank(),
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 10),
         axis.text.x = element_text(size = 10, angle = 45, hjust = 1)
       ) +
-      guides(fill = guide_legend(title = NULL)) +
-      geom_text(
+      ggplot2::guides(fill = guide_legend(title = NULL)) +
+      ggplot2::geom_text(
         aes(label = ifelse(duplicated(annee), "*", "")),
         color = "red",
         size = 8,
@@ -862,11 +875,19 @@ server <- function(input, output, session) {
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% unique()
     
+    Code_Valid1 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[1]) %>%
+      dplyr::pull(CodeValid) %>% unique()
+    
+    Code_Valid2 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[2]) %>%
+      dplyr::pull(CodeValid) %>% unique()
+    
     leaflet_data <- data() %>%
       dplyr::filter(full_name %in% Code_Valid) %>%
-      mutate(full_name = CodeValid) %>%
+      dplyr::mutate(full_name = CodeValid) %>%
       dplyr::mutate(annee = as.character(lubridate::year(DATE))) %>%
-      mutate(grp_color = str_sub(CodeValid, -6)) %>%
+      dplyr::mutate(grp_color = str_sub(CodeValid, -6)) %>%
       dplyr::group_by(grp_color) %>%
       dplyr::mutate(label = dplyr::cur_group_id()) %>%
       dplyr::distinct() %>%
@@ -876,24 +897,29 @@ server <- function(input, output, session) {
         lubridate::year(DATE), "_0",
         lubridate::month(DATE), "_0",
         lubridate::day(DATE)
-      ),
-      color = color_palette[label]) %>%
+      )) %>%
       ungroup()
+
+    
+    # Fonction de correspondance pour les couleurs
+    color_mapping <- function(value) {
+      base::ifelse(value == Code_Valid1, "#66C1BF", "#423089")
+    }
     
     
-    pal <- colorFactor(
-      palette = c("#66C1BF", "#423089"),
-      domain = leaflet_data$CodeValid
-    )
+    # pal <- colorFactor(
+    #   palette = c("#66C1BF", "#423089"),
+    #   domain = unique(leaflet_data$CodeValid)
+    # )
     
     # points <- leaflet_data %>%
     #   sf::st_as_sf(coords = c("long", "lat"), crs = 4326) %>%
     #   dplyr::select(taxon, geometry)
-    
-    polygones <- hydro %>% st_transform(geometry, crs = 4326)
+
+    polygones <- hydro %>% sf::st_transform(geometry, crs = 4326)
     
     # points <- st_make_valid(points)
-    polygones <- st_make_valid(polygones)
+    polygones <- sf::st_make_valid(polygones)
     
     # intersection_tab <- st_intersection(points, polygones) %>%
     #   dplyr::select(taxon, NomHER1) %>%
@@ -909,8 +935,8 @@ server <- function(input, output, session) {
         lng = ~long, 
         lat = ~lat,
         group = ~annee,
-        color = ~pal(CodeValid),
-        fillOpacity = 1,
+        color = ~color_mapping(CodeValid),
+        fillOpacity = 0.8,
         weight = 1,
         radius = 5,
         # icon = leafIcons,
@@ -929,7 +955,7 @@ server <- function(input, output, session) {
         )
       ) %>%
       
-      addPolygons(data = 
+      leaflet::addPolygons(data = 
                     polygones,
                   # intersection_tab_final,
                   label = 
@@ -958,7 +984,7 @@ server <- function(input, output, session) {
         lng = 2,
         lat = 47,
         zoom = 6) %>%
-      addControl(html = "<div id='custom-legend'>Référence Données: https://naiades.eaufrance.fr </div>",
+      leaflet::addControl(html = "<div id='custom-legend'>Référence Données: https://naiades.eaufrance.fr </div>",
                  position = "bottomleft")
     
     
@@ -1152,29 +1178,29 @@ server <- function(input, output, session) {
     
     Code_Valid <- data() %>% 
       dplyr::filter(full_name %in% input$taxons) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
     Code_Valid1 <- data() %>% 
       dplyr::filter(full_name %in% input$taxons[1]) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
     Code_Valid2 <- data() %>% 
       dplyr::filter(full_name %in% input$taxons[2]) %>%
-      dplyr::pull(CodeValid) %>% unique()
+      dplyr::pull(CodeValid) %>% base::unique()
     
     data <- reshape2::melt(trophie %>% 
                              dplyr::filter(full_name %in% Code_Valid) %>%
-                             rename(Optimum = optima, Tolerance = tolerance, Seuil_minimum = range_min, Seuil_maximum = range_max), 
+                             dplyr::rename(Optimum = optima, Tolerance = tolerance, Seuil_minimum = range_min, Seuil_maximum = range_max), 
                            id.vars = c("full_name", "parameter_full"), 
                            measure.vars = c("Optimum", "Tolerance", "Seuil_minimum", "Seuil_maximum"))  %>%
-      group_by(parameter_full) %>%
-      mutate(group = cur_group_id()) %>%
+      dplyr::group_by(parameter_full) %>%
+      dplyr::mutate(group = cur_group_id()) %>%
       ungroup() %>%
-      mutate(code = str_sub(full_name, start = -5, end = -2))
+      dplyr::mutate(code = str_sub(full_name, start = -5, end = -2))
     
     
     if (nrow(data) == 0) {
-      showNotification(
+      shiny::showNotification(
         "Ce taxon ne possède pas de profil trophique défini d'après l'étude de Carayon et al 2019",
         type = "warning",
         duration = 20
@@ -1182,20 +1208,20 @@ server <- function(input, output, session) {
       return(NULL)
     }else{
       
-      data2 <- data %>% group_by(full_name, parameter_full) %>%
-        pivot_wider(names_from = variable, values_from = value) %>%
-        rowwise() %>%
-        mutate(Distribution = list(rtruncnorm(n = 2000, a = 0, b = Inf, mean = Optimum, sd = Tolerance))) %>%
+      data2 <- data %>% dplyr::group_by(full_name, parameter_full) %>%
+        tidyr::pivot_wider(names_from = variable, values_from = value) %>%
+        dplyr::rowwise() %>%
+        dplyr::mutate(Distribution = list(rtruncnorm(n = 2000, a = 0, b = Inf, mean = Optimum, sd = Tolerance))) %>%
         ungroup()
-      
+    
       p <- data2 %>%
-        unnest(Distribution) %>%
-        ggplot(aes(x = code, y = Distribution, color = parameter_full, fill = full_name)) +
-        geom_violinhalf() +
-        facet_wrap(~ parameter_full, scales = "free", ncol = 4)+
-        labs(x = "", y = "") +
-        theme_bw() +
-        theme(
+        tidyr::unnest(Distribution) %>%
+        ggplot2::ggplot(aes(x = code, y = Distribution, color = parameter_full, fill = full_name)) +
+        see::geom_violinhalf() +
+        ggplot2::facet_wrap(~ parameter_full, scales = "free", ncol = 4)+
+        ggplot2::labs(x = "", y = "") +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
           panel.spacing = unit(2, "lines"),
           legend.text = element_text(size = 12),
           axis.text.x = element_text(size = 15),
@@ -1205,11 +1231,11 @@ server <- function(input, output, session) {
           strip.text = element_text(size = 15)
           # axis.text.x = element_text(angle = 45, hjust = 1)
         ) +
-        scale_fill_manual(breaks = c(Code_Valid1, Code_Valid2),
+        ggplot2::scale_fill_manual(breaks = c(Code_Valid1, Code_Valid2),
           values = c("#66C1BF", "#423089"))+
         
-        scale_color_manual(values = rep("#000000", length(unique(data2$parameter_full))))+
-        guides(color = FALSE, fill = guide_legend(title = NULL))
+        ggplot2::scale_color_manual(values = rep("#000000", length(unique(data2$parameter_full))))+
+        ggplot2::guides(color = FALSE, fill = guide_legend(title = NULL))
       
       
       
@@ -1255,8 +1281,8 @@ server <- function(input, output, session) {
   
   
   output$Profil <- renderPlot({
-    
-    req(input$taxons)
+  
+    shiny::req(input$taxons)
     
     Code_Valid <- data() %>% 
       dplyr::filter(full_name %in% input$taxons) %>%
@@ -1276,29 +1302,29 @@ server <- function(input, output, session) {
         
         num_colors <- 7  # Nombre de couleurs dans le gradient
         
-        colories <- colorRampPalette(c("red", "orange", "green"))(num_colors)
+        colories <- grDevices::colorRampPalette(c("red", "orange", "green"))(num_colors)
         
         p <- tab %>%
-          pivot_longer(
+          tidyr::pivot_longer(
             cols = starts_with("CL"),  
             names_to = "Classe",  
             values_to = "Valeur"  
           ) %>%
-          mutate(Valeur = as.numeric(Valeur)) %>%
-          ggplot(aes(x = factor(Classe), y = Valeur,
+          dplyr::mutate(Valeur = as.numeric(Valeur)) %>%
+          ggplot2::ggplot(aes(x = factor(Classe), y = Valeur,
                      group = full_name)) +
-          geom_point(size = 6, aes(shape = full_name, 
+          ggplot2::geom_point(size = 6, aes(shape = full_name, 
                                    color = factor(Classe))) +
-          geom_smooth(se = FALSE, size = 0.5, method = "loess",span = 0.3, color = "black") +
+          ggplot2::geom_smooth(se = FALSE, size = 0.5, method = "loess",span = 0.3, color = "black") +
           ggplot2::labs(
             title = ""
           ) +
           ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
-          scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1), breaks = seq(0.1, 1, by = 0.1)) +
-          scale_color_manual(values = colories,
+          ggplot2::scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1), breaks = seq(0.1, 1, by = 0.1)) +
+          ggplot2::scale_color_manual(values = colories,
                              name = "") +  # Utilisation d'une échelle de couleur discrète
-          theme_classic() +
-          theme(text = element_text(size = 20),
+          ggplot2::theme_classic() +
+          ggplot2::theme(text = element_text(size = 20),
                 legend.title = element_blank(),
                 axis.title.x = element_blank(),
                 axis.title.y = element_blank(),
@@ -1313,16 +1339,16 @@ server <- function(input, output, session) {
   output$downloadData2 <- shiny::downloadHandler(
     
     filename = function() {
-      paste(as.character(data() %>%
+      base::paste(as.character(data() %>%
                            dplyr::filter(full_name %in% input$taxons[1]) %>%
-                           unique() %>%
+                             base::unique() %>%
                            dplyr::pull(CodeValid) %>%
-                           unique()),
+                             base::unique()),
             as.character(data() %>%
                            dplyr::filter(full_name %in% input$taxons[2]) %>%
-                           unique() %>%
+                           base::unique() %>%
                            dplyr::pull(CodeValid) %>%
-                           unique()),
+                           base::unique()),
             Sys.Date(), ".csv", sep = ".")
     },
     content = function(file) {
