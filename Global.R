@@ -42,6 +42,10 @@ library(cowplot)
 library(grid)
 library(fontawesome)
 library(shinycssloaders)
+library(geojson)
+library(geojsonio)
+library(geojsonlint)
+library(geojsonsf)
 
 
 
