@@ -1,0 +1,438 @@
+{
+  "languages": ["en", "fr", "sp", "ger"],
+  "translation": [
+    {
+      "en": "Visualization",
+      "fr": "Visualisation",
+      "sp": "Visualización",
+      "ger": "Visualisierung"
+    },
+    {
+      "en": "Change language",
+      "fr": "Changer la langue",
+      "sp": "Cambiar idioma",
+      "ger": "Sprache ändern"
+    },
+    {
+      "en": "Nothing Selected",
+      "fr": "Rien de Sélectionné",
+      "sp": "Nada seleccionado",
+      "ger": "Nichts ausgewählt"
+    },
+    {
+      "en": "List of available taxa: ",
+      "fr": "Liste des taxons disponibles: ",
+      "sp": "Lista de taxones disponibles: ",
+      "ger": "Liste der verfügbaren Taxa: "
+    },
+    {
+  "en": "Species included in your selection: ",
+  "fr": "Espèces comprises dans votre sélection: ",
+  "sp": "Especies incluidas en su selección: ",
+  "ger": "Arten in Ihrer Auswahl enthalten: "
+},
+    {
+      "en": "Display Average Abundance",
+      "fr": "Afficher les Abondances Moyennes",
+      "sp": "Mostrar Abundancia Promedio",
+      "ger": "Durchschnittliche Fülle anzeigen"
+    },
+    {
+      "en": "Display Occurrences",
+      "fr": "Afficher les Occurences",
+      "sp": "Mostrar Ocurrencias",
+      "ger": "Vorkommen anzeigen"
+    },
+    {
+      "en": "Choose a year range:",
+      "fr": "Choisissez une plage année:",
+      "sp": "Elija un rango de años:",
+      "ger": "Wähle einen Jahresbereich:"
+    },
+    {
+      "en": "Data",
+      "fr": "Données",
+      "sp": "Datos",
+      "ger": "Daten"
+    },
+    {
+      "en": "Trophic",
+      "fr": "Trophique",
+      "sp": "Trófico",
+      "ger": "Trophisch"
+    },
+    {
+      "en": "Ecological",
+      "fr": "Écologique",
+      "sp": "Ecológico",
+      "ger": "Ökologisch"
+    },
+    {
+      "en": "Information about the ecological profile",
+      "fr": "Informations sur le profil écologique",
+      "sp": "Información sobre el perfil ecológico",
+      "ger": "Informationen zum ökologischen Profil"
+    },
+    {
+      "en": "The ecological profile of a taxon is defined based on a percentage probability of presence along a gradient of 7 classes of water quality. This gradient is based on a list of physico-chemical parameters including pH, conductivity, dissolved oxygen, biological oxygen demand, ammonium, orthophosphates, and nitrates. It is calibrated at the European scale.",
+      "fr": "Le profil écologique d'un taxon est définis d'après une probabilité de présence en pourcentage le long d'un gradient de 7 classes de qualités d'eau. Ce gradient est basé sur une liste de paramètres physico-chimique comprenant le pH, la conductivité, l'oxygène dissous, la demande biologique en oxygène, l'ammonium, les orthophosphates et les nitrates. Il est callilbré à l'échelle Européenne.",
+      "sp": "El perfil ecológico de un taxón se define en función de una probabilidad de presencia a lo largo de un gradiente de 7 clases de calidad del agua. Este gradiente se basa en una lista de parámetros fisicoquímicos que incluye el pH, la conductividad, el oxígeno disuelto, la demanda biológica de oxígeno, el amonio, los ortofosfatos y los nitratos. Está calibrado a escala europea.",
+      "ger": "Das ökologische Profil eines Taxons wird anhand einer prozentualen Wahrscheinlichkeit des Vorhandenseins entlang eines Gradienten von 7 Klassen der Wasserqualität definiert. Dieser Gradient basiert auf einer Liste physikalisch-chemischer Parameter, einschließlich pH, Leitfähigkeit, gelöstem Sauerstoff, biologischem Sauerstoffbedarf, Ammonium, Orthophosphaten und Nitraten. Er ist auf europäischer Ebene kalibriert."
+    },    {
+      "en": "The graph below shows the ecological profile(s) of the taxon(s) you have selected.",
+      "fr": "Le graphique que vous voyez ci-dessous présente le(s) profil(s) écologique(s) du/des taxon(s) que vous avez sélectionné.",
+      "sp": "El gráfico de abajo muestra el(los) perfil(es) ecológico(s) del(de los) taxón(es) que has seleccionado.",
+      "ger": "Das unten stehende Diagramm zeigt das( die) ökologische(n) Profil(e) des (der) ausgewählten Taxons/Taxa."
+    },{
+      "en": "In the taxonomy tab, you will get the informations concerning the taxa included in your selection, as well as the actual valid appelation",
+      "fr": "Dans l'onglet de taxonomie, vous obtiendrez les informations concernant les taxons inclus dans votre sélection, ainsi que l'appellation valide actuelle.",
+      "sp": "En la pestaña de taxonomía, obtendrás la información sobre los taxones incluidos en tu selección, así como la denominación válida actual.",
+      "ger": "Im Taxonomie-Tab erhalten Sie Informationen über die in Ihrer Auswahl enthaltenen Taxa sowie die tatsächliche gültige Bezeichnung."
+    },
+    {
+      "en": "Link to NAIADES:",
+      "fr": "Lien vers NAIADES:",
+      "sp": "Enlace a NAIADES:",
+      "ger": "Link zu NAIADES:"
+    },
+    {
+      "en": "You can't compare more than two taxons",
+      "fr": "Vous ne pouvez pas comparer plus de deux taxons",
+      "sp": "No puedes comparar más de dos taxones",
+      "ger": "Sie können nicht mehr als zwei Taxa vergleichen."
+    },
+    {
+      "en": "Loading NAIADES data and setting language parameters, this operation may take a few minutes.",
+      "fr": "Chargement des données NAIADES et ajustement de la langue: Cette opération peut prendre quelques minutes",
+      "sp": "Cargando datos de NAIADES y configurando parámetros de idioma, esta operación puede tardar unos minutos.",
+      "ger": "Laden von NAIADES-Daten und Einstellung von Sprachparametern, diese Operation kann einige Minuten dauern."
+    },
+    {
+      "en": "Loading successful",
+      "fr": "Chargement terminé",
+      "sp": "Carga exitosa",
+      "ger": "Laden erfolgreich"
+    },
+    {
+      "en": "NAIADES data successfully loaded!",
+      "fr": "Les données NAIADES ont été chargées avec succès !",
+      "sp": "¡Datos de NAIADES cargados con éxito!",
+      "ger": "NAIADES-Daten erfolgreich geladen!"
+    },
+    {
+      "en": ": None",
+      "fr": ": Aucun",
+      "sp": ": Ninguno",
+      "ger": ": Keine"
+    },
+    {
+      "en": "For ",
+      "fr": "Pour ",
+      "sp": "Para ",
+      "ger": "Für "
+    },
+    {
+      "en": ": Taxa included: ",
+      "fr": ": Taxons compris: ",
+      "sp": ": Taxones incluidos: ",
+      "ger": ": Enthaltene Taxa: "
+    },
+    {
+      "en": "Relative abundance (‰)",
+      "fr": "Abondance relative (‰)",
+      "sp": "Abundancia relativa (‰)",
+      "ger": "Relative Fülle (‰)"
+    },
+    {
+      "en": "Data for ",
+      "fr": "Données pour l'année ",
+      "sp": "Datos para ",
+      "ger": "Daten für "
+    },
+    {
+      "en": "Downloading data may take a few minutes",
+      "fr": "Téléchargement des données, cette opération peut prendre quelques minutes",
+      "sp": "Descargar datos puede tardar unos minutos",
+      "ger": "Das Herunterladen von Daten kann einige Minuten dauern"
+    },
+    {
+      "en": "Data successfully downloaded !",
+      "fr": "Vos données ont été téléchargées avec succès !",
+      "sp": "¡Datos descargados con éxito!",
+      "ger": "Daten erfolgreich heruntergeladen!"
+    },
+    {
+      "en": "1- Year: ",
+      "fr": "1- Année: ",
+      "sp": "1- Año: ",
+      "ger": "1- Jahr: "
+    },
+    {
+      "en": "2- Taxa: ",
+      "fr": "2- Taxon: ",
+      "sp": "2- Taxones: ",
+      "ger": "2- Taxa: "
+    },
+    {
+      "en": "3- Municipality: ",
+      "fr": "3- Commune: ",
+      "sp": "3- Municipio: ",
+      "ger": "3- Gemeinde: "
+    },
+    {
+      "en": "6- Relative abundance (‰):",
+      "fr": "6- Abondance relative (‰):",
+      "sp": "6- Abundancia relativa (‰):",
+      "ger": "6- Relative Fülle (‰):"
+    },
+    {
+      "en": "density: ",
+      "fr": "densité: ",
+      "sp": "densidad: ",
+      "ger": "Dichte: "
+    },
+    {
+      "en": "Only one taxon selected",
+      "fr": "Pas de deuxième taxon sélectionné",
+      "sp": "Solo se seleccionó un taxón",
+      "ger": "Nur ein Taxon ausgewählt"
+    },
+    {
+      "en": "Hydro ecoregions",
+      "fr": "Hydro écorégions",
+      "sp": "Ecoregiones hidrográficas",
+      "ger": "Hydro-Ökoregionen"
+    },{
+      "en": "None",
+      "fr": "Aucun",
+      "sp": "Ninguno",
+      "ger": "Keine"
+    },{
+      "en": "Municipality",
+      "fr": "commune",
+      "sp": "municipio",
+      "ger": "Gemeinde"
+    },
+    {
+      "en": "Conductivity (μS/cm)",
+      "fr": "Conductivité (μS/cm)",
+      "sp": "Conductividad (μS/cm)",
+      "ger": "Leitfähigkeit (μS/cm)"
+    },
+    {
+      "en": "Oxygen demand (mg/L)",
+      "fr": "Demande en oxygène (mg/L)",
+      "sp": "Demanda de oxígeno (mg/L)",
+      "ger": "Sauerstoffbedarf (mg/L)"
+    },
+    {
+      "en": "Oxygen saturation (%)",
+      "fr": "Saturation en oxygène (%)",
+      "sp": "Saturación de oxígeno (%)",
+      "ger": "Sauerstoffsättigung (%)"
+    },
+    {
+      "en": "Organic nitrogen (mg/L)",
+      "fr": "Azote organique (mg/L)",
+      "sp": "Nitrógeno orgánico (mg/L)",
+      "ger": "Organischer Stickstoff (mg/L)"
+    },{
+      "en": "Nitrates (mg/L)",
+      "fr": "Nitrates (mg/L)",
+      "sp": "Nitratos (mg/L)",
+      "ger": "Nitrate (mg/L)"
+    },{
+      "en": "Phosphates (mg/L)",
+      "fr": "Phosphates (mg/L)",
+      "sp": "Fosfatos (mg/L)",
+      "ger": "Phosphate (mg/L)"
+    },
+    {
+      "en": "Relative ABUNDANCE (‰)",
+      "fr": "ABONDANCE relative (‰)",
+      "sp": "ABUNDANCIA relativa (‰)",
+      "ger": "Relative FÜLLE (‰)"
+    },
+    {
+      "en": "This taxon does not have a defined trophic profile according to the Carayon et al 2019 study.",
+      "fr": "Ce taxon ne possède pas de profil trophique défini d'après l'étude de Carayon et al 2019",
+      "sp": "Este taxón no tiene un perfil trófico definido según el estudio de Carayon et al 2019.",
+      "ger": "Dieses Taxon hat kein definiertes trophisches Profil gemäß der Studie von Carayon et al 2019."
+    },
+    {
+      "en": "This taxon does not have a defined ecological profile",
+      "fr": "Ce taxon ne possède pas de profil écologique",
+      "sp": "Este taxón no tiene un perfil ecológico definido",
+      "ger": "Dieses Taxon hat kein definiertes ökologisches Profil."
+    },
+    {
+      "en": "Main Author: Léonard Heinry, Co-Authors: Sebastien Boutry, Juliette Rosebery",
+      "fr": "Auteur principal: Léonard Heinry, Co-Auteurs: Sebastien Boutry, Juliette Rosebery",
+      "sp": "Autor principal: Léonard Heinry, Coautores: Sebastien Boutry, Juliette Rosebery",
+      "ger": "Hauptautor: Léonard Heinry, Co-Autoren: Sebastien Boutry, Juliette Rosebery"
+    },{
+      "en": "This application allows you to visualize and compare diatom sampling data from the NAIADES public database. If it is your first time using the application, there is a user guide available below. Enjoy your visit!",
+      "fr": "Cette application vous permet de visualiser et de comparer les données de prélèvements diatomiques présents sur la base publique NAIADES. Si c'est la première fois que vous entrez sur l'application, une notice d'utilisation est à votre disposition ci-dessous. Bonne visite !",
+      "sp": "Esta aplicación le permite visualizar y comparar datos de muestreo de diatomeas de la base de datos pública de NAIADES. Si es la primera vez que utiliza la aplicación, hay una guía del usuario disponible a continuación. ¡Disfrute de su visita!",
+      "ger": "Diese Anwendung ermöglicht es Ihnen, Diatomeenprobendaten aus der öffentlichen NAIADES-Datenbank zu visualisieren und zu vergleichen. Wenn Sie die Anwendung zum ersten Mal verwenden, steht Ihnen unten eine Bedienungsanleitung zur Verfügung. Viel Spaß bei Ihrem Besuch!"
+    },
+    {
+      "en": "The goal of this application is to improve the understanding of diatom data by allowing users to visualize the taxa recorded in the NAIADES public database. Through the interactive interface, you can select, download, and even compare floristic sampling data collected by water agencies since 2007. Our application is divided into several tabs, making navigation simple and intuitive. \nTo ensure you fully enjoy the experience, the rest of this page provides a brief description of the features you'll find in the application.",
+      "fr": "L'objectif de cette application est d'améliorer la compréhension de la donnée diatomique, en proposant à l'utilisateur de visualiser les taxons enregistrés sur la base de données publique NAIADES. Grâce à l'interface interactive, vous allez pouvoir sélectionner, télécharger et même comparer les données des prélèvements floristiques opérés par les agences de l'eau depuis 2007. Notre application se décompose en plusieurs onglets qui rendent la navigation simple et intuitive. Pour être certains que vous profiterez pleinement de l'expérience, la suite de cette page décrit de manière synthétique les fonctionnalités que vous retrouverez dans l'application.",
+      "sp": "El objetivo de esta aplicación es mejorar la comprensión de los datos de diatomeas permitiendo a los usuarios visualizar los taxones registrados en la base de datos pública de NAIADES. A través de la interfaz interactiva, puede seleccionar, descargar e incluso comparar datos de muestreo florístico recopilados por las agencias de agua desde 2007. Nuestra aplicación está dividida en varias pestañas, lo que facilita la navegación y es intuitiva. Para asegurarse de que disfrute completamente de la experiencia, el resto de esta página proporciona una breve descripción de las características que encontrará en la aplicación.",
+      "ger": "Das Ziel dieser Anwendung besteht darin, das Verständnis von Diatomeendaten zu verbessern, indem Benutzern ermöglicht wird, die in der öffentlichen NAIADES-Datenbank erfassten Taxa zu visualisieren. Durch die interaktive Benutzeroberfläche können Sie floristische Probendaten auswählen, herunterladen und sogar vergleichen, die von Wasseragenturen seit 2007 gesammelt wurden. Unsere Anwendung ist in mehrere Registerkarten unterteilt, sodass die Navigation einfach und intuitiv ist. Um sicherzustellen, dass Sie das Erlebnis in vollen Zügen genießen, bietet der Rest dieser Seite eine kurze Beschreibung der Funktionen, die Sie in der Anwendung finden werden."
+    },
+    {
+      "en": "By clicking on this tab, you have direct access to the latest version of the raw data extracted and formatted from NAIADES. Use the left panel to navigate between the years of sampling. Each table for a year is constructed in the same way, with columns that can be queried for those containing characters. Numeric columns can be filtered using a slider that appears when you click in the search bar of the column. Finally, if needed, you can download the data for a year in CSV format using the 'Download' button located at the bottom of each table. Please note that the volume of data is quite large and may take several seconds or a few minutes to load!",
+      "fr": "En cliquant sur cet onglet, vous avez directement accès à la dernière version des données brutes extraites et formatées depuis NAIADES. Servez-vous du panneau de gauche pour naviguer entre les années de prélèvements. Chaque tableau d'une année est construit de la même façon, les colonnes sont requêtables pour celles présentant des caractères.  Les colonnes numérique peuvent quand à elles être filtrées à l'aide d'un curseur qui apparaît lorsque vous cliquez dans la barre de recherche de la colonne. Enfin, si vous en avez besoin, vous pouvez télécharger les données d'une année au format CSV à l'aide du bouton 'Download' situé en bas de chaque tableau. Veuillez noter que le volume des données est assez important et peut donc prendre plusieurs secondes voir quelques minutes !",
+      "sp": "Al hacer clic en esta pestaña, tiene acceso directo a la última versión de los datos brutos extraídos y formateados de NAIADES. Use el panel izquierdo para navegar entre los años de muestreo. Cada tabla de un año se construye de la misma manera, con columnas que pueden consultarse para aquellas que contienen caracteres. Las columnas numéricas se pueden filtrar usando un control deslizante que aparece cuando hace clic en la barra de búsqueda de la columna. Finalmente, si es necesario, puede descargar los datos de un año en formato CSV usando el botón 'Descargar' ubicado en la parte inferior de cada tabla. ¡Tenga en cuenta que el volumen de datos es bastante grande y puede tardar varios segundos o unos minutos en cargarse!",
+      "ger": "Durch Klicken auf diese Registerkarte haben Sie direkten Zugriff auf die neueste Version der aus der NAIADES extrahierten und formatierten Rohdaten. Verwenden Sie das linke Panel, um zwischen den Abnahmejahren zu navigieren. Jede Tabelle für ein Jahr ist auf die gleiche Weise aufgebaut, mit Spalten, die nach enthaltenen Zeichen abgefragt werden können. Numerische Spalten können mit einem Schieberegler gefiltert werden, der angezeigt wird, wenn Sie in der Suchleiste der Spalte klicken. Wenn nötig, können Sie die Daten eines Jahres im CSV-Format mit dem 'Download'-Button am unteren Ende jeder Tabelle herunterladen. Bitte beachten Sie, dass das Datenvolumen recht groß ist und das Laden einige Sekunden oder Minuten dauern kann!"
+    },
+    {
+      "en": "This tab consists of several elements. In the taxonomy tab, you will get the informations concerning the taxa included in your selection, as well as the actual valid appelation. The 'Chorology' panel allows you to visualize the data from the raw database with a focus on taxa. Select the taxa you want to display using the 'List of available taxa' dropdown. The map in this tab will then display the geographic locations of the selected taxa, and a menu will allow you to check the years you want to observe. You can select up to two taxa. Each point on the map is clickable and will display the information of the sampling you are looking at. Finally, two interactive histograms can be activated using the 'Display Average Abundance' and 'Display Occurrences' buttons. They show the evolution of the relative abundance (per 1000) and the number of occurrences of the taxa in the surveys of the years in which they were observed, which gives you an idea of their importance. When you select a second taxon, the graphical representations of each taxon (Map and Plot) are superimposed for comparison. On the bar plots, red crosses appear if two taxa are sampled in the same year.",
+      "fr": "Cet onglet est composé de plusieurs éléments. Dans l'onglet de taxonomie, vous obtiendrez les informations concernant les taxons inclus dans votre sélection, ainsi que l'appellation valide actuelle. Le panneau 'Chorologie' vous permet de visualiser les données de la base brute avec une vue centrée sur les taxons. Sélectionnez le ou les taxons à afficher à l'aide de la liste déroulante 'Liste des taxons disponibles'.  La carte de l'onglet affichera ensuite les emplacements géographiques des taxons sélectionnés, et un menu vous permettra de cocher les années que vous souhaitez observer.  Vous pouvez sélectionner jusqu'à deux taxons. Chaque point de la carte est cliquable et affichera les informations du prélèvement que vous regardez. Enfin, deux histogrammes interactifs sont activables via les boutons 'Afficher les Abondances Moyennes' et 'Afficher les occurences'. Ils présentent l'évolution de l'abondance relative (en pour 1000) et l'évolution du nombre d'occurences du ou des taxons dans les relevés des années ou il(s) est/sont vu(s), ce qui vous permet d'avoir une idée de son/leur importance. Lorsque vous sélectionnez un deuxième taxon, les représentations graphiques de chacun (Carte et Plot) se superposent pour vous permettre de comparer les deux. Sur les barplots, des croix rouges apparaissent si deux taxons sont échantillonnés une même année.",
+      "sp": "Esta pestaña consta de varios elementos. En la pestaña de taxonomía, obtendrás la información sobre los taxones incluidos en tu selección, así como la denominación válida actual. El panel 'Chorology' le permite visualizar los datos de la base de datos en bruto con un enfoque en los taxones. Seleccione los taxones que desea mostrar usando el menú desplegable 'Lista de taxones disponibles'. El mapa en esta pestaña mostrará las ubicaciones geográficas de los taxones seleccionados y un menú le permitirá verificar los años que desea observar. Puede seleccionar hasta dos taxones. Cada punto en el mapa es interactivo y mostrará la información del muestreo que está viendo. Finalmente, se pueden activar dos histogramas interactivos usando los botones 'Mostrar Abundancia Promedio' y 'Mostrar Ocurrencias'. Estos muestran la evolución de la abundancia relativa (por cada 1000) y el número de ocurrencias de los taxones en las encuestas de los años en los que fueron observados, lo que le da una idea de su importancia. Cuando selecciona un segundo taxón, las representaciones gráficas de cada taxón (Mapa y Gráfico) se superponen para compararlos. En los gráficos de barras, aparecen cruces rojas si se muestrean dos taxones en el mismo año.",
+      "ger": "Dieses Registerkarte besteht aus mehreren Elementen. Im Taxonomie-Tab erhalten Sie Informationen über die in Ihrer Auswahl enthaltenen Taxa sowie die tatsächliche gültige Bezeichnung. Das 'Chorologie'-Panel ermöglicht es Ihnen, die Daten aus der Rohdatenbank mit Fokus auf Taxa zu visualisieren. Wählen Sie die Taxa aus, die Sie anzeigen möchten, indem Sie die Dropdown-Liste 'Liste der verfügbaren Taxa' verwenden. Die Karte in diesem Tab zeigt dann die geografischen Standorte der ausgewählten Taxa an, und ein Menü ermöglicht es Ihnen, die Jahre zu überprüfen, die Sie beobachten möchten. Sie können bis zu zwei Taxa auswählen. Jeder Punkt auf der Karte ist anklickbar und zeigt die Informationen der Probe an, die Sie betrachten. Schließlich können mit den Schaltflächen 'Durchschnittliche Abundanz anzeigen' und 'Vorkommen anzeigen' zwei interaktive Histogramme aktiviert werden. Sie zeigen die Entwicklung der relativen Abundanz (pro 1000) und die Anzahl der Vorkommnisse der Taxa in den Umfragen der Jahre, in denen sie beobachtet wurden, was Ihnen eine Vorstellung von ihrer Bedeutung gibt. Wenn Sie ein zweites Taxon auswählen, werden die grafischen Darstellungen jedes Taxons (Karte und Diagramm) zur Vergleichung übereinandergelegt. Auf den Balkendiagrammen erscheinen rote Kreuze, wenn zwei Taxa im selben Jahr beprobt werden."
+    },
+    {
+      "en": "In this panel, you can display and download the data of the taxa you have selected from the Chorology panel. Use the 'Download' button to download the data in CSV format.",
+      "fr": "Dans ce panneau, vous pouvez afficher et télécharger les données des taxons que vous avez sélectionnés depuis le panneau Chorologie. Utilisez le bouton 'Download' pour télécharger les données au format CSV.",
+      "sp": "En este panel, puede mostrar y descargar los datos de los taxones que ha seleccionado desde el panel de 'Chorology'. Use el botón 'Descargar' para descargar los datos en formato CSV.",
+      "ger": "In diesem Panel können Sie die Daten der von Ihnen aus dem Chorologie-Panel ausgewählten Taxa anzeigen und herunterladen. Verwenden Sie die Schaltfläche 'Download', um die Daten im CSV-Format herunterzuladen."
+    },
+    {
+      "en": "In the 'Trophic' tab, you can view information about the physico-chemical preferences of the taxa you have selected. This information was obtained through the work of David Carayon in 2019, who compiled a table of physico-chemical profiles for a large number of taxa. If a taxon is not present in David Carayon's database, a message will appear to indicate this. Parameter values also overlap if you select two taxa.",
+      "fr": "Dans l'onglet 'Trophique', vous pouvez afficher les informations concernant les préférenda pyshico-chimiques des taxons que vous avez sélectionné. Ces informations ont été récupérées grâce aux travaux de David Carayon en 2019 qui a dréssé un tableau de profils physico-chimiques d'un grand nombre de taxons. Si un taxon n'est pas présent dans la base de David Carayon, alors un message apparaîtra vous le précisant. Les valeurs des paramètres se superposent la encore si vous sélectionnez deux taxons.",
+      "sp": "En la pestaña 'Trophic', puede ver información sobre las preferencias fisicoquímicas de los taxones que ha seleccionado. Esta información se obtuvo a través del trabajo de David Carayon en 2019, quien compiló una tabla de perfiles fisicoquímicos para un gran número de taxones. Si un taxón no está presente en la base de datos de David Carayon, aparecerá un mensaje para indicarlo. Los valores de los parámetros también se superponen si selecciona dos taxones.",
+      "ger": "Im Register 'Trophic' können Sie Informationen zu den physikochemischen Vorlieben der von Ihnen ausgewählten Taxa anzeigen. Diese Informationen wurden durch die Arbeit von David Carayon im Jahr 2019 erlangt, der eine Tabelle mit physikochemischen Profilen für eine große Anzahl von Taxa erstellt hat. Wenn ein Taxon nicht in der Datenbank von David Carayon vorhanden ist, wird eine Meldung angezeigt, die dies angibt. Die Parameterwerte überlappen sich auch, wenn Sie zwei Taxa auswählen."
+    },
+    {
+      "en": "In the 'Ecological' tab, you can see if the selected taxon is an indicator of the Diatom Biological Index (IBD). If it is, the ecological profile of the selected taxon will be displayed on the screen; otherwise, a message will appear, as in the Trophic tab.",
+      "fr": "Dans l'onglet 'Écologique', vous pouvez voir si le taxon sélectionné est indicateur ou pas de l'Indice Biologique Diatomées (IBD). Si il l'est, vous verrez le profil écologique du taxon en question s'afficher à l'écran, sinon un message apparaîtra, comme pour l'onglet Trophique",
+      "sp": "En la pestaña 'Ecological', puede ver si el taxón seleccionado es un indicador del Índice Biológico de Diatomeas (IBD). Si lo es, se mostrará el perfil ecológico del taxón seleccionado en la pantalla; de lo contrario, aparecerá un mensaje, como en la pestaña 'Trophic'.",
+      "ger": "Im Register 'Ecological' können Sie sehen, ob das ausgewählte Taxon ein Indikator für den Diatom Biological Index (IBD) ist. Wenn dies der Fall ist, wird das ökologische Profil des ausgewählten Taxons auf dem Bildschirm angezeigt, andernfalls wird eine Nachricht angezeigt, wie im 'Trophic'-Register."
+    },
+    {
+      "en": "Welcome to the VisualDiatoms application!",
+      "fr": "Bienvenue sur l'application VisualDiatoms!",
+      "sp": "¡Bienvenido a la aplicación VisualDiatoms!",
+      "ger": "Willkommen bei der VisualDiatoms-Anwendung!"
+    },
+    {
+      "en": "This panel has two tabs: Trophic and Ecological",
+      "fr": "Ce panneau comporte deux onglets: Trophique et Ecologique",
+      "sp": "Este panel tiene dos pestañas: 'Trophic' y 'Ecological'",
+      "ger": "Dieses Panel hat zwei Registerkarten: 'Trophic' und 'Ecological'"
+    },
+    {
+      "en": "Raw Data Tab",
+      "fr": "Panneau Données Brutes",
+      "sp": "Pestaña de Datos en Bruto",
+      "ger": "Registerkarte 'Rohdaten'"
+    },
+    {
+      "en": "Visualization Tab",
+      "fr": "Panneau Visualisation",
+      "sp": "Pestaña de Visualización",
+      "ger": "Registerkarte 'Visualisierung'"
+    },
+    {
+      "en": "Data Sub-Tab",
+      "fr": "Sous-onglet Données",
+      "sp": "Subpestaña de Datos",
+      "ger": "Unterregisterkarte 'Daten'"
+    },
+    {
+      "en": "Profile Sub-Tab",
+      "fr": "Sous-onglet Profile",
+      "sp": "Subpestaña de Perfil",
+      "ger": "Unterregisterkarte 'Profil'"
+    },
+    {
+      "en": "Bibliography",
+      "fr": "Références bibliographiques",
+      "sp": "Bibliografía",
+      "ger": "Bibliografie"
+    },
+    {
+      "en": "Welcoming page",
+      "fr": "Accueil",
+      "sp": "Página de Bienvenida",
+      "ger": "Willkommensseite"
+    },
+    {
+      "en": "Raw data",
+      "fr": "Données Brutes",
+      "sp": "Datos en Bruto",
+      "ger": "Rohdaten"
+    },
+    {
+      "en": ", Valid Code = ",
+      "fr": ", Code Valide = ",
+      "sp": ", Código Válido = ",
+      "ger": ", Gültiger Code = "
+    },
+    {
+      "en": "Data raw visualization",
+      "fr": "Visualisation des données brutes",
+      "sp": "Visualización de datos en bruto",
+      "ger": "Visualisierung von Rohdaten"
+    },
+    {
+      "en": "Chorology",
+      "fr": "Chorologie",
+      "sp": "Corología",
+      "ger": "Chorologie"
+    },{
+      "en": "Date",
+      "fr": "Date",
+      "sp": "Fecha",
+      "ger": "Datum"
+    },{
+      "en": "Station",
+      "fr": "Station",
+      "sp": "Estación",
+      "ger": "Station"
+    },{
+      "en": "Longitude",
+      "fr": "Longitude",
+      "sp": "Longitud",
+      "ger": "Länge"
+    },{
+      "en": "Latitude",
+      "fr": "Latitude",
+      "sp": "Latitud",
+      "ger": "Breite"
+    },{
+      "en": "4- Longitude: ",
+      "fr": "4- Longitude: ",
+      "sp": "4- Longitud: ",
+      "ger": "4- Länge: "
+    },{
+      "en": "5- Latitude: ",
+      "fr": "5- Latitude: ",
+      "sp": "5- Latitud: ",
+      "ger": "5- Breite: "
+    },{
+      "en": "Taxa",
+      "fr": "Taxon",
+      "sp": "Taxones",
+      "ger": "Taxa"
+    },{
+  "en": "White background",
+  "fr": "Fond clair",
+  "sp": "Fondo blanco",
+  "ger": "Weißer Hintergrund"
+   },{
+  "en": "Black background",
+  "fr": "Fond Noir",
+  "sp": "Fondo negro",
+  "ger": "Schwarzer Hintergrund"
+},{
+  "en": "Satellite background",
+  "fr": "Fond Satellite",
+  "sp": "Fondo de satélite",
+  "ger": "Satellitenhintergrund"
+}
+    ]
+}

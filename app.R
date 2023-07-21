@@ -1,9 +1,14 @@
 source("Global.R")
 
 ui <- shiny::fluidPage(
-  
   shiny::tags$head(
     shiny::tags$style(
+      
+      ".jhr{
+      display: inline;
+      vertical-align: middle;
+      padding-left: 10px;
+      }",
     
     ".navbar{margin-right:auto; margin-left:auto;}",
       
@@ -65,7 +70,7 @@ ui <- shiny::fluidPage(
     ),
   ),
   shinyjs::useShinyjs(),
-  
+  shiny.i18n::usei18n(i18n),
   shiny::div(
     id = "welcome_page",
     style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fff; z-index: 9999; text-align: center;",
@@ -85,7 +90,12 @@ ui <- shiny::fluidPage(
     shiny::navbarPage(
       title = "",
       shiny::tabPanel(
-        title = "Accueil",
+        title = i18n$t("Welcoming page"),
+        
+        pickerInput(inputId = "selected_language",
+                    label = i18n$t('Change language'),
+                    choices = df$val,
+                    choicesOpt = list(content = df$img)),
         shiny::fluidRow(
           shiny::column(
             width = 12,
@@ -113,125 +123,104 @@ ui <- shiny::fluidPage(
                 img(src = "logo_Aquaref.png", width = "100px")
               )
             ),
-            
-            shiny::div(
-              class = "container",
-              style = "display: flex; justify-content: center; align-items: center; margin-top: 2px; background-color: white; padding: 5px;",
+          
               shiny::div(
                 style = "margin-right: 10px;",
-                "Auteur Principal: Léonard Heinry, Co-Auteurs: Sebastien Boutry, Juliette Rosebery"
-              )),
-            
-            
-            shiny::div(style = "border: 2px solid #66C1BF; border-radius: 10px; padding: 10px; margin-top: 20px; margin-bottom: 10px; background-color: #f2f2f2;",
-                       
-                       shiny::h1("Bienvenue dans l'application VisualDiatoms !"),
-                       
-                       shiny::p(
-                         class = "custom-text",
-                         paste0("Cette application vous permet de visualiser et de comparer les données de prélèvements diatomiques présents sur la base publique NAIADES.
-            Si c'est la première fois que vous entrez sur l'application, une notice d'utilisation est à votre disposition ci-dessous. Bonne visite !"
-                         )),
-                       
-                       
-                       shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                                  
-                                  shiny::h3(class = "custom-heading", "Introduction"),
-                                  
-                                  shiny::p(
-                                    class = "custom-text",
-                                    "L'objectif de cette application est d'améliorer la compréhension de la donnée diatomique, en proposant à l'utilisateur de visualiser 
-                       les taxons enregistrés sur la base de données publique NAIADES. Grâce à l'interface interactive, vous allez pouvoir sélectionner, télécharger et 
-                       même comparer les données des prélèvements floristiques opérés par les agences de l'eau depuis 2007. Notre application se décompose en plusieurs
-                       onglets qui rendent la navigation simple et intuitive. Pour être certains que vous profiterez pleinement de l'expérience, la suite de cette page
-                       décrit de manière synthétique les fonctionnalités que vous retrouverez dans l'application."
-                                    
-                                  )),
-                       
-                       shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                                  
-                                  shiny::h3(class = "custom-heading", "L'onglet Données Brutes"),
-                                  
-                                  shiny::p(
-                                    class = "custom-text",
-                                    "En cliquant sur cet onglet, vous avez directement accès à la dernière version des données brutes extraites et formatées depuis NAIADES. 
-            Servez-vous du panneau de gauche pour naviguer entre les années de prélèvements. 
-            Chaque tableau d'une année est construit de la même façon, les colonnes sont requêtables pour celles présentant des caractères. 
-            Les colonnes numérique peuvent quand à elles être filtrées à l'aide d'un curseur qui apparaît lorsque vous cliquez dans la barre de recherche de la colonne.
-            Enfin, si vous en avez besoin, vous pouvez télécharger les données d'une année au format CSV à l'aide du bouton 'Download' situé en bas de chaque tableau.
-            Veuillez noter que le volume des données est assez important et peut donc prendre plusieurs secondes voir quelques minutes !"
-                                    
-                                  )),
-                       
-                       shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                                  shiny::h3(class = "custom-heading", "L'onglet Visualisation"),
-                                  shiny::p(
-                                    class = "custom-text",
-                                    "Cet onglet est composé de plusieurs éléments. Le panneau 'Chorologie' vous permet de visualiser les données de la base brute avec une vue centrée sur les taxons. 
-            Sélectionnez le ou les taxons à afficher à l'aide de la liste déroulante 'Liste des taxons disponibles'. 
-            La carte de l'onglet affichera ensuite les emplacements géographiques des taxons sélectionnés, et un menu vous permettra de cocher les années que vous souhaitez observer. 
-            Vous pouvez sélectionner jusqu'à deux taxons. Chaque point de la carte est cliquable et affichera les informations du prélèvement que vous regardez.
-            En dessous de 'Liste des taxons disponibles', les taxons appariés à celui ou ceux que vous avez choisit vous sont précisés.
-            Enfin, deux histogrammes interactifs sont activables via les boutons 'Afficher les Abondances Moyennes' et 'Afficher les occurences'. Ils présentent l'évolution de l'abondance relative (en pour 1000) et 
-            l'évolution du nombre d'occurences du ou des taxons dans les relevés des années ou il(s) est/sont vu(s), ce qui vous permet d'avoir une idée de son/leur importance.
-            Lorsque vous sélectionnez un deuxième taxon, les représentations graphiques de chacun (Carte et Plot) se superposent pour vous permettre de comparer 
-            les deux. Sur les barplots, des croix rouges apparaissent si deux taxons sont échantillonnés une même année. 
-            "
-                                  ),
-                                  
-                                  shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                                             shiny::h3(class = "custom-heading", "Le sous-Onglet Données"),
-                                             shiny::p(
-                                               class = "custom-text",
-                                               "Dans ce panneau, 
-            vous pouvez afficher et télécharger les données des taxons que vous avez sélectionnés depuis le panneau Chorologie. 
-            Utilisez le bouton 'Download' pour télécharger les données au format CSV."
-                                             )),
-                                  
-                                  
-                                  shiny::div(style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                                             shiny::h3(class = "custom-heading", "Le sous-Onglet Profil"),
-                                             shiny::p(
-                                               class = "custom-text",
-                                               "Ce panneau comporte deux onglets: 'Trophique' et 'Écologique'."
-                                             ),
-                                             shiny::p(class = "custom-text",
-                                                      "Dans l'onglet 'Trophique', vous pouvez afficher les informations concernant les préférenda pyshico-chimiques des taxons que 
-                   vous avez sélectionné. Ces informations ont été récupérées grâce aux travaux de David Carayon en 2019 qui a dréssé un tableau 
-                   de profils physico-chimiques d'un grand nombre de taxons. Si un taxon n'est pas présent dans la base de David Carayon,
-                   alors un message apparaîtra vous le précisant. Les valeurs des paramètres se superposent la encore si vous sélectionnez deux taxons."),
-                                             shiny::p(class = "custom-text",
-                                                      "Dans l'onglet 'Écologique', vous pouvez voir si le taxon sélectionné est indicateur ou pas de l'Indice Biologique Diatomées (IBD).
-                   Si il l'est, vous verrez le profil écologique du taxon en question s'afficher à l'écran, sinon un message apparaîtra, comme pour l'onglet Trophique"))),
+                i18n$t("Main Author: Léonard Heinry, Co-Authors: Sebastien Boutry, Juliette Rosebery")
+              ),
+
+              shiny::div(
+                style = "border: 2px solid #66C1BF; border-radius: 10px; padding: 10px; margin-top: 20px; margin-bottom: 10px; background-color: #f2f2f2;",
+                shiny::h1(i18n$t("Welcome to the VisualDiatoms application!")),
+                shiny::p(
+                  class = "custom-text",
+                i18n$t("This application allows you to visualize and compare diatom sampling data from the NAIADES public database. If it is your first time using the application, there is a user guide available below. Enjoy your visit!")
+                )
+              ),
+
+              shiny::div(
+                style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                shiny::h3(class = "custom-heading", "Introduction"),
+                shiny::p(
+                  class = "custom-text",
+                  i18n$t("The goal of this application is to improve the understanding of diatom data by allowing users to visualize the taxa recorded in the NAIADES public database. Through the interactive interface, you can select, download, and even compare floristic sampling data collected by water agencies since 2007. Our application is divided into several tabs, making navigation simple and intuitive. \nTo ensure you fully enjoy the experience, the rest of this page provides a brief description of the features you'll find in the application.")
+                )
+              ),
+
+              shiny::div(
+                style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                shiny::h3(class = "custom-heading", i18n$t("Raw Data Tab")),
+                shiny::p(
+                  class = "custom-text",
+                  i18n$t("By clicking on this tab, you have direct access to the latest version of the raw data extracted and formatted from NAIADES. Use the left panel to navigate between the years of sampling. Each table for a year is constructed in the same way, with columns that can be queried for those containing characters. Numeric columns can be filtered using a slider that appears when you click in the search bar of the column. Finally, if needed, you can download the data for a year in CSV format using the 'Download' button located at the bottom of each table. Please note that the volume of data is quite large and may take several seconds or a few minutes to load!"),
+                )
+              ),
+              
+              shiny::div(
+                style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                shiny::h3(class = "custom-heading", i18n$t("Visualization Tab")),
+                shiny::p(
+                  class = "custom-text",
+                  i18n$t("This tab consists of several elements. In the taxonomy tab, you will get the informations concerning the taxa included in your selection, as well as the actual valid appelation. The 'Chorology' panel allows you to visualize the data from the raw database with a focus on taxa. Select the taxa you want to display using the 'List of available taxa' dropdown. The map in this tab will then display the geographic locations of the selected taxa, and a menu will allow you to check the years you want to observe. You can select up to two taxa. Each point on the map is clickable and will display the information of the sampling you are looking at. Finally, two interactive histograms can be activated using the 'Display Average Abundance' and 'Display Occurrences' buttons. They show the evolution of the relative abundance (per 1000) and the number of occurrences of the taxa in the surveys of the years in which they were observed, which gives you an idea of their importance. When you select a second taxon, the graphical representations of each taxon (Map and Plot) are superimposed for comparison. On the bar plots, red crosses appear if two taxa are sampled in the same year.")
+                )
+              ),
+              
+              shiny::div(
+                style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                shiny::h3(class = "custom-heading", i18n$t("Data Sub-Tab")),
+                shiny::p(
+                  class = "custom-text",
+                  i18n$t("In this panel, you can display and download the data of the taxa you have selected from the Chorology panel. Use the 'Download' button to download the data in CSV format.")
+                )
+              ),
+
+              shiny::div(
+                style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+                shiny::h3(class = "custom-heading", i18n$t("Profile Sub-Tab")),
+                shiny::p(
+                  class = "custom-text",
+                  i18n$t("This panel has two tabs: Trophic and Ecological")
+                ),
+                shiny::p(
+                  class = "custom-text",
+                  i18n$t("In the 'Trophic' tab, you can view information about the physico-chemical preferences of the taxa you have selected. This information was obtained through the work of David Carayon in 2019, who compiled a table of physico-chemical profiles for a large number of taxa. If a taxon is not present in David Carayon's database, a message will appear to indicate this. Parameter values also overlap if you select two taxa.")
+                ),
+                shiny::p(
+                  class = "custom-text",
+                  i18n$t("In the 'Ecological' tab, you can see if the selected taxon is an indicator of the Diatom Biological Index (IBD). If it is, the ecological profile of the selected taxon will be displayed on the screen; otherwise, a message will appear, as in the Trophic tab."
+                ))
+              ),
                        
                        
                        shiny::div(
                          class = "container",
-                         style = "display: flex; justify-content: center; align-items: center; margin-top: 30px; background-color: white; padding: 20px; border: 2px solid black;",
+                         style = "display: flex; justify-content: center; align-items: center; margin-top: 25px; background-color: white; padding: 20px; border: 2px solid white;",
                          shiny::div(
                            style = "margin-right: 30px;",
-                           HTML("<p>Références bibliograpiques:</p>"),
                            
+                           shiny::p(
+                             class = "custom-text",
+                             i18n$t("Bibliography")),
                            HTML("<p>Carayon, D., Tison-Rosebery, J., & Delmas, F., 2019. Defining a new autoecological trait matrix for French stream benthic diatoms. Ecological Indicators, 103, 650-658.</p>"),
                            
                            HTML("<p>Coste, M., Boutry, S., Tison-Rosebery, J., Delmas, F., 2009. Improvements of the Biological Diatom Index (IBD): description and efficiency of the new version (IBD-2006). Ecological Indicators, 9, 621–650. https://doi.org/10.1016/j.ecolind.2008.06.003.</p>"),
                            
                            uiOutput("link")
                            
-                         ))
+                         )
             )
             
           )
         )
       ),
       shiny::tabPanel(
-        title = "Données Brutes",
+        title = i18n$t("Raw data"),
         shiny::sidebarLayout(
           shiny::sidebarPanel(
             shiny::radioButtons(
               inputId = "radio",
-              label = "Visualisation des données brutes",
-              choices = c("Nothing Selected" = ""),
+              label = i18n$t("Data raw visualization"),
+              choices = c(i18n$t("Nothing Selected"), ""),
               selected = NULL
             ),
             width = 3
@@ -242,26 +231,17 @@ ui <- shiny::fluidPage(
           )
         )
       ),
+      
       shiny::tabPanel(
-        title = "Visualisation",
+        title = i18n$t("Visualization"),
         shiny::sidebarLayout(
           shiny::sidebarPanel(
-            shiny::selectizeInput("taxons", "Liste des taxons disponibles: ", "", multiple = TRUE,
+            shiny::selectizeInput("taxons", i18n$t("List of available taxa: "), "", multiple = TRUE,
                                   options = list(maxOptions = 10000)),
-            shiny::code(
-              "Espèces comprises dans cette appelation: ",
-              style = "font-size:15px;"
-            ),
-            shiny::p(
-              shiny::textOutput("name_list"),
-              style = "font-size:15px;color:black;"
-            ),
-            shiny::p(
-              shiny::textOutput("name_list2"),
-              style = "font-size:15px;color:black;"
-            ), 
-            shiny::checkboxInput("toggleMaps", "Afficher les Abondances Moyennes"),
-            shiny::checkboxInput("toggleMaps2", "Afficher les Occurences"),
+            
+             
+            shiny::checkboxInput("toggleMaps", i18n$t("Display Average Abundance")),
+            shiny::checkboxInput("toggleMaps2", i18n$t("Display Occurrences")),
           shinycssloaders::withSpinner(plotOutput("Plot1", width = "100%", height = "400px"), type = 1, id = "spinnerPlot1"),
             
             # Utilisation de withSpinner pour le deuxième plot
@@ -271,9 +251,36 @@ ui <- shiny::fluidPage(
           shiny::mainPanel(
             shiny::tabsetPanel(
               id = "tabs",
+              
+              shiny::tabPanel("Taxonomy",
+                              
+                              shiny::tags$div(
+                                shiny::p(
+                                  i18n$t("Species included in your selection: "),
+                                  style = "font-size:20px;color:red;"
+                                ),
+                                shiny::br(),
+                                
+                                shiny::p(
+                                  shiny::textOutput("name_list"),
+                                  style = "font-size:15px;color:black;"
+                                ),
+                                
+                                shiny::br(),
+                                
+                                shiny::p(
+                                  shiny::textOutput("name_list2"),
+                                  style = "font-size:15px;color:black;"
+                                )
+                                
+                              ) 
+                              
+                              
+              ),
+              
               shiny::tabPanel(
-                "Chorologie",
-                dateRangeInput("date", "Choisissez une plage année:",
+                i18n$t("Chorology"),
+                dateRangeInput("date", i18n$t("Choose a year range:"),
                                start = as.Date("2007-01-01"),
                                end = as.Date("2007-01-01"),
                                format = "yyyy-mm-dd",
@@ -295,7 +302,7 @@ ui <- shiny::fluidPage(
               
               
               shiny::tabPanel(
-                "Données",
+                i18n$t("Data"),
                 shiny::fluidRow(
                   shiny::mainPanel(
                     DT::dataTableOutput("Donnees2", width = "100%"),
@@ -306,22 +313,22 @@ ui <- shiny::fluidPage(
               shiny::navbarMenu(
                 "Profile",
                 shiny::tabPanel(
-                  "Trophique",
+                  i18n$t("Trophic"),
                   shiny::mainPanel(
                     shiny::div(class = "custom-plot",
                         shinycssloaders::withSpinner(shiny::plotOutput("Trophie", width = "100%")))
                   )
                 ), 
                 shiny::tabPanel(
-                  "Écologique",
+                  i18n$t("Ecological"),
                   shiny::mainPanel(
                     shiny::tags$div(
-                      shiny::h3("Informations sur le profil écologique"),
+                      shiny::h3(i18n$t("Information about the ecological profile")),
                       shiny::br(),
                       shiny::p(
-                        "Le profil écologique d'un taxon est définis d'après une probabilité de présence en pourcentage le long d'un gradient de 7 classes de qualités d'eau. Ce gradient est basé sur une liste de paramètres physico-chimique comprenant le pH, la conductivité, l'oxygène dissous, la demande biologique en oxygène, l'ammonium, les orthophosphates et les nitrates. Il est callilbré à l'échelle Européenne.",
-                        "Le graphique que vous voyez ci-dessous présente le(s) profil(s) écologique(s) du/des taxon(s) que vous avez sélectionné."
-                      )
+                        i18n$t("The ecological profile of a taxon is defined based on a percentage probability of presence along a gradient of 7 classes of water quality. This gradient is based on a list of physico-chemical parameters including pH, conductivity, dissolved oxygen, biological oxygen demand, ammonium, orthophosphates, and nitrates. It is calibrated at the European scale."),
+                        p(i18n$t("The graph below shows the ecological profile(s) of the taxon(s) you have selected."
+                      )))
                     ),
                     shinycssloaders::withSpinner(shiny::plotOutput("Profil", width = "100%"))
                   )
@@ -334,7 +341,12 @@ ui <- shiny::fluidPage(
     )
   ))
 
+
 server <- function(input, output, session) {
+  
+  observeEvent(input$selected_language, {
+    update_lang(input$selected_language)
+  })
   
   shinyjs::hide("app_content")
   
@@ -345,10 +357,10 @@ server <- function(input, output, session) {
   })
 
   observe({
-    data_filtered <- data() %>% dplyr::filter(taxon %in% input$taxons[1])
+    data_filtered <- data() %>% dplyr::filter(full_name %in% input$taxons)
     updateDateRangeInput(session, "date", 
                          start = min(data_filtered$DATE),
-                         end = min(data_filtered$DATE) + 10,
+                         end = min(data_filtered$DATE),
                          min = min(data_filtered$DATE),
                          max = max(data_filtered$DATE))
   })
@@ -356,7 +368,7 @@ server <- function(input, output, session) {
   url <- a("https://naiades.eaufrance.fr", href="https://naiades.eaufrance.fr", 
            style = "color:#423089;font-size:18px", target="_blank")
   output$link <- renderUI({
-    tagList("Lien vers NAIADES:", url)
+    tagList(i18n$t("Link to NAIADES:"), url)
   })
   
   shiny::observeEvent(input$toggleMaps, {
@@ -413,7 +425,7 @@ server <- function(input, output, session) {
       shiny::updateSelectizeInput(session, "taxons", selected = input$taxons[1:2])
       
       shiny::showNotification(
-        "Vous ne pouvez pas comparer plus de deux taxons",
+        i18n$t("You can't compare more than two taxons"),
         type = "warning",
         duration = 20
       )
@@ -650,7 +662,7 @@ server <- function(input, output, session) {
     shinybusy::show_modal_spinner(
       spin = "cube-grid",
       color = "#66C1BF",
-      text = "Chargement des données NAIADES: Cette opération peut prendre quelques minutes"
+      text = i18n$t("Loading NAIADES data and setting language parameters, this operation may take a few minutes.")
     )
     
     # load(input$upload$datapath)
@@ -675,8 +687,8 @@ server <- function(input, output, session) {
     )
     
     shinyWidgets::show_alert(
-      title = "Chargement terminé",
-      text = "Les données NAIADES ont été chargées avec succès !",
+      title = i18n$t("Loading successful"),
+      text = i18n$t("NAIADES data successfully loaded!"),
       type = "success"
     )
     
@@ -706,22 +718,26 @@ server <- function(input, output, session) {
   })
   
   output$name_list <- shiny::renderText({
+
+    req(input$taxons)
+    
     as.character(data() %>%
                    dplyr::filter(full_name %in% input$taxons[1]) %>%
                    dplyr::select(taxons_apparies, CodeValid) %>%
                    unique() %>%
-                   dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", base::paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Aucun"), 
-                                                                  base::paste0("Pour ",str_sub(input$taxons[1],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,",       Code Valide = ",CodeValid))))[1]
+                   dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", base::paste0(i18n$t("For "),str_sub(input$taxons[1],  start = -5, end = -2),i18n$t(": None")),
+                                                                  base::paste0(i18n$t("For "),str_sub(input$taxons[1],  start = -5, end = -2),i18n$t(": Taxa included: "), taxons_apparies,i18n$t(", Valid Code = "),CodeValid))))[1]
   })
   
   output$name_list2 <- shiny::renderText({
+    
     if(length(input$taxons) == 2){
-      as.character(data() %>%
+    as.character(data() %>%
                      dplyr::filter(full_name %in% input$taxons[2]) %>%
                      dplyr::select(taxons_apparies, CodeValid) %>%
                      unique() %>%
-                     dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", base::paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Aucun"), 
-                                                                    base::paste0("Pour ",str_sub(input$taxons[2],  start = -5, end = -2),": Taxons compris: ", taxons_apparies,",       Code Valide = ",CodeValid))))[1]
+                     dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", base::paste0(i18n$t("For "),str_sub(input$taxons[2],  start = -5, end = -2),i18n$t(": None")), 
+                                                                    base::paste0(i18n$t("For "), str_sub(input$taxons[2],  start = -5, end = -2),i18n$t(": Taxa included: "), taxons_apparies,i18n$t(", Valid Code = "),CodeValid))))[1]
     }else{""}
     
   })
@@ -733,20 +749,30 @@ server <- function(input, output, session) {
     # req(input$upload)
     shiny::req(input$radio)
     
+    langue <- i18n$get_key_translation()
     
+
+    RESULTS <- i18n$t("Relative abundance (‰)")
+    Commune <- i18n$t("Municipality")
+    Latitude <- i18n$t("Latitude")
+    Longitude <- i18n$t("Longitude")
+    Station <-  i18n$t("Station")
+    Date <- i18n$t("Date")
+    taxon <- i18n$t("Taxa")
+                             
     DT::datatable(
       data() %>% 
         dplyr::mutate(lon = round(lon, 2), lat = round(lat, 2)) %>%
         distinct(taxon, CODE_STATION, DATE, .keep_all = TRUE) %>%
         dplyr::filter(lubridate::year(DATE) == input$radio) %>%
         dplyr::select(
-          date = DATE,
-          "n°station" = CODE_STATION,
-          commune,
-          longitude = lon,
-          latitude = lat,
-          taxon = full_name,
-          "Abondance relative (‰)" = RESULTAT
+          !!Date := DATE,
+          !!Station := CODE_STATION,
+          !!Commune := commune,
+          !!Longitude := lon,
+          !!Latitude := lat,
+          !!taxon := full_name,
+          !!RESULTS := RESULTAT
         ),
       extensions = "Buttons",
       options = list(
@@ -766,13 +792,13 @@ server <- function(input, output, session) {
   
   output$downloadData <- shiny::downloadHandler(
     filename = function() {
-      base::paste("Données pour l'année ", as.character(unique(lubridate::year(data()$DATE))), ".csv", sep = ".")
+      base::paste(i18n$t("Data for "), as.character(unique(lubridate::year(data()$DATE))), ".csv", sep = ".")
     },
     content = function(file) {
       shinybusy::show_modal_spinner(
         spin = "cube-grid",
         color = "#66C1BF",
-        text = "Téléchargement des données, cette opération peut prendre quelques minutes"
+        text = i18n$t("Downloading data may take a few minutes")
       )
       utils::write.csv2(data() %>% 
                           mutate(lon = round(lon, 2), lat = round(lat, 2)) %>%
@@ -781,16 +807,16 @@ server <- function(input, output, session) {
                           dplyr::select(
                             Date = DATE,
                             "n°station" = CODE_STATION,
-                            Commune = commune,
+                            Municipality = commune,
                             Longitude = lon,
                             Latitude = lat,
                             Taxon = full_name,
-                            Abondance = RESULTAT
+                            Abundance = RESULTAT
                           ), file)
       shinybusy::remove_modal_spinner()
       shinyWidgets::show_alert(
-        title = "Chargement terminé",
-        text = "Vos données ont été téléchargées avec succès !",
+        title = i18n$t("Loading successful"),
+        text = i18n$t("Data successfully downloaded !"),
         type = "success"
       )
     }
@@ -968,7 +994,25 @@ server <- function(input, output, session) {
     # 
     # intersection_tab_final <- data.frame(hydro) %>% left_join(intersection_tab, by = "NomHER1") %>%
     #   st_as_sf() %>% mutate(count = ifelse(is.na(count) == TRUE, 0, count))
-    map_base %>%
+    
+    
+    leaflet::leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
+      leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas,
+                                group = i18n$t("White background")
+      ) %>%
+      leaflet::addProviderTiles(providers$CartoDB.DarkMatter,
+                                group = i18n$t("Black background")
+      ) %>%
+      leaflet::addProviderTiles(providers$GeoportailFrance.orthos,
+                                group = i18n$t("Satellite background")
+      ) %>%
+      leaflet::addProviderTiles("OpenStreetMap",
+                                group = "Open Street Map"
+      ) %>%
+      htmlwidgets::onRender(
+        "function(el, x) {
+          L.control.zoom({position:''}).addTo(this);
+        }") %>%
       leaflet::addCircleMarkers(
         data = leaflet_data,
         lng = ~long, 
@@ -980,12 +1024,12 @@ server <- function(input, output, session) {
         radius = 5,
         # icon = leafIcons,
         popup = ~ paste(
-          "1- Année: ", annee, "<br>",
-          "2- Taxon: ", CodeValid, "<br>",
-          "3- Commune: ", commune, "<br>",
-          "4- Longitude: ", round(long, 2), "<br>",
-          "5- Latitude: ", round(lat, 2), "<br>",
-          "5- Abondance relative (‰):", round(RESULTAT, 2), "<br>"
+          i18n$t("1- Year: "), annee, "<br>",
+          i18n$t("2- Taxa: "), CodeValid, "<br>",
+                 i18n$t("3- Municipality: "), commune, "<br>",
+          i18n$t("4- Longitude: "), round(long, 2), "<br>",
+          i18n$t("5- Latitude: "), round(lat, 2), "<br>",
+          i18n$t("6- Relative abundance (‰):"), round(RESULTAT, 2), "<br>"
         ), 
         # clusterOptions = leaflet::markerClusterOptions(removeOutsideVisibleBounds = F),
         labelOptions = leaflet::labelOptions(
@@ -997,7 +1041,7 @@ server <- function(input, output, session) {
         data = leaflet_data %>% dplyr::filter(full_name %in% Code_Valid1),
         lng = ~long,
         lat = ~lat,
-        group = paste0("densité: ",input$taxons[1]),
+        group = paste0(i18n$t("density: "),Code_Valid1),
         blur = 15,     # Adjust the blur radius for smoothing the heatmap
         max = 0.6,     # Adjust the maximum intensity value
         radius = 10 # Adjust the radius of influence for each point
@@ -1008,8 +1052,8 @@ server <- function(input, output, session) {
         lng = ~long,
         lat = ~lat,
         group = ifelse(length(input$taxons) == 2, 
-                       paste0("densité: ",input$taxons[2]),
-                       "Pas de deuxième taxon sélectionné"),
+                       paste0(i18n$t("density: "),Code_Valid2),
+                       i18n$t("Only one taxon selected")),
         blur = 15,     # Adjust the blur radius for smoothing the heatmap
         max = 0.6,     # Adjust the maximum intensity value
         radius = 10 # Adjust the radius of influence for each point
@@ -1025,34 +1069,34 @@ server <- function(input, output, session) {
                   
                   color = "black",
                   fill = "lightgrey",
-                  group = "Hydro écorégions",
+                  group = i18n$t("Hydro ecoregions"),
                   labelOptions =  labelOptions(textsize = "15px")) %>%
       
       leaflet::addLayersControl(
         position = "topright",
         baseGroups = c(
-          "Fond satellite",
-          "Fond clair",
-          "Fond noir",
+          i18n$t("White background"),
+          i18n$t("Black background"),
+          i18n$t("Satellite background"),
           "Open Street Map"
         ),
-        overlayGroups = c(unique(leaflet_data$annee), "Hydro écorégions", 
-                          paste0("densité: ",input$taxons[1]), 
+        overlayGroups = c(unique(leaflet_data$annee), i18n$t("Hydro ecoregions"), 
+                          paste0(i18n$t("density: "),Code_Valid1), 
                           ifelse(length(input$taxons) == 2, 
-                                 paste0("densité: ",input$taxons[2]),
-                                 "Pas de deuxième taxon sélectionné")),
+                                 paste0(i18n$t("density: "),Code_Valid2),
+                                 i18n$t("Only one taxon selected"))),
         options = leaflet::layersControlOptions(collapsed = TRUE)
       ) %>%
-      leaflet::hideGroup(group = c(unique(leaflet_data$annee), "Hydro écorégions", 
-                                   paste0("densité: ",input$taxons[1]), 
+      leaflet::hideGroup(group = c(unique(leaflet_data$annee), i18n$t("Hydro ecoregions"), 
+                                   paste0(i18n$t("density: "),Code_Valid1), 
                                    ifelse(length(input$taxons) == 2, 
-                                          paste0("densité: ",input$taxons[2]),
-                                          "Pas de deuxième taxon sélectionné"))) %>%
+                                          paste0(i18n$t("density: "),Code_Valid2),
+                                          i18n$t("Only one taxon selected")))) %>%
       leaflet::setView(
         lng = 2,
         lat = 47,
         zoom = 6) %>%
-      leaflet::addControl(html = "<div id='custom-legend'>Référence Données: https://naiades.eaufrance.fr </div>",
+      leaflet::addControl(html = "<div id='custom-legend'> https://naiades.eaufrance.fr </div>",
                  position = "bottomleft")
     
     
@@ -1279,16 +1323,26 @@ server <- function(input, output, session) {
     Code_valid <- data() %>% 
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% unique()
+
+      Commune <- i18n$t("Municipality")
+      Abondance <- i18n$t("Relative abundance (‰)")
+      Latitude <- i18n$t("Latitude")
+      Longitude <- i18n$t("Longitude")
+      Station <-  i18n$t("Station")
+      Date <- i18n$t("Date")
+      taxon <- i18n$t("Taxa")
+
+
     
     DT::datatable(
       data() %>% 
         dplyr::filter(full_name %in% Code_valid) %>%
         dplyr::mutate(RESULTAT = round(RESULTAT, 2)) %>%
         dplyr::select(
-          date = DATE, station = CODE_STATION, commune,
-          taxon = CodeValid, Sandre = SANDRE,
-          longitude = lon, latitude = lat,
-          "ABONDANCE relative (‰)" = RESULTAT
+          !!Date := DATE, !!Station := CODE_STATION, !!Commune := commune,
+          !!taxon := CodeValid, Sandre = SANDRE,
+          !!Latitude := lat, !!Longitude := lon,
+          !!Abondance := RESULTAT
         ),
       extensions = "Buttons",
       options = list(
@@ -1306,21 +1360,17 @@ server <- function(input, output, session) {
     
     shiny::req(input$taxons)
     
-    # num_taxons <- length(input$taxons)
-    # 
-    # if (length(input$taxons) == 1) {
-    #   
-    #   facet <- "parameter"
-    #   x <- "variable"
-    #   
-    # } else {
-    #   
-    #   facet <- "variable"
-    #   x <- "parameter"
-    # 
-    # }
+    correspondance <- c(
+      "COND" = i18n$t("Conductivity (μS/cm)"),
+      "DBO5" = i18n$t("Oxygen demand (mg/L)"),
+      "NO3" = i18n$t("Nitrates (mg/L)"),
+      "PO4" = i18n$t("Phosphates (mg/L)"),
+      "SAT" = i18n$t("Oxygen saturation (%)"),
+      "NORG" = i18n$t("Organic nitrogen (mg/L)"),
+      "PH" = "pH"
+    )
     
-    # num_taxons <- length(input$taxons)
+    trophie <- trophie %>% dplyr::mutate(parameter_full = correspondance[parameter])
     
     Code_Valid <- data() %>% 
       dplyr::filter(full_name %in% input$taxons) %>%
@@ -1347,7 +1397,7 @@ server <- function(input, output, session) {
     
     if (nrow(data) == 0) {
       shiny::showNotification(
-        "Ce taxon ne possède pas de profil trophique défini d'après l'étude de Carayon et al 2019",
+        i18n$t("This taxon does not have a defined trophic profile according to the Carayon et al 2019 study."),
         type = "warning",
         duration = 20
       )
@@ -1440,7 +1490,7 @@ server <- function(input, output, session) {
     
     if (nrow(tab) == 0) {
       showNotification(
-        "Ce taxon ne possède pas de profil écologique",
+        i18n$t("This taxon does not have a defined ecological profile"),
         type = "warning",
         duration = 20
       )
@@ -1484,6 +1534,8 @@ server <- function(input, output, session) {
   
   output$downloadData2 <- shiny::downloadHandler(
     
+    Abondance <- i18n$t("Relative ABUNDANCE (‰)"),
+    
     filename = function() {
       base::paste(as.character(data() %>%
                            dplyr::filter(full_name %in% input$taxons[1]) %>%
@@ -1501,7 +1553,7 @@ server <- function(input, output, session) {
       shinybusy::show_modal_spinner(
         spin = "cube-grid",
         color = "#009999",
-        text = "Téléchargement des données, cette opération peut prendre quelques minutes"
+        text = i18n$t("Downloading data may take a few minutes")
       )
       
       utils::write.csv2(data() %>% dplyr::filter(full_name %in% input$taxons) %>%
@@ -1511,14 +1563,14 @@ server <- function(input, output, session) {
                             Date = DATE, Station = CODE_STATION, Commune = commune,
                             Taxon = CodeValid, Sandre = SANDRE,
                             Longitude = lon, Latitude = lat,
-                            "ABONDANCE relative (‰)" = RESULTAT
+                            Abondance = RESULTAT
                           ), file)
       
       shinybusy::remove_modal_spinner()
       
       shinyWidgets::show_alert(
-        title = "Chargement terminé",
-        text = "Les données du taxon ont été téléchargées avec succès !",
+        title = i18n$t("Loading successful"),
+        text = i18n$t("Data successfully downloaded !"),
         type = "success"
       )
       

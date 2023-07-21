@@ -46,7 +46,25 @@ library(geojson)
 library(geojsonio)
 library(geojsonlint)
 library(geojsonsf)
+library(shiny.i18n)
+library(htmlwidgets)
 
+
+i18n <- Translator$new(translation_json_path='data/Translations.json')
+i18n$set_translation_language('en')
+
+
+
+df <- data.frame(
+  val = c("en","fr","sp","ger")
+)
+
+df$img = c(
+  sprintf("<img src='https://upload.wikimedia.org/wikipedia/commons/4/42/Flag_of_the_United_Kingdom.png' width=30px><div class='jhr'>%s</div></img>", df$val[1]),
+  sprintf("<img src='https://logodownload.org/wp-content/uploads/2023/06/bandeira-france-flag-1.png' width=30px><div class='jhr'>%s</div></img>", df$val[2]),
+  sprintf("<img src='https://upload.wikimedia.org/wikipedia/commons/6/6f/Spain_flag_300.png' width=30px><div class='jhr'>%s</div></img>", df$val[3]),
+  sprintf("<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/1280px-Flag_of_Germany.svg.png' width=30px><div class='jhr'>%s</div></img>", df$val[4])
+)
 
 
 # cOuleur des plots
@@ -113,15 +131,6 @@ shift_legend <- function(p) {
 }
 
 
-correspondance <- c(
-  "COND" = "Conductivité (μS/cm)",
-  "DBO5" = "Demande en oxygène (mg/L)",
-  "NO3" = "Nitrates (mg/L)",
-  "PO4" = "Phosphates (mg/L)",
-  "SAT" = "Saturation en oxygène (%)",
-  "NORG" = "Azote organique (mg/L)",
-  "PH" = "pH"
-)
 
 # Trophie
 trophie <- tidyr::as_tibble(readxl::read_excel("data/Sup_material_published.xlsx", sheet = "Numbers")) %>%
@@ -141,8 +150,8 @@ trophie <- tidyr::as_tibble(readxl::read_excel("data/Sup_material_published.xlsx
     full_name, code, parameter,
     tolerance,
     optima, range_min, range_max, Class
-  ) %>%
-  dplyr::mutate(parameter_full = correspondance[parameter])
+  )
+  
 
 
 # profiles <- as_tibble(read.csv2(file = "data/IBD_params.csv", sep = ";",
@@ -166,20 +175,35 @@ trophie <- tidyr::as_tibble(readxl::read_excel("data/Sup_material_published.xlsx
 load("data/profiles.RData")
 
 
+# white_bg <- i18n$t("White background")
+# black_bg <- i18n$t("Black background")
+# satellite_bg <- i18n$t("Satellite background")
+# open_street_map = "Open Street Map"
+
+# 
+# background_white_group <- i18n$t("White background")
+# background_black_group <- i18n$t("Black background")
+# background_sattelite_group <- i18n$t("Satellite background")
+
+
 # Fond de carte
-map_base <- leaflet::leaflet() %>%
-  leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas,
-    group = "Fond clair"
-  ) %>%
-  leaflet::addProviderTiles(providers$CartoDB.DarkMatter,
-    group = "Fond noir"
-  ) %>%
-  leaflet::addProviderTiles(providers$GeoportailFrance.orthos,
-    group = "Fond satellite"
-  ) %>%
-  leaflet::addProviderTiles("OpenStreetMap",
-    group = "Open Street Map"
-  )
+# map_base <- leaflet::leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
+#   leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas,
+#     group = white_bg
+#   ) %>%
+#   leaflet::addProviderTiles(providers$CartoDB.DarkMatter,
+#     group = black_bg
+#   ) %>%
+#   leaflet::addProviderTiles(providers$GeoportailFrance.orthos,
+#     group = satellite_bg
+#   ) %>%
+#   leaflet::addProviderTiles("OpenStreetMap",
+#     group = open_street_map
+#   ) %>%
+#   htmlwidgets::onRender(
+#     "function(el, x) {
+#           L.control.zoom({position:''}).addTo(this);
+#         }")
 
 
 #
