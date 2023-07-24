@@ -54,7 +54,6 @@ i18n <- Translator$new(translation_json_path='data/Translations.json')
 i18n$set_translation_language('en')
 
 
-
 df <- data.frame(
   val = c("en","fr","sp","ger")
 )

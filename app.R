@@ -95,7 +95,8 @@ ui <- shiny::fluidPage(
         pickerInput(inputId = "selected_language",
                     label = i18n$t('Change language'),
                     choices = df$val,
-                    choicesOpt = list(content = df$img)),
+                    choicesOpt = list(content = df$img),
+                    selected = 'fr'),
         shiny::fluidRow(
           shiny::column(
             width = 12,
@@ -242,12 +243,16 @@ ui <- shiny::fluidPage(
              
             shiny::checkboxInput("toggleMaps", i18n$t("Display Average Abundance")),
             shiny::checkboxInput("toggleMaps2", i18n$t("Display Occurrences")),
-          shinycssloaders::withSpinner(plotOutput("Plot1", width = "100%", height = "400px"), type = 1, id = "spinnerPlot1"),
             
-            # Utilisation de withSpinner pour le deuxième plot
-          shinycssloaders::withSpinner(plotOutput("Plot2", width = "100%", height = "400px"), type = 1, id = "spinnerPlot2"),
-            width = 4
-          ),
+          shinycssloaders::withSpinner(
+            plotOutput("Plot1", width = "100%", height = "400px")
+            , type = 1, id = "spinnerPlot1"),
+
+          shinycssloaders::withSpinner(
+            plotOutput("Plot2", width = "100%", height = "400px")
+            , type = 1, id = "spinnerPlot2"),
+         
+           width = 4),
           shiny::mainPanel(
             shiny::tabsetPanel(
               id = "tabs",
@@ -356,7 +361,8 @@ server <- function(input, output, session) {
     
   })
 
-  observe({
+  shiny::observeEvent(input$taxons, {
+    
     data_filtered <- data() %>% dplyr::filter(full_name %in% input$taxons)
     updateDateRangeInput(session, "date", 
                          start = min(data_filtered$DATE),
@@ -390,7 +396,7 @@ server <- function(input, output, session) {
       shinyjs::hide("spinnerPlot2")
     }
   })
-  
+
   # observeEvent(input$Animation1, {
   #   if (input$Animation1) {
   #     shinyjs::hide("mapFiltered")
@@ -828,7 +834,7 @@ server <- function(input, output, session) {
   
   output$Plot1 <- shiny::renderPlot({
     
-    req(input$taxons)
+    req(input$toggleMaps)
     
     Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
@@ -856,18 +862,20 @@ server <- function(input, output, session) {
     
     plot_data %>%
       ggplot2::ggplot(aes(x = annee, y = Abondance_moyenne, fill = full_name)) +
-      ggplot2::geom_bar(stat = "identity", position = "stack", color = "black") +
+      ggplot2::geom_bar(stat = "identity", position = position_dodge(), color = "black", width = 0.7) +
       ggplot2::theme_classic() +
       ggplot2::scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(stringr::str_sub(Code_Valid1,-6), 
                                                                      stringr::str_sub(Code_Valid2, -6)),
                        breaks = levels_order) + 
       ggplot2::theme(
         legend.text = element_text(size = 12),
-        axis.title.y = element_blank(),
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 10),
         axis.text.x = element_text(size = 10, angle = 45, hjust = 1)
       ) + 
+      labs(
+        y = i18n$t("Abundance")
+      ) +
       ggplot2::guides(fill = guide_legend(title = NULL)) +
       ggplot2::geom_text(
         aes(label = ifelse(duplicated(annee), "*", "")),
@@ -880,9 +888,9 @@ server <- function(input, output, session) {
   })
   
   output$Plot2 <- shiny::renderPlot({
-    req(length(input$taxons) <= 2)
     
-
+    req(input$toggleMaps2)
+    
     Code_Valid <- data() %>%
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% base::unique()
@@ -909,17 +917,19 @@ server <- function(input, output, session) {
     
     plot_data2 %>%
       ggplot2::ggplot(aes(x = annee, y = Occurence, fill = full_name)) +
-      ggplot2::geom_bar(stat = "identity", position = "stack", color = "black") +
+      ggplot2::geom_bar(stat = "identity", position = position_dodge(), color = "black", width = 0.7) +
       ggplot2::theme_classic() +
       ggplot2::scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(stringr::str_sub(Code_Valid1,-6), 
                                                                      stringr::str_sub(Code_Valid2, -6)),
                         breaks = levels_order) +
       ggplot2::theme(
         legend.text = element_text(size = 12),
-        axis.title.y = element_blank(),
         axis.title.x = element_blank(),
         axis.text.y = element_text(size = 10),
         axis.text.x = element_text(size = 10, angle = 45, hjust = 1)
+      ) +
+      labs(
+        y = i18n$t("Occurence")
       ) +
       ggplot2::guides(fill = guide_legend(title = NULL)) +
       ggplot2::geom_text(
@@ -1037,7 +1047,20 @@ server <- function(input, output, session) {
           direction = "auto"
         )
       ) %>% 
-      addHeatmap(
+      leaflet::addPolygons(data = 
+                    polygones,
+                  # intersection_tab_final,
+                  label = 
+                    # paste0(intersection_tab_final$NomHER1, " | Total: ",
+                    #              intersection_tab_final$count),
+                    polygones$NomHER1,
+                  
+                  color = "black",
+                  fill = "lightgrey",
+                  group = i18n$t("Hydro ecoregions"),
+                  labelOptions =  labelOptions(textsize = "15px")) %>%
+      
+       addHeatmap(
         data = leaflet_data %>% dplyr::filter(full_name %in% Code_Valid1),
         lng = ~long,
         lat = ~lat,
@@ -1058,19 +1081,6 @@ server <- function(input, output, session) {
         max = 0.6,     # Adjust the maximum intensity value
         radius = 10 # Adjust the radius of influence for each point
       ) %>%
-      
-      leaflet::addPolygons(data = 
-                    polygones,
-                  # intersection_tab_final,
-                  label = 
-                    # paste0(intersection_tab_final$NomHER1, " | Total: ",
-                    #              intersection_tab_final$count),
-                    polygones$NomHER1,
-                  
-                  color = "black",
-                  fill = "lightgrey",
-                  group = i18n$t("Hydro ecoregions"),
-                  labelOptions =  labelOptions(textsize = "15px")) %>%
       
       leaflet::addLayersControl(
         position = "topright",
@@ -1484,6 +1494,16 @@ server <- function(input, output, session) {
       dplyr::filter(full_name %in% input$taxons) %>%
       dplyr::pull(CodeValid) %>% unique()
     
+    Code_Valid1 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[1]) %>%
+      dplyr::pull(CodeValid) %>% base::unique()
+    
+    Code_Valid2 <- data() %>% 
+      dplyr::filter(full_name %in% input$taxons[2]) %>%
+      dplyr::pull(CodeValid) %>% base::unique()
+    
+    levels_order <- c(Code_Valid1, Code_Valid2)
+    
     tab <- profiles %>%
       dplyr::filter(full_name %in% Code_Valid)
     
@@ -1496,9 +1516,9 @@ server <- function(input, output, session) {
       )
       return(NULL)}else{
         
-        num_colors <- 7  # Nombre de couleurs dans le gradient
-        
-        colories <- grDevices::colorRampPalette(c("red", "orange", "green"))(num_colors)
+        # num_colors <- 7  # Nombre de couleurs dans le gradient
+        # 
+        # colories <- grDevices::colorRampPalette(c("red", "orange", "green"))(num_colors)
         
         p <- tab %>%
           tidyr::pivot_longer(
@@ -1508,17 +1528,20 @@ server <- function(input, output, session) {
           ) %>%
           dplyr::mutate(Valeur = as.numeric(Valeur)) %>%
           ggplot2::ggplot(aes(x = factor(Classe), y = Valeur,
-                     group = full_name)) +
-          ggplot2::geom_point(size = 6, aes(shape = full_name, 
-                                   color = factor(Classe))) +
+                     group = full_name, color = full_name)) +
+          ggplot2::geom_point(size = 6, aes(shape = full_name)) +
+          ggplot2::scale_color_manual(values = c("#66C1BF", "#423089"), labels = c(stringr::str_sub(Code_Valid1,-6), 
+                                                                                  stringr::str_sub(Code_Valid2, -6)),
+                                     breaks = levels_order) +
+        
           ggplot2::geom_smooth(se = FALSE, size = 0.5, method = "loess",span = 0.3, color = "black") +
           ggplot2::labs(
             title = ""
           ) +
           ggplot2::scale_y_continuous(breaks = scales::pretty_breaks()) +
           ggplot2::scale_y_continuous(labels = scales::percent_format(), limits = c(0, 1), breaks = seq(0.1, 1, by = 0.1)) +
-          ggplot2::scale_color_manual(values = colories,
-                             name = "") +  # Utilisation d'une échelle de couleur discrète
+          # ggplot2::scale_color_manual(values = colories,
+          #                     name = "") +  # Utilisation d'une échelle de couleur discrète
           ggplot2::theme_classic() +
           ggplot2::theme(text = element_text(size = 20),
                 legend.title = element_blank(),

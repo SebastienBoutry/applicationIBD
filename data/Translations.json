@@ -433,6 +433,17 @@
   "fr": "Fond Satellite",
   "sp": "Fondo de satélite",
   "ger": "Satellitenhintergrund"
+},{
+  "en": "Abundance",
+  "fr": "Abondance",
+  "sp": "Abundanz",
+  "ger": "Abundancia"
+},
+{
+  "en": "Occurrence",
+  "fr": "Occurrence",
+  "sp": "Ocurrencia",
+  "ger": "Vorkommen"
 }
     ]
 }
