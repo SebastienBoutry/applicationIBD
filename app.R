@@ -76,7 +76,7 @@ ui <- shiny::fluidPage(
     style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fff; z-index: 9999; text-align: center;",
 
     img(
-      src = "VisualDiatom2.gif",
+      src = "VisualDiatom3.gif",
       style = "width: 1000px; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
       onclick = "shinyjs.toggle('welcome_page'); shinyjs.toggle('app_content');"
     )
@@ -118,6 +118,10 @@ ui <- shiny::fluidPage(
               shiny::div(
                 style = "margin-right: 60px;",
                 img(src = "ECOVEA.png", width = "100px")
+              ),
+              shiny::div(
+                style = "margin-right: 60px;",
+                img(src = "OFB.png", width = "100px")
               ),
               shiny::div(
                 style = "margin-right: 60px;",
