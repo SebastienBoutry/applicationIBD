@@ -18,6 +18,11 @@
       "fr": "Rien de Sélectionné",
       "sp": "Nada seleccionado",
       "ger": "Nichts ausgewählt"
+    },{
+      "en": "Display typology",
+      "fr": "Afficher la typologie",
+      "sp": "Tipología de expositores",
+      "ger": "Typologie anzeigen"
     },
     {
       "en": "List of available taxa: ",
@@ -60,6 +65,11 @@
       "fr": "Trophique",
       "sp": "Trófico",
       "ger": "Trophisch"
+    },{
+      "en": "Taxonomy",
+      "fr": "Taxonomie",
+      "sp": "Taxonomía",
+      "ger": "Taxonomie"
     },
     {
       "en": "Ecological",
@@ -132,10 +142,10 @@
       "ger": "Für "
     },
     {
-      "en": ": Taxa included: ",
-      "fr": ": Taxons compris: ",
-      "sp": ": Taxones incluidos: ",
-      "ger": ": Enthaltene Taxa: "
+      "en": ": Taxa included = ",
+      "fr": ": Taxons compris = ",
+      "sp": ": Taxones incluidos = ",
+      "ger": ": Enthaltene Taxa = "
     },
     {
       "en": "Relative abundance (‰)",
@@ -367,10 +377,10 @@
       "ger": "Rohdaten"
     },
     {
-      "en": ", Valid Code = ",
-      "fr": ", Code Valide = ",
-      "sp": ", Código Válido = ",
-      "ger": ", Gültiger Code = "
+      "en": "Valid Code = ",
+      "fr": "Code Valide = ",
+      "sp": "Código Válido = ",
+      "ger": "Gültiger Code = "
     },
     {
       "en": "Data raw visualization",
@@ -438,6 +448,11 @@
   "fr": "Abondance",
   "sp": "Abundanz",
   "ger": "Abundancia"
+},{
+  "en": "Profile",
+  "fr": "Profile",
+  "sp": "Perfil",
+  "ger": "Profil"
 },
 {
   "en": "Occurrence",

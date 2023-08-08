@@ -14,8 +14,7 @@ ui <- shiny::fluidPage(
       
   ".custom-table {",
     "border: 1px solid black;",
-    "margin-top: 40px; ", 
-    "font-weight: bold;",
+    "margin-top: 40px; ",
   "}",
 
       ".custom-plot {",
@@ -64,6 +63,7 @@ ui <- shiny::fluidPage(
         .navbar-default .navbar-nav > li > a[data-value='Données Brutes'] {color: white;background-color: #66C1BF;font-size: 25px;}
         .navbar-default .navbar-nav > li > a[data-value='Visualisation'] {color: white;background-color: #66C1BF;font-size: 25px;}
         .navbar-default .navbar-nav > li > a[data-value='Profiles'] {color: white;background-color: #66C1BF;font-size: 25px;}
+        .nowrap {white-space: nowrap;}
         
     
 ")
@@ -76,8 +76,8 @@ ui <- shiny::fluidPage(
     style = "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fff; z-index: 9999; text-align: center;",
 
     img(
-      src = "VisualDiatom3.gif",
-      style = "width: 1000px; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
+      src = "VisualDiatoms.gif",
+      style = "width: 800px; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);",
       onclick = "shinyjs.toggle('welcome_page'); shinyjs.toggle('app_content');"
     )
   ),
@@ -101,31 +101,26 @@ ui <- shiny::fluidPage(
           shiny::column(
             width = 12,
             
-            shiny::div(class = "container",
-                style = "display: flex; justify-content: center; align-items: center; margin-top: 15px; background-color: white; padding: 20px;",
-                div(
-                  style = "margin-right: 40px;",
-                  img(src = "VisualDiatoms Logo2.png", width = "200px")
-                )),
-            
             shiny::div(
               class = "container",
               style = "display: flex; justify-content: center; align-items: center; margin-top: 2px; background-color: white; padding: 20px;",
+              shiny::div(class = "container",
+                         style = "display: flex; justify-content: center; align-items: center; margin-top: 15px; background-color: white; padding: 20px;",
+                         div(
+                           style = "margin-right: 20px;",
+                           img(src = "LOGO.png", width = "400px")
+                         )),
               shiny::div(
                 style = "margin-right: 60px;",
-                img(src = "INRAE.png", width = "100px")
+                img(src = "EABX.png", width = "200px")
               ),
               shiny::div(
                 style = "margin-right: 60px;",
-                img(src = "ECOVEA.png", width = "100px")
+                img(src = "OFB.png", width = "200px")
               ),
               shiny::div(
                 style = "margin-right: 60px;",
-                img(src = "OFB.png", width = "100px")
-              ),
-              shiny::div(
-                style = "margin-right: 60px;",
-                img(src = "logo_Aquaref.png", width = "100px")
+                img(src = "logo_Aquaref.png", width = "200px")
               )
             ),
           
@@ -247,6 +242,7 @@ ui <- shiny::fluidPage(
              
             shiny::checkboxInput("toggleMaps", i18n$t("Display Average Abundance")),
             shiny::checkboxInput("toggleMaps2", i18n$t("Display Occurrences")),
+            shiny::checkboxInput("toggleMaps3", i18n$t("Display typology")),
             
           shinycssloaders::withSpinner(
             plotOutput("Plot1", width = "100%", height = "400px")
@@ -255,35 +251,64 @@ ui <- shiny::fluidPage(
           shinycssloaders::withSpinner(
             plotOutput("Plot2", width = "100%", height = "400px")
             , type = 1, id = "spinnerPlot2"),
-         
+          
+          shinycssloaders::withSpinner(
+            plotOutput("Circular_plot", width = "100%", height = "400px")
+            , type = 1, id = "spinnerPlot3"),
+          
            width = 4),
           shiny::mainPanel(
             shiny::tabsetPanel(
               id = "tabs",
               
-              shiny::tabPanel("Taxonomy",
+              shiny::tabPanel(i18n$t("Taxonomy"),
                               
-                              shiny::tags$div(
+                              shiny::tags$style(HTML("
+    .custom-div {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  ")),
+                              
+                              shiny::div(
                                 shiny::p(
                                   i18n$t("Species included in your selection: "),
                                   style = "font-size:20px;color:red;"
                                 ),
-                                shiny::br(),
-                                
+                                class = "custom-div"
+                              ),
+                              
+                              shiny::div(
                                 shiny::p(
                                   shiny::textOutput("name_list"),
                                   style = "font-size:15px;color:black;"
                                 ),
-                                
-                                shiny::br(),
-                                
+                                class = "custom-div"
+                              ),
+                              
+                              shiny::div(
+                                shiny::p(
+                                  shiny::textOutput("name_list1"),
+                                  style = "font-size:15px;color:black;"
+                                ),
+                                class = "custom-div"
+                              ),
+                              
+                              shiny::div(
                                 shiny::p(
                                   shiny::textOutput("name_list2"),
                                   style = "font-size:15px;color:black;"
-                                )
-                                
-                              ) 
+                                ),
+                                class = "custom-div"
+                              ),
                               
+                              shiny::div(
+                                shiny::p(
+                                  shiny::textOutput("name_list3"),
+                                  style = "font-size:15px;color:black;"
+                                ),
+                                class = "custom-div"
+                              )
                               
               ),
               
@@ -297,7 +322,6 @@ ui <- shiny::fluidPage(
                 fluidRow(
                   shinycssloaders::withSpinner(leafletOutput("mapFiltered", width = "100%", height = "800px"))
                 )
-               
               ),
               # shiny::tabPanel(
               # "Chorologie", 
@@ -308,19 +332,8 @@ ui <- shiny::fluidPage(
               #   leafletOutput("mapFiltered3", width = "100%", height = "800px")
               # )
               # ),
-              
-              
-              shiny::tabPanel(
-                i18n$t("Data"),
-                shiny::fluidRow(
-                  shiny::mainPanel(
-                    DT::dataTableOutput("Donnees2", width = "100%"),
-                    shiny::downloadButton("downloadData2", "Download")
-                  )
-                )
-              ), 
               shiny::navbarMenu(
-                "Profile",
+                i18n$t("Profile"),
                 shiny::tabPanel(
                   i18n$t("Trophic"),
                   shiny::mainPanel(
@@ -342,6 +355,12 @@ ui <- shiny::fluidPage(
                     shinycssloaders::withSpinner(shiny::plotOutput("Profil", width = "100%"))
                   )
                 )
+              ),
+              shiny::tabPanel(
+                title = i18n$t("Data"),
+                    DT::dataTableOutput("Donnees2"),
+                    shiny::downloadButton("downloadData2", "Download")
+                  
               )
             )
           )
@@ -398,6 +417,30 @@ server <- function(input, output, session) {
     } else {
       shinyjs::hide("Plot2")
       shinyjs::hide("spinnerPlot2")
+    }
+  })
+  
+  shiny::observeEvent(input$toggleMaps3, {
+    if (input$toggleMaps3) {
+      shinyjs::show("Circular_plot")
+      shinyjs::show("spinnerPlot3")
+    } else {
+      shinyjs::hide("Circular_plot")
+      shinyjs::hide("spinnerPlot3")
+    }
+  })
+  
+  shiny::observeEvent(input$taxons, {
+      shinyjs::show("name_list")
+      shinyjs::show("spinnerPlot4")
+  })
+  
+  shiny::observeEvent(input$taxons, {
+    if (length(input$taxons) == 2) {
+      shinyjs::show("name_list2")
+      shinyjs::show("spinnerPlot5")
+    } else {
+      shinyjs::hide("")
     }
   })
 
@@ -672,20 +715,20 @@ server <- function(input, output, session) {
     shinybusy::show_modal_spinner(
       spin = "cube-grid",
       color = "#66C1BF",
-      text = i18n$t("Loading NAIADES data and setting language parameters, this operation may take a few minutes.")
+      text = " Chargement des données NAIADES | Loading NAIADES data | Cargando datos de NAIADES | Laden von NAIADES-Daten "
     )
     
     # load(input$upload$datapath)
     
-    githubURL <- base::paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/", fichier_plus_recent)
+    # githubURL <- base::paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/", fichier_plus_recent)
     
     # tempfile <- tempfile()  # Crée un fichier temporaire pour stocker le fichier téléchargé
     # download.file(url = githubURL, destfile = tempfile, mode = "wb")  # Télécharge le fichier à partir de l'URL
     # 
     # load(tempfile)
     
-    base::load(url(githubURL))
-    
+    # base::load(url(githubURL))
+    base::load("data/test.RData")
     # load("data/Diatom.RData")
     
     
@@ -697,8 +740,8 @@ server <- function(input, output, session) {
     )
     
     shinyWidgets::show_alert(
-      title = i18n$t("Loading successful"),
-      text = i18n$t("NAIADES data successfully loaded!"),
+      title = "",
+      text = " NAIADES data successfully loaded! | Les données NAIADES ont été chargées avec succès | ¡Datos de NAIADES cargados con éxito! | NAIADES-Daten erfolgreich geladen!",
       type = "success"
     )
     
@@ -736,7 +779,18 @@ server <- function(input, output, session) {
                    dplyr::select(taxons_apparies, CodeValid) %>%
                    unique() %>%
                    dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", base::paste0(i18n$t("For "),str_sub(input$taxons[1],  start = -5, end = -2),i18n$t(": None")),
-                                                                  base::paste0(i18n$t("For "),str_sub(input$taxons[1],  start = -5, end = -2),i18n$t(": Taxa included: "), taxons_apparies,i18n$t(", Valid Code = "),CodeValid))))[1]
+                                                                  base::paste0(i18n$t("For "),str_sub(input$taxons[1],  start = -5, end = -2),i18n$t(": Taxa included = "), taxons_apparies))))[1]
+  })
+  
+  output$name_list1 <- shiny::renderText({
+    
+    req(input$taxons)
+    
+    as.character(data() %>%
+                   dplyr::filter(full_name %in% input$taxons[1]) %>%
+                   dplyr::select(taxons_apparies, CodeValid) %>%
+                   unique() %>%
+                   dplyr::mutate(CodeValid = base::paste0(i18n$t("Valid Code = "),CodeValid)))[2]
   })
   
   output$name_list2 <- shiny::renderText({
@@ -747,7 +801,19 @@ server <- function(input, output, session) {
                      dplyr::select(taxons_apparies, CodeValid) %>%
                      unique() %>%
                      dplyr::mutate(taxons_apparies = dplyr::if_else(taxons_apparies == "Aucun", base::paste0(i18n$t("For "),str_sub(input$taxons[2],  start = -5, end = -2),i18n$t(": None")), 
-                                                                    base::paste0(i18n$t("For "), str_sub(input$taxons[2],  start = -5, end = -2),i18n$t(": Taxa included: "), taxons_apparies,i18n$t(", Valid Code = "),CodeValid))))[1]
+                                                                    base::paste0(i18n$t("For "), str_sub(input$taxons[2],  start = -5, end = -2),i18n$t(": Taxa included = "), taxons_apparies))))[1]
+    }else{""}
+    
+  })
+  
+  output$name_list3 <- shiny::renderText({
+    
+    if(length(input$taxons) == 2){
+      as.character(data() %>%
+                     dplyr::filter(full_name %in% input$taxons[2]) %>%
+                     dplyr::select(taxons_apparies, CodeValid) %>%
+                     unique() %>%
+                     dplyr::mutate(CodeValid = base::paste0(i18n$t("Valid Code = "),CodeValid)))[2]
     }else{""}
     
   })
@@ -772,9 +838,14 @@ server <- function(input, output, session) {
                              
     DT::datatable(
       data() %>% 
-        dplyr::mutate(lon = round(lon, 2), lat = round(lat, 2)) %>%
+        dplyr::mutate(lon = round(long, 2), lat = round(lat, 2)) %>%
         distinct(taxon, CODE_STATION, DATE, .keep_all = TRUE) %>%
         dplyr::filter(lubridate::year(DATE) == input$radio) %>%
+        mutate(lon = as.character(lon),
+               lat = as.character(lat),
+               DATE = as.character(DATE),
+               full_name = as.factor(full_name),
+               commune = as.factor(commune)) %>%
         dplyr::select(
           !!Date := DATE,
           !!Station := CODE_STATION,
@@ -787,9 +858,14 @@ server <- function(input, output, session) {
       extensions = "Buttons",
       options = list(
         pageLength = 10,
-        scroller = TRUE
+        autowidth = TRUE,
+        columnDefs = list(
+          list(className = "nowrap", targets = "_all"),
+          list(targets = c(2,3,6,7), width = '150px')
+        ),
+        scrollX = TRUE
       ),
-      filter = "top", selection = "multiple", escape = FALSE,
+      filter = "top", escape = FALSE,
       class = 'custom-table'
     )
     
@@ -865,29 +941,32 @@ server <- function(input, output, session) {
     levels_order <- c(Code_Valid1, Code_Valid2)
     
     plot_data %>%
-      ggplot2::ggplot(aes(x = annee, y = Abondance_moyenne, fill = full_name)) +
-      ggplot2::geom_bar(stat = "identity", position = position_dodge(), color = "black", width = 0.7) +
+      ggplot2::ggplot(aes(x = annee, y = Abondance_moyenne)) +
+      ggplot2::geom_point(aes(color = full_name), size = 5) +
+      ggplot2::geom_line(aes(group = full_name, color = full_name), linewidth = 3) +
       ggplot2::theme_classic() +
-      ggplot2::scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(stringr::str_sub(Code_Valid1,-6), 
-                                                                     stringr::str_sub(Code_Valid2, -6)),
-                       breaks = levels_order) + 
+      ggplot2::scale_color_manual(values = c("#66C1BF", "#423089"), 
+                                  labels = c(stringr::str_sub(Code_Valid1, -6), stringr::str_sub(Code_Valid2, -6)),
+                                  breaks = levels_order) +
+      labs(tag =ifelse(length(input$taxons) == 2 & Code_Valid1 != Code_Valid2,"* = both\nspecies","")) +
       ggplot2::theme(
         legend.text = element_text(size = 12),
         axis.title.x = element_blank(),
-        axis.text.y = element_text(size = 10),
-        axis.text.x = element_text(size = 10, angle = 45, hjust = 1)
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, angle = 45, hjust = 1),
+        plot.tag.position = c(.87,.4),
+        plot.tag = element_text(hjust =0, size=12, color = "red")
       ) + 
       labs(
         y = i18n$t("Abundance")
       ) +
       ggplot2::guides(fill = guide_legend(title = NULL)) +
       ggplot2::geom_text(
-        aes(label = ifelse(duplicated(annee), "*", "")),
+        aes(label = ifelse(duplicated(annee), "*", ""), y = 0),
         color = "red",
-        size = 8,
-        position = position_dodge(width = 0)
-      )
-  
+        size = 8
+      ) 
+
     
   })
   
@@ -919,31 +998,94 @@ server <- function(input, output, session) {
     
     levels_order <- c(Code_Valid1, Code_Valid2)
     
+    
     plot_data2 %>%
-      ggplot2::ggplot(aes(x = annee, y = Occurence, fill = full_name)) +
-      ggplot2::geom_bar(stat = "identity", position = position_dodge(), color = "black", width = 0.7) +
+      ggplot2::ggplot(aes(x = annee, y = Occurence)) +
+      ggplot2::geom_point(aes(color = full_name), size = 5) +
+      ggplot2::geom_line(aes(group = full_name, color = full_name), linewidth = 3) +
       ggplot2::theme_classic() +
-      ggplot2::scale_fill_manual(values = c("#66C1BF", "#423089"), labels = c(stringr::str_sub(Code_Valid1,-6), 
-                                                                     stringr::str_sub(Code_Valid2, -6)),
-                        breaks = levels_order) +
+      ggplot2::scale_color_manual(values = c("#66C1BF", "#423089"), 
+                                  labels = c(stringr::str_sub(Code_Valid1, -6), stringr::str_sub(Code_Valid2, -6)),
+                                  breaks = levels_order) +
+      labs(tag =ifelse(length(input$taxons) == 2 & Code_Valid1 != Code_Valid2,"* = both\nspecies","")) +
       ggplot2::theme(
         legend.text = element_text(size = 12),
         axis.title.x = element_blank(),
-        axis.text.y = element_text(size = 10),
-        axis.text.x = element_text(size = 10, angle = 45, hjust = 1)
-      ) +
+        axis.text.y = element_text(size = 12),
+        axis.text.x = element_text(size = 12, angle = 45, hjust = 1),
+        plot.tag.position = c(.87,.4),
+        plot.tag = element_text(hjust =0, size=12, color = "red")
+      ) + 
       labs(
-        y = i18n$t("Occurence")
+        y = i18n$t("Occurrence")
       ) +
       ggplot2::guides(fill = guide_legend(title = NULL)) +
       ggplot2::geom_text(
-        aes(label = ifelse(duplicated(annee), "*", "")),
+        aes(label = ifelse(duplicated(annee), "*", ""), y = 0),
         color = "red",
-        size = 8,
-        position = position_dodge(width = 0)
-      )
+        size = 8
+      ) 
   })
   
+  
+  
+  output$Circular_plot <- shiny::renderPlot({
+    
+    req(input$taxons)
+    req(input$toggleMaps3)
+    
+    Code_Valid <- data() %>%
+      dplyr::filter(full_name %in% input$taxons) %>%
+      dplyr::pull(CodeValid) %>% base::unique()
+    
+    Circular_data <- data() %>%
+      dplyr::filter(full_name %in% Code_Valid) %>%
+      dplyr::select(full_name, type) %>%
+      dplyr::group_by(full_name) %>%
+      dplyr::summarise(
+        "cours d'eau" = sum(type == "cours d'eau"),
+        "plan d'eau" = sum(type == "plan d'eau")
+      ) %>%
+      ungroup() %>%
+      pivot_longer(
+        cols = c("cours d'eau", "plan d'eau"),
+        names_to = "group",
+        values_to = "values"
+      ) %>%
+      group_by(full_name) %>%
+      mutate(percentage = ifelse(values > 0, values/sum(values) * 100, 0)) %>%
+      ungroup()
+    
+    blank_theme <- theme_minimal()+
+      theme(
+        axis.text.x=element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        panel.border = element_blank(),
+        panel.grid=element_blank(),
+        axis.ticks = element_blank(),
+        plot.title=element_text(size=14, face="bold"),
+        strip.text = element_text(size = 15, face = "bold"),
+        legend.text = element_text(size = 12)
+      )
+
+    pie_plot <- ggplot(Circular_data, aes(x = "", y = percentage, fill = group)) +
+      geom_bar(width = 1, stat = "identity", color = "black") +
+      
+      ggplot2::scale_fill_manual(values = c("#3399FF", "#339900"), labels = c("cours d'eau", 
+                                                                              "plan d'eau")) +
+      coord_polar("y", start = 0) +
+      blank_theme +
+      geom_text(data = subset(Circular_data, percentage > 0),
+                aes(label = paste(round(percentage, 1), "%")),
+                position = position_stack(vjust = 0.5),
+                size = 5) +
+      facet_wrap(~str_sub(full_name, -6), ncol = 2) +
+      labs(fill = "Typologie")
+    
+    pie_plot
+    
+  })
   
   mapFiltered <- shiny::reactive({
     shiny::req(input$taxons)
@@ -961,6 +1103,7 @@ server <- function(input, output, session) {
       dplyr::pull(CodeValid) %>% unique()
     
     leaflet_data <- data() %>%
+      dplyr::filter(type == "cours d'eau") %>%
       dplyr::filter(full_name %in% Code_Valid) %>%
       dplyr::mutate(full_name = CodeValid) %>%
       dplyr::mutate(annee = as.character(lubridate::year(DATE))) %>%
@@ -977,7 +1120,26 @@ server <- function(input, output, session) {
       )) %>%
       ungroup()
     
-    leaflet_data <- leaflet_data[leaflet_data$DATE >= input$date[1] & leaflet_data$DATE <= input$date[2], ]
+    leaflet_data2 <- data() %>%
+      dplyr::filter(type == "plan d'eau") %>%
+      dplyr::filter(full_name %in% Code_Valid) %>%
+      dplyr::mutate(full_name = CodeValid) %>%
+      dplyr::mutate(annee = as.character(lubridate::year(DATE))) %>%
+      dplyr::mutate(grp_color = str_sub(CodeValid, -6)) %>%
+      dplyr::group_by(grp_color) %>%
+      dplyr::mutate(label = dplyr::cur_group_id()) %>%
+      dplyr::distinct() %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(Location = paste0(
+        CODE_STATION, "_",
+        lubridate::year(DATE), "_0",
+        lubridate::month(DATE), "_0",
+        lubridate::day(DATE)
+      )) %>%
+      ungroup()
+    
+    leaflet_data <- leaflet_data %>% dplyr::filter(DATE >= input$date[1] & DATE <= input$date[2])
+    leaflet_data2 <- leaflet_data2 %>% dplyr::filter(DATE >= input$date[1] & DATE <= input$date[2])
 
     
     # Fonction de correspondance pour les couleurs
@@ -1009,6 +1171,8 @@ server <- function(input, output, session) {
     # intersection_tab_final <- data.frame(hydro) %>% left_join(intersection_tab, by = "NomHER1") %>%
     #   st_as_sf() %>% mutate(count = ifelse(is.na(count) == TRUE, 0, count))
     
+    bins <- c(unique(polygones$CdHER1))
+    pal <- colorBin("YlOrRd", domain = polygones$NomHER1, bins = bins)
     
     leaflet::leaflet(options = leafletOptions(zoomControl = FALSE)) %>%
       leaflet::addProviderTiles(providers$Esri.WorldGrayCanvas,
@@ -1031,7 +1195,7 @@ server <- function(input, output, session) {
         data = leaflet_data,
         lng = ~long, 
         lat = ~lat,
-        group = unique(leaflet_data$annee),
+        group = "cours d'eau",
         color = ~color_mapping(CodeValid),
         fillOpacity = 0.8,
         weight = 1,
@@ -1051,19 +1215,30 @@ server <- function(input, output, session) {
           direction = "auto"
         )
       ) %>% 
-      leaflet::addPolygons(data = 
-                    polygones,
-                  # intersection_tab_final,
-                  label = 
-                    # paste0(intersection_tab_final$NomHER1, " | Total: ",
-                    #              intersection_tab_final$count),
-                    polygones$NomHER1,
-                  
-                  color = "black",
-                  fill = "lightgrey",
-                  group = i18n$t("Hydro ecoregions"),
-                  labelOptions =  labelOptions(textsize = "15px")) %>%
-      
+      leaflet::addCircleMarkers(
+        data = leaflet_data2,
+        lng = ~long, 
+        lat = ~lat,
+        group = "plan d'eau",
+        color = ~color_mapping(CodeValid),
+        fillOpacity = 0.8,
+        weight = 1,
+        radius = 5,
+        # icon = leafIcons,
+        popup = ~ paste(
+          i18n$t("1- Year: "), annee, "<br>",
+          i18n$t("2- Taxa: "), CodeValid, "<br>",
+          i18n$t("3- Municipality: "), commune, "<br>",
+          i18n$t("4- Longitude: "), round(long, 2), "<br>",
+          i18n$t("5- Latitude: "), round(lat, 2), "<br>",
+          i18n$t("6- Relative abundance (‰):"), round(RESULTAT, 2), "<br>"
+        ), 
+        # clusterOptions = leaflet::markerClusterOptions(removeOutsideVisibleBounds = F),
+        labelOptions = leaflet::labelOptions(
+          noHide = F,
+          direction = "auto"
+        )
+      ) %>%
        addHeatmap(
         data = leaflet_data %>% dplyr::filter(full_name %in% Code_Valid1),
         lng = ~long,
@@ -1086,6 +1261,28 @@ server <- function(input, output, session) {
         radius = 10 # Adjust the radius of influence for each point
       ) %>%
       
+      leaflet::addPolygons(
+        data = polygones,
+        label = polygones$NomHER1,
+        color = "lightgrey",
+        fillColor = 
+          # "white",
+          ~pal(CdHER1),
+        dashArray = "3",
+        fillOpacity = 0.1,
+        group = i18n$t("Hydro ecoregions"),
+        labelOptions = labelOptions(textsize = "15px"),
+        highlightOptions = highlightOptions(
+          weight = 5,
+          color = "#666",
+          # fillColor = ~pal(CdHER1),
+          dashArray = "3",
+          fillOpacity = 0.1,
+          bringToFront = TRUE
+        )
+      ) %>%
+      
+      
       leaflet::addLayersControl(
         position = "topright",
         baseGroups = c(
@@ -1094,18 +1291,20 @@ server <- function(input, output, session) {
           i18n$t("Satellite background"),
           "Open Street Map"
         ),
-        overlayGroups = c(unique(leaflet_data$annee), i18n$t("Hydro ecoregions"), 
+        overlayGroups = c("cours d'eau", "plan d'eau",  
                           paste0(i18n$t("density: "),Code_Valid1), 
                           ifelse(length(input$taxons) == 2, 
                                  paste0(i18n$t("density: "),Code_Valid2),
-                                 i18n$t("Only one taxon selected"))),
+                                 i18n$t("Only one taxon selected")),
+                          i18n$t("Hydro ecoregions")),
         options = leaflet::layersControlOptions(collapsed = TRUE)
       ) %>%
-      leaflet::hideGroup(group = c(unique(leaflet_data$annee), i18n$t("Hydro ecoregions"), 
+      leaflet::hideGroup(group = c("cours d'eau", "plan d'eau", 
                                    paste0(i18n$t("density: "),Code_Valid1), 
                                    ifelse(length(input$taxons) == 2, 
                                           paste0(i18n$t("density: "),Code_Valid2),
-                                          i18n$t("Only one taxon selected")))) %>%
+                                          i18n$t("Only one taxon selected")),
+                                   i18n$t("Hydro ecoregions"))) %>%
       leaflet::setView(
         lng = 2,
         lat = 47,
@@ -1345,13 +1544,19 @@ server <- function(input, output, session) {
       Station <-  i18n$t("Station")
       Date <- i18n$t("Date")
       taxon <- i18n$t("Taxa")
-
-
-    
+      
     DT::datatable(
       data() %>% 
         dplyr::filter(full_name %in% Code_valid) %>%
-        dplyr::mutate(RESULTAT = round(RESULTAT, 2)) %>%
+        dplyr::mutate(RESULTAT = round(RESULTAT, 2),
+                      lat = round(lat,2),
+                      lon = round(lon,2)) %>%
+        mutate(SANDRE = as.character(SANDRE),
+               lon = as.character(lon),
+               lat = as.character(lat),
+               DATE = as.character(DATE),
+               full_name = as.factor(full_name),
+               commune = as.factor(commune)) %>%
         dplyr::select(
           !!Date := DATE, !!Station := CODE_STATION, !!Commune := commune,
           !!taxon := CodeValid, Sandre = SANDRE,
@@ -1361,9 +1566,14 @@ server <- function(input, output, session) {
       extensions = "Buttons",
       options = list(
         pageLength = 10,
-        scroller = TRUE
+        autowidth = TRUE,
+        columnDefs = list(
+          list(className = "nowrap", targets = "_all"),
+          list(targets = c(2,3,6,7), width = '150px')
+        ),
+        scrollX = TRUE
       ),
-      filter = "top", selection = "multiple", escape = FALSE,
+      filter = "top",
       class = 'custom-table'
     )
   })
@@ -1551,7 +1761,8 @@ server <- function(input, output, session) {
                 legend.title = element_blank(),
                 axis.title.x = element_blank(),
                 axis.title.y = element_blank(),
-                plot.margin = margin(t = 20, unit = "pt"))
+                plot.margin = margin(t = 20, unit = "pt")) +
+          ggplot2::guides(shape = "none")
         
       }
     

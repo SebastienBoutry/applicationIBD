@@ -5,7 +5,6 @@ getwd()
 options(shiny.http.response.timeout = 300)
 options(encoding = "UTF-8")
 
-
 library(httr)
 library(gh)
 library(RColorBrewer)
@@ -31,7 +30,6 @@ library(xlsx)
 library(scales)
 library(shinyjs)
 library(fs)
-library(git2r)
 library(leaflet.extras)
 library(openxlsx)
 library(shinymaterial)
@@ -48,6 +46,7 @@ library(geojsonlint)
 library(geojsonsf)
 library(shiny.i18n)
 library(htmlwidgets)
+library(downloader)
 
 
 i18n <- Translator$new(translation_json_path='data/Translations.json')
