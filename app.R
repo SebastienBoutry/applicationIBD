@@ -161,19 +161,10 @@ ui <- shiny::fluidPage(
                 shiny::h3(class = "custom-heading", i18n$t("Visualization Tab")),
                 shiny::p(
                   class = "custom-text",
-                  i18n$t("This tab consists of several elements. In the taxonomy tab, you will get the informations concerning the taxa included in your selection, as well as the actual valid appelation. The 'Chorology' panel allows you to visualize the data from the raw database with a focus on taxa. Select the taxa you want to display using the 'List of available taxa' dropdown. The map in this tab will then display the geographic locations of the selected taxa, and a menu will allow you to check the years you want to observe. You can select up to two taxa. Each point on the map is clickable and will display the information of the sampling you are looking at. Finally, two interactive histograms can be activated using the 'Display Average Abundance' and 'Display Occurrences' buttons. They show the evolution of the relative abundance (per 1000) and the number of occurrences of the taxa in the surveys of the years in which they were observed, which gives you an idea of their importance. When you select a second taxon, the graphical representations of each taxon (Map and Plot) are superimposed for comparison. On the bar plots, red crosses appear if two taxa are sampled in the same year.")
+                  i18n$t("This tab consists of several elements. In the taxonomy tab, you will get the informations concerning the taxa included in your selection, as well as the actual valid appelation. The 'Chorology' panel allows you to visualize the data from the raw database with a focus on taxa. Select the taxa you want to display using the 'List of available taxa' dropdown. A map will then appear on which you can choose a year range and display the corresponding geographic locations of the selected taxa, according to its typology. You will also be able to display density of the taxa location depending on the year range you have selected. You can select up to two taxa. Each point on the map is clickable and will display the information of the sampling you are looking at. Hydro-ecoregions can also be displayed on the map. Finally, three plots can be shown using the 'Display Average Abundance', 'Display Occurrences' and 'Display Typology' buttons. They respectively show the evolution of the relative abundance (per 1000), the number of occurrences of the taxa in the surveys of the years in which they were observed and the percentage of sampled that were recorded in water body and in watercourse. When you select a second taxon, the graphical representations of each taxon (Map and Plots) are superimposed for comparison. On the plots, red crosses appear if two taxa are sampled in the same year.")
                 )
               ),
               
-              shiny::div(
-                style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
-                shiny::h3(class = "custom-heading", i18n$t("Data Sub-Tab")),
-                shiny::p(
-                  class = "custom-text",
-                  i18n$t("In this panel, you can display and download the data of the taxa you have selected from the Chorology panel. Use the 'Download' button to download the data in CSV format.")
-                )
-              ),
-
               shiny::div(
                 style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
                 shiny::h3(class = "custom-heading", i18n$t("Profile Sub-Tab")),
@@ -190,6 +181,15 @@ ui <- shiny::fluidPage(
                   i18n$t("In the 'Ecological' tab, you can see if the selected taxon is an indicator of the Diatom Biological Index (IBD). If it is, the ecological profile of the selected taxon will be displayed on the screen; otherwise, a message will appear, as in the Trophic tab."
                 ))
               ),
+            
+            shiny::div(
+              style = "border: 4px solid #66C1BF; border-radius: 10px; padding: 10px; margin-bottom: 10px; background-color: #f2f2f2;",
+              shiny::h3(class = "custom-heading", i18n$t("Data Sub-Tab")),
+              shiny::p(
+                class = "custom-text",
+                i18n$t("In this panel, you can display and download the data of the taxa you have selected from the Chorology panel. Use the 'Download' button to download the data in CSV format.")
+              )
+            ),
                        
                        
                        shiny::div(
@@ -720,15 +720,15 @@ server <- function(input, output, session) {
     
     # load(input$upload$datapath)
     
-    # githubURL <- base::paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/", fichier_plus_recent)
+    githubURL <- base::paste0("https://github.com/leolea12/NAIDESexport/raw/main/data_raw/", fichier_plus_recent)
     
     # tempfile <- tempfile()  # Crée un fichier temporaire pour stocker le fichier téléchargé
     # download.file(url = githubURL, destfile = tempfile, mode = "wb")  # Télécharge le fichier à partir de l'URL
     # 
     # load(tempfile)
     
-    # base::load(url(githubURL))
-    base::load("data/test.RData")
+    base::load(url(githubURL))
+    # base::load("data/test.RData")
     # load("data/Diatom.RData")
     
     
