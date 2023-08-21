@@ -146,8 +146,8 @@ trophie <- tidyr::as_tibble(readxl::read_excel("data/Sup_material_published.xlsx
   dplyr::select(-True_name) %>%
   dplyr::filter(!is.na(code)) %>%
   dplyr::mutate(full_name = sub("\\_g.*", "", full_name)) %>%
-  plotly::mutate(full_name = stringr::str_replace_all(full_name, "[^[:alnum:]]", " ")) %>%
-  plotly::mutate(full_name = paste0(full_name, " ", "(", code, ")")) %>%
+  dplyr::mutate(full_name = stringr::str_replace_all(full_name, "[^[:alnum:]]", " ")) %>%
+  dplyr::mutate(full_name = paste0(full_name, " ", "(", code, ")")) %>%
   dplyr::select(
     full_name, code, parameter,
     tolerance,
