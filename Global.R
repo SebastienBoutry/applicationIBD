@@ -5,6 +5,10 @@ getwd()
 options(shiny.http.response.timeout = 300)
 options(encoding = "UTF-8")
 
+library(renv)
+
+renv::activate()
+
 library(httr)
 library(gh)
 library(RColorBrewer)
@@ -170,7 +174,7 @@ trophie <- tidyr::as_tibble(readxl::read_excel("data/Sup_material_published.xlsx
 
 # save(profiles, file = "data/profiles.RData")
 
-load("data/profiles.RData")
+base::load("data/profiles.RData")
 
 
 # white_bg <- i18n$t("White background")

@@ -419,7 +419,7 @@ server <- function(input, output, session) {
       shinyjs::hide("spinnerPlot2")
     }
   })
-  
+ 
   shiny::observeEvent(input$toggleMaps3, {
     if (input$toggleMaps3) {
       shinyjs::show("Circular_plot")
@@ -428,6 +428,12 @@ server <- function(input, output, session) {
       shinyjs::hide("Circular_plot")
       shinyjs::hide("spinnerPlot3")
     }
+  })
+  
+  shiny::observeEvent(input$taxons, {
+    shiny::updateCheckboxInput(session, "toggleMaps", value = FALSE)
+    shiny::updateCheckboxInput(session, "toggleMaps2", value = FALSE)
+    shiny::updateCheckboxInput(session, "toggleMaps3", value = FALSE)
   })
   
   shiny::observeEvent(input$taxons, {
