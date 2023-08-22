@@ -34,7 +34,7 @@ ui <- shiny::fluidPage(
     margin-bottom: 15px;
     }",
 
-      # Mise en page HTML
+      # Mise en page HTML de la bar de navigation
 
       shiny::HTML("
       .navbar-default .navbar-brand {color: black;font-size: 30px;}
