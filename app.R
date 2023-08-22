@@ -1,4 +1,4 @@
-# Chargement du fichier source
+# Chargement du fichier source contenant les packages et les fonctions 
 
 source("Global.R")
 
