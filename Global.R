@@ -7,7 +7,7 @@ options(encoding = "UTF-8")
 
 library(renv)
 
-renv::activate()
+renv::restore()
 
 library(RColorBrewer)
 library(shinythemes)
